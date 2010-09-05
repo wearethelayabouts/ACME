@@ -43,6 +43,8 @@
 $route['default_controller'] = "welcome";
 $route['scaffolding_trigger'] = "";
 
+$route['~:num'] = "user/view";
+
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */
