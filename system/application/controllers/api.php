@@ -9,9 +9,9 @@ class Api extends Controller {
 	}
 	
 	function user_fetch() {
-		$format = split('_', $this->uri->segment(3));
-		$format = $format[1];
-		$uid = 1;
+		$variables = split('_', $this->uri->segment(4));
+		$format = $variables[1];
+		$uid = $variables[0];
 		
 		$userFields = $this->acmedata->fetchUserFields();
 		$user = $this->acmedata->fetchUser($uid, $userFields);
