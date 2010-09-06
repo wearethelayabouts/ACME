@@ -6,6 +6,7 @@ class Api extends Controller {
 		parent::Controller();
 		$this->load->database();
 		$this->load->library('ACMEData');
+		$this->load->model('usermodel');
 	}
 	
 	function user_fetch() {
@@ -13,8 +14,8 @@ class Api extends Controller {
 		$format = $variables[1];
 		$uid = $variables[0];
 		
-		$userFields = $this->acmedata->fetchUserFields();
-		$user = $this->acmedata->fetchUser($uid, $userFields);
+		$userFields = $this->usermodel->fetchUserFields();
+		$user = $this->usermodel->fetchUser($uid, $userFields);
 		
 		switch ($format) {
 			case 'json':
