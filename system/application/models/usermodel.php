@@ -17,6 +17,11 @@ class Usermodel extends Model {
 	
 	function fetchUser($uid, $fieldMap) {
 		$query = $this->db->get_where('userdata', array('user-id' => $uid));
+		
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		
 		$query = $query->result_array();
 		
 		foreach ($query as $field) {

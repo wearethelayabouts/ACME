@@ -45,7 +45,10 @@ $route['scaffolding_trigger'] = "";
 
 $route['~:num'] = "user/view";
 
-$route['api/user/fetch/:any.:any'] = "api/user_fetch";
+// API Version 1
+$route['api/1/~:any/info.:any'] = "api/user_info";
+
+$route['api/1/!:any/info.:any'] = "api/category_info";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

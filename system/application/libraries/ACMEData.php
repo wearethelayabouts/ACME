@@ -4,7 +4,7 @@ class ACMEData {
 	    foreach($data as $key => $value){
 	        if(is_array($value)){
 	            $xml->startElement($key);
-	            write($xml, $value);
+	            $this->writeXML($xml, $value);
 	            $xml->endElement();
 	            continue;
 	        }
