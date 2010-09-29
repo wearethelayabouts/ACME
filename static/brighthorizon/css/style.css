@@ -1,0 +1,36 @@
+body {
+	margin: 0;
+	background-image: url('/static/brighthorizon/img/starfield.png');
+}
+#UIHeader{
+	background-color: #5f5e5e;
+	color: #FFF;
+	width: 100%;
+	opacity: 0.5;
+}
+#UIHeaderContent {
+	position: absolute;
+	top: 0px;
+	left: 50%;
+	margin-left: -400px;
+	width: 800px;
+	opacity: 1;
+}
+#UITitlesMain {
+	position: absolute;
+	top: 50px;
+	left: 50%;
+	margin-left: -400px;
+	opacity: 0.9;
+	background-color: #5f5e5e;
+	padding: 2px;
+}
+#UITitlesSecondary {
+	position: absolute;
+	top: 73px;
+	left: 50%;
+	margin-left: -400px;
+	opacity: 0.8;
+	background-color: #5f5e5e;
+	padding: 2px;
+}

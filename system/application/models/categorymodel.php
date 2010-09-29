@@ -22,8 +22,8 @@ class Categorymodel extends Model {
 		
 		$data['cat-'.$query['id']] = $query;
 		
-		if ($query['parent-id'] != 0) {
-			$data = $this->fetchParentCategory($query['parent-id'], $data);
+		if ($query['parent_id'] != 0) {
+			$data = $this->fetchParentCategory($query['parent_id'], $data);
 		}
 		
 		return array_reverse($data);
@@ -38,8 +38,8 @@ class Categorymodel extends Model {
 		$nData = $data;
 		$nData['cat-'.$query['id']] = $query;
 		
-		if ($query['parent-id'] != 0) {
-			$data = $this->fetchParentCategory($query['parent-id'], $data);
+		if ($query['parent_id'] != 0) {
+			$data = $this->fetchParentCategory($query['parent_id'], $data);
 		}
 		
 		return $nData;

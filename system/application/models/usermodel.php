@@ -16,7 +16,7 @@ class Usermodel extends Model {
 	}
 	
 	function fetchUser($uid, $fieldMap) {
-		$query = $this->db->get_where('userdata', array('user-id' => $uid));
+		$query = $this->db->get_where('userdata', array('user_id' => $uid));
 		
 		if ($query->num_rows() == 0) {
 			return false;
@@ -25,7 +25,7 @@ class Usermodel extends Model {
 		$query = $query->result_array();
 		
 		foreach ($query as $field) {
-			$fields[$fieldMap[$field['field-id']]['slug']] = $field['data'];
+			$fields[(string)$fieldMap[$field['field_id']]['slug']] = $field['data'];
 		}
 		
 		return $fields;
