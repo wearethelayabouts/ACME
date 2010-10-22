@@ -1,7 +1,6 @@
 <?php
-
-class Welcome extends Controller {
-	function Welcome() {
+class Contentcontroller extends Controller {
+	function Contentcontroller() {
 		parent::Controller();
 		$this->load->database();
 		$this->load->library('ACMEData');
@@ -10,19 +9,14 @@ class Welcome extends Controller {
 		$this->load->model('contentmodel');
 	}
 	
-	function index() {
+	function view() {
 		$config = $this->systemmodel->fetchConfig();
 		$userFields = $this->usermodel->fetchUserFields();
 		$news = $this->contentmodel->fetchNews($userFields);
-		$links = $this->systemmodel->fetchLinks();
 		
 		$data = Array(
-					'news' => $news,
-					'links' => $links
+					'news' => $news
 				);
-		$this->load->view($config['templategroup'].'_frontpage', $data);
+		$this->load->view($config['templategroup'].'_contentpage', $data);
 	}
 }
-
-/* End of file welcome.php */
-/* Location: ./system/application/controllers/welcome.php */

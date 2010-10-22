@@ -24,6 +24,8 @@ class Usermodel extends Model {
 		
 		$query = $query->result_array();
 		
+		$fields['id'] = $uid;
+		
 		foreach ($query as $field) {
 			$fields[(string)$fieldMap[$field['field_id']]['slug']] = $field['data'];
 		}

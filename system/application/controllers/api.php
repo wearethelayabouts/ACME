@@ -74,4 +74,19 @@ class Api extends Controller {
 				break;
 		}
 	}
+	
+	function file() {
+		$file = $this->uri->segment(4);
+		
+		$query = $this->db->get_where('files', array('id' => $file));
+		
+		if ($query->num_rows() == 0) {
+			//show_404('');
+		}
+		
+		$query = $query->row_array();
+		
+		header('Content-type: '.$query['type']);
+		echo $query['content'];
+	}
 }
