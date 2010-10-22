@@ -30,6 +30,9 @@ class Systemmodel extends Model {
 		foreach ($query as $link) {
 			$tlink = $link;
 			switch ($link['link_type']) {
+				case '0': // URL
+					$pquery[] = $tlink;
+					break;
 				case '1': // Category
 					$category = $this->categorymodel->fetchCategory($link['objectid']);
 					if (!$category) {
@@ -40,11 +43,12 @@ class Systemmodel extends Model {
 					}
 					break;
 				case '2': // Content
+					// Not supported at the moment
 					break;
 				case '3': // Comment
+					// Not supported at the moment
 					break;
-				default: // Everything else
-					$pquery[] = $tlink;
+				default: // Silently ignore the link
 					break;
 			}
 		}

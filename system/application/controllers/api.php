@@ -8,12 +8,13 @@ class Api extends Controller {
 		$this->load->library('ACMEData');
 		$this->load->model('usermodel');
 		$this->load->model('categorymodel');
+		$this->load->model('contentmodel');
 	}
 	
 	function user_info() {
-		$variables = split('_', $this->uri->segment(4));
+		$variables = explode('.', $this->uri->segment(5));
 		$format = $variables[1];
-		$object = substr($this->uri->segment(3), 1);
+		$object = $this->uri->segment(4);
 		
 		$userFields = $this->usermodel->fetchUserFields();
 		$user = $this->usermodel->fetchUser($object, $userFields);
@@ -42,9 +43,9 @@ class Api extends Controller {
 	}
 	
 	function category_info() {
-		$variables = split('_', $this->uri->segment(4));
+		$variables = explode('.', $this->uri->segment(5));
 		$format = $variables[1];
-		$object = substr($this->uri->segment(3), 1);
+		$object = $this->uri->segment(4);
 		
 		$category = $this->categorymodel->fetchCategory($object);
 		
@@ -81,12 +82,43 @@ class Api extends Controller {
 		$query = $this->db->get_where('files', array('id' => $file));
 		
 		if ($query->num_rows() == 0) {
-			//show_404('');
+			show_404('');
 		}
 		
 		$query = $query->row_array();
 		
 		header('Content-type: '.$query['type']);
 		echo $query['content'];
+	}
+	
+	function content_featured() {
+		$variables = explode('.', $this->uri->segment(4));
+		$format = $variables[1];
+		
+		$content = $this->contentmodel->fetchFeaturedContent();
+		
+		if (!$content) {
+			show_404('');
+		}
+		
+		$data = Array('content' => $content);
+		
+		switch ($format) {
+			case 'json':
+				header('Content-type: application/json');
+				echo json_encode($data);
+				break;
+			case 'php':
+				header('Content-type: text/plain');
+				echo serialize($data);
+				break;
+			case 'xml':
+				header('Content-type: text/xml');
+				echo $this->acmedata->toXML($data);
+				break;
+			default:
+				show_404('');
+				break;
+		}
 	}
 }

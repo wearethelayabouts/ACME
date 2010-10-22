@@ -28,6 +28,26 @@ class Categorymodel extends Model {
 		
 		return array_reverse($data);
 	}
+	function fetchCategoryHub($cid) {
+		$tree = $this->fetchTree($cid);
+		
+		if (!$tree) {
+			return false;
+		}
+		
+		$tree = array_reverse($tree);
+		foreach ($tree as $category) {
+			if ($category['isHub'] == '1') {
+				$hub = $category;
+				break;
+			}
+		}
+		if (isset($hub)) {
+			return $hub;
+		} else {
+			return false;
+		}
+	}
 	private function fetchParentCategory($cid, $data) {
 		$query = $this->db->get_where('categories', array('id' => $cid));
 		if ($query->num_rows() == 0) {

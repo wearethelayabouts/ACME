@@ -10,12 +10,18 @@ class Contentcontroller extends Controller {
 	}
 	
 	function view() {
+		$content = $this->contentmodel->fetchContentBySlug($this->uri->segment(2), $this->uri->segment(3));
+		if (!$content) {
+			show_404('');
+		}
+		
 		$config = $this->systemmodel->fetchConfig();
 		$userFields = $this->usermodel->fetchUserFields();
-		$news = $this->contentmodel->fetchNews($userFields);
+		$links = $this->systemmodel->fetchLinks();
 		
 		$data = Array(
-					'news' => $news
+					'links' => $links,
+					'content' => $content,
 				);
 		$this->load->view($config['templategroup'].'_contentpage', $data);
 	}
