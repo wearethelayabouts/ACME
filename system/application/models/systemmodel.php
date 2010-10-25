@@ -65,4 +65,14 @@ class Systemmodel extends Model {
 		
 		return $links;
 	}
+	
+	function fetchPage($slug) {
+		$query = $this->db->get_where('pages', array('slug' => $slug));
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->row_array();
+		
+		return $query;
+	}
 }

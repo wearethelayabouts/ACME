@@ -13,6 +13,24 @@ class Categorymodel extends Model {
 		
 		return $query;
 	}
+	function fetchCategorySlug($slug) {
+		$query = $this->db->get_where('categories', array('slug' => $slug));
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->row_array();
+		
+		return $query;
+	}
+	function fetchChildrenCategories($cid) {
+		$query = $this->db->get_where('categories', array('parent_id' => $cid));
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->result_array();
+		
+		return $query;
+	}
 	function fetchTree($cid) {
 		$query = $this->db->get_where('categories', array('id' => $cid));
 		if ($query->num_rows() == 0) {

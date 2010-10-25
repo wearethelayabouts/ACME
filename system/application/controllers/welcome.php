@@ -15,10 +15,12 @@ class Welcome extends Controller {
 		$userFields = $this->usermodel->fetchUserFields();
 		$news = $this->contentmodel->fetchNews($userFields);
 		$links = $this->systemmodel->fetchLinks();
+		$newcontent = $this->contentmodel->fetchNewContent();
 		
 		$data = Array(
 					'news' => $news,
-					'links' => $links
+					'links' => $links,
+					'content' => $newcontent
 				);
 		$this->load->view($config['templategroup'].'_frontpage', $data);
 	}

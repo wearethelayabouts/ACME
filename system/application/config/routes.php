@@ -43,8 +43,6 @@
 $route['default_controller'] = "welcome";
 $route['scaffolding_trigger'] = "";
 
-$route['user/:num'] = "usercontroller/view";
-
 // API Version 1 routes
 $route['api/1/user/:num/info.:any'] = "api/user_info";
 
@@ -55,7 +53,12 @@ $route['api/1/content/featured.:any'] = "api/content_featured";
 $route['api/1/file/:num'] = "api/file";
 
 // Regular routes
+$route['user/:num'] = "usercontroller/view";
+
 $route['content/:any/:any'] = "contentcontroller/view";
+$route['content/:any'] = "categorycontroller/view";
+
+$route['page/:any'] = "pagecontroller/view";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */
