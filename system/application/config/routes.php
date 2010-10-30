@@ -49,8 +49,10 @@ $route['api/1/user/:num/info.:any'] = "api/user_info";
 $route['api/1/category/:num/info.:any'] = "api/category_info";
 
 $route['api/1/content/featured.:any'] = "api/content_featured";
+$route['api/1/content/:any/download.zip'] = "api/content_downloadZip";
 
 $route['api/1/file/:num'] = "api/file";
+$route['api/1/file/:num/download'] = "api/file";
 
 // Regular routes
 $route['user/:num'] = "usercontroller/view";

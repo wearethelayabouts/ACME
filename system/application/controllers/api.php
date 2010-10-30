@@ -88,6 +88,14 @@ class Api extends Controller {
 		$query = $query->row_array();
 		
 		header('Content-type: '.$query['type']);
+		if ($this->uri->segment(5) == "download") {
+			if ($query['name'] != "") {
+				header('Content-Disposition: attachment; filename="'.$query['name'].'"');
+			} else {
+				header('Content-Disposition: attachment');
+			}
+		}
+		header('Content-length: '.strlen($query['content']));
 		echo $query['content'];
 	}
 	
@@ -120,5 +128,35 @@ class Api extends Controller {
 				show_404('');
 				break;
 		}
+	}
+	
+	function content_downloadZip() {
+		$category = $this->uri->segment(4);
+		$category = $this->categorymodel->fetchCategorySlug($category);
+		$categorycontent = $this->contentmodel->fetchContentByCategory($category['id']);
+		
+		foreach ($categorycontent as $content) {
+			$f = $content['file'];
+			$files[] = $f;
+		}
+		
+		$temporaryfile = sys_get_temp_dir().'acmezip'.(time()+rand(11111,99999)).'.zip';
+		$zip = new ZipArchive;
+		$res = $zip->open($temporaryfile, ZipArchive::CREATE);
+		
+		foreach ($files as $file) {
+			if ($file['isDownloadable'] == 1) {
+				$zip->addFromString($file['name'], $file['content']);
+			}
+		}
+		
+		$zip->close();
+		
+		header('Content-type: application/zip');
+		header('Content-Disposition: attachment; filename="'.$category['name'].'.zip"');
+		header('Content-length: '.filesize($temporaryfile));
+		readfile($temporaryfile);
+		
+		unlink($temporaryfile);
 	}
 }
