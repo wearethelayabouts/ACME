@@ -63,6 +63,13 @@ class Contentmodel extends Model {
 			$query['ratingstars'] = round((((($query['votes_up'] - $query['votes_down']) / ($query['votes_up'] + $query['votes_down'] + $query['votes_neutral'])) * 2) + 3), 0);
 		}
 		
+		$query['file'] = $this->db->get_where('files', array('id' => $query['main_attachment']));
+		$query['file'] = $query['file']->row_array();
+		
+		if (!isset($query['authors'])) {
+			$query['authors'] = Array();
+		}
+		
 		return $query;
 	}
 	

@@ -1,25 +1,39 @@
 <?php
 class ACMEData {
-	private function writeXML(XMLWriter $xml, $data){
-	    foreach($data as $key => $value){
-	        if(is_array($value)){
-	            $xml->startElement($key);
-	            $this->writeXML($xml, $value);
-	            $xml->endElement();
-	            continue;
-	        }
-	        $xml->writeElement($key, $value);
-	    }
-	}
-    function toXML($data) {
-    	$xml = new XmlWriter();
-    	$xml->openMemory();
-    	$xml->startDocument('1.0', 'UTF-8');
-    	$xml->startElement('root');
+    function toXML($data, $rootNodeName = 'data', $xml=null) {
+    	// turn off compatibility mode as simple xml throws a wobbly if you don't.
+    	if (ini_get('zend.ze1_compatibility_mode') == 1) {
+    		ini_set ('zend.ze1_compatibility_mode', 0);
+    	}
     	
-    	$this->writeXML($xml, $data);
+    	if ($xml == null) {
+    		$xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$rootNodeName />");
+    	}
     	
-    	$xml->endElement();
-    	return $xml->outputMemory(true);
+    	// loop through the data passed in.
+    	foreach($data as $key => $value) {
+    		// no numeric keys in our xml please!
+    		if (is_numeric($key)) {
+    			// make string key...
+    			$key = "n";
+    		}
+    		
+    		// replace anything not alpha numeric
+    		$key = preg_replace('/[^a-z]/i', '', $key);
+    		
+    		// if there is another array found recrusively call this function
+    		if (is_array($value)) {
+    			$node = $xml->addChild($key);
+    			// recrusive call.
+    			$this->toXML($value, $rootNodeName, $node);
+    		} else {
+    			// add single node.
+				$value = htmlentities($value);
+    			$xml->addChild($key,$value);
+    		}
+    		
+    	}
+    	// pass back as string. or simple xml object if you want!
+    	return $xml->asXML();
     }
 }

@@ -23,6 +23,17 @@ class Categorycontroller extends Controller {
 		$userFields = $this->usermodel->fetchUserFields();
 		$links = $this->systemmodel->fetchLinks();
 		
+		if (!is_array($content)) {
+			$content = Array();
+		}
+		
+		if ($category['returnAllContent'] == 1) {
+			foreach($childrencategories as $cat) {
+				$c = $this->contentmodel->fetchContentByCategory($cat['id']);
+				$content = array_merge($content, $c);
+			}
+		}
+		
 		$data = Array(
 					'links' => $links,
 					'category' => $category,
