@@ -23,6 +23,7 @@ class Categorymodel extends Model {
 		return $query;
 	}
 	function fetchChildrenCategories($cid) {
+		$this->db->order_by('name', 'asc'); 
 		$query = $this->db->get_where('categories', array('parent_id' => $cid));
 		if ($query->num_rows() == 0) {
 			return false;
@@ -77,7 +78,7 @@ class Categorymodel extends Model {
 		$nData['cat-'.$query['id']] = $query;
 		
 		if ($query['parent_id'] != 0) {
-			$data = $this->fetchParentCategory($query['parent_id'], $data);
+			$nData = $this->fetchParentCategory($query['parent_id'], $nData);
 		}
 		
 		return $nData;
