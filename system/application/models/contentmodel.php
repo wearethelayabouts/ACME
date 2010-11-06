@@ -54,6 +54,7 @@ class Contentmodel extends Model {
 		foreach ($authors as $author) {
 			$a['role'] = $roles[$author['role']];
 			$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
+			$a['showIcon'] = $author['showIcon'];
 			$query['authors'][] = $a;
 		}
 		
@@ -74,6 +75,7 @@ class Contentmodel extends Model {
 	}
 	
 	function fetchFeaturedContent() {
+		$this->db->order_by('date', 'desc');
 		$query = $this->db->get_where('content', array('featured_status' => '1'));
 		if ($query->num_rows() == 0) {
 			return false;
@@ -86,7 +88,7 @@ class Contentmodel extends Model {
 						'featured_image' => $content['featured_image'],
 						'hub_slug' => $content['hub_slug'],
 						'name' => $content['name'],
-						'featured_prefix' => $content['featured_prefix']
+						'featured_name' => $content['featured_name']
 						);
 		}			
 		
@@ -111,7 +113,11 @@ class Contentmodel extends Model {
 		return $items;
 	}
 	
-	function fetchContentByCategory($cid) {
+	function fetchContentByCategory($cid, $limit = 0) {
+		if ($limit != 0) {
+			$this->db->limit($limit[1], $limit[0]);
+		}
+		$this->db->order_by('date', 'desc'); 
 		$queryr = $this->db->get_where('content', array('category_id' => $cid));
 		if ($queryr->num_rows() == 0) {
 			return false;
@@ -151,12 +157,37 @@ class Contentmodel extends Model {
 				$query['ratingstars'] = round((((($query['votes_up'] - $query['votes_down']) / ($query['votes_up'] + $query['votes_down'] + $query['votes_neutral'])) * 2) + 3), 0);
 			}
 			
-			$query['file'] = $this->db->get_where('files', array('id' => $query['main_attachment']));
-			$query['file'] = $query['file']->row_array();
-			
 			$bits[] = $query;
 		}
 		
 		return $bits;
+	}
+	function fetchContentNear($content) {
+	
+		$this->db->order_by('date', 'desc');
+		$before = $this->db->get_where('content', array('date <' => $content['date'], 'hub_slug' => $content['hub_slug']), 1);
+		$before = $before->row_array();
+		
+		$this->db->order_by('date', 'asc');
+		$after = $this->db->get_where('content', array('date >' => $content['date'], 'hub_slug' => $content['hub_slug']), 1);
+		$after = $after->row_array();
+		
+		$this->db->where('hub_slug',$content['hub_slug']);
+		$this->db->select_min('date');
+		$firsttimestamp = $this->db->get('content');
+		$firsttimestamp = $firsttimestamp->row_array();
+		
+		$this->db->where('hub_slug',$content['hub_slug']);
+		$this->db->select_max('date');
+		$latesttimestamp = $this->db->get('content');
+		$latesttimestamp = $latesttimestamp->row_array();
+		
+		$first = $this->db->get_where('content', array('date' => $firsttimestamp['date'], 'hub_slug' => $content['hub_slug']), 1);
+		$first = $first->row_array();
+		$latest = $this->db->get_where('content', array('date' => $latesttimestamp['date'], 'hub_slug' => $content['hub_slug']), 1);
+		$latest = $latest->row_array();
+		
+		
+		return Array('after' => $after, 'before' => $before, 'first' => $first, 'latest' => $latest);
 	}
 }
