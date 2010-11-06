@@ -1,3 +1,6 @@
 RewriteEngine on
+
 RewriteCond $1 !^(index\.php|images|robots\.txt|static)
 RewriteRule ^(.*)$ /index.php/$1 [L,QSA]
+
+RewriteRule . - [E=no-gzip:1]
