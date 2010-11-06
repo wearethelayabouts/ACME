@@ -57,8 +57,14 @@ $route['api/1/file/:num/download'] = "api/file";
 // Regular routes
 $route['user/:num'] = "usercontroller/view";
 
+$route['content/:any/download.zip'] = "contentcontroller/downloadzip";
+$route['content/:any/playall'] = "contentcontroller/playall";
+$route['content/:any/page/:num'] = "categorycontroller/view";
 $route['content/:any/:any'] = "contentcontroller/view";
 $route['content/:any'] = "categorycontroller/view";
+
+$route['news/:any'] = "newscontroller/view";
+$route['news'] = "newscontroller/view";
 
 $route['page/:any'] = "pagecontroller/view";
 
