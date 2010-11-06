@@ -13,6 +13,8 @@ class Categorycontroller extends Controller {
 	
 	function view() {
 		$category = $this->categorymodel->fetchCategorySlug($this->uri->segment(2));
+		$pagestr = $this->uri->segment(4);
+		$page = (int)$pagestr;
 		
 		if (!$category) {
 			show_404();
@@ -24,22 +26,44 @@ class Categorycontroller extends Controller {
 		$links = $this->systemmodel->fetchLinks();
 		
 		if (!is_array($content)) {
-			$content = Array();
+			$content = (Array) Array();
 		}
 		
-		if ($category['returnAllContent'] == 1) {
+		if ($category['returnAllContent'] == 1 && is_array($childrencategories)) {
 			foreach($childrencategories as $cat) {
 				$c = $this->contentmodel->fetchContentByCategory($cat['id']);
-				$content = array_merge($content, $c);
+				$subc = $this->categorymodel->fetchChildrenCategories($cat['id']);
+				if (is_array($c)) {
+					$content = array_merge($content, $c);
+				}
+				if (is_array($subc)) {
+					foreach ($subc as $c) {
+						$cont = 	$this->contentmodel->fetchContentByCategory($c['id']);
+						$content = array_merge($cont, $content);
+					}
+				}
 			}
 		}
+		
+		uasort($content, 'cmp_content');
+		
+		if ($category['oldestFirst']) {
+			$content = array_reverse($content);
+		}
+
+		$contentchunks = array_chunk($content,24);
+		if ($page < 1) $contentchunk = $contentchunks[0];
+		else $contentchunk = $contentchunks[$page-1];
+		$pagesamount = sizeof($contentchunks);
 		
 		$data = Array(
 					'links' => $links,
 					'category' => $category,
 					'children' => $childrencategories,
-					'content' => $content
+					'content' => $contentchunk,
+					'pagesamount' => $pagesamount
 				);
+		
 		$this->load->view($category['category_template'], $data);
 	}
 }
