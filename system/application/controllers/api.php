@@ -95,8 +95,8 @@ class Api extends Controller {
 				header('Content-Disposition: attachment');
 			}
 		}
-		header('Content-length: '.strlen($query['content']));
-		echo $query['content'];
+		header('Content-Length: '.filesize('./files/'.$query['id']));
+		readfile('./files/'.$query['id']);
 	}
 	
 	function content_featured() {
@@ -135,26 +135,28 @@ class Api extends Controller {
 		$category = $this->categorymodel->fetchCategorySlug($category);
 		$categorycontent = $this->contentmodel->fetchContentByCategory($category['id']);
 		
-		foreach ($categorycontent as $content) {
-			$f = $content['file'];
-			$files[] = $f;
+		if (!is_array($categorycontent)) {
+			die();
 		}
 		
-		$temporaryfile = sys_get_temp_dir().'acmezip'.(time()+rand(11111,99999)).'.zip';
+		$temporaryfile = sys_get_temp_dir().'/acmezip'.(time()+rand(11111,99999)).'.zip';
 		$zip = new ZipArchive;
 		$res = $zip->open($temporaryfile, ZipArchive::CREATE);
 		
-		foreach ($files as $file) {
-			if ($file['isDownloadable'] == 1) {
-				$zip->addFromString($file['name'], $file['content']);
+		foreach ($categorycontent as $content) {
+			$f = $this->db->get_where('files', array('id' => $content['main_attachment']));
+			$f = $f->row_array();
+			if ($f['isDownloadable'] == 1) {
+				$zip->addFile('./files/'.$f['id'], $f['name']);
 			}
+			$f = Array();
 		}
 		
 		$zip->close();
 		
-		header('Content-type: application/zip');
+		header('Content-Type: application/zip');
+		header('Content-Length: '.filesize($temporaryfile));
 		header('Content-Disposition: attachment; filename="'.$category['name'].'.zip"');
-		header('Content-length: '.filesize($temporaryfile));
 		readfile($temporaryfile);
 		
 		unlink($temporaryfile);
