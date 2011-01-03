@@ -4,6 +4,16 @@ class Categorymodel extends Model {
 		parent::Model();
 	}
 	
+	function fetchCategoryBySlug($cslug) {
+		$query = $this->db->get_where('categories', array('slug' => $cslug));
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->row_array();
+		
+		return $query;
+	}
+	
 	function fetchCategory($cid) {
 		$query = $this->db->get_where('categories', array('id' => $cid));
 		if ($query->num_rows() == 0) {

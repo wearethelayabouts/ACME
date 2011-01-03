@@ -47,7 +47,7 @@ class Api extends Controller {
 		$format = $variables[1];
 		$object = $this->uri->segment(4);
 		
-		$category = $this->categorymodel->fetchCategory($object);
+		$category = $this->categorymodel->fetchCategoryBySlug($object);
 		
 		if (!$category) {
 			show_404('');
