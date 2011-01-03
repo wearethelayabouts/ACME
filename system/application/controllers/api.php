@@ -9,6 +9,7 @@ class Api extends Controller {
 		$this->load->model('usermodel');
 		$this->load->model('categorymodel');
 		$this->load->model('contentmodel');
+		$this->load->model('systemmodel');
 	}
 	
 	function user_info() {
@@ -47,7 +48,7 @@ class Api extends Controller {
 		$format = $variables[1];
 		$object = $this->uri->segment(4);
 		
-		$category = $this->categorymodel->fetchCategoryBySlug($object);
+		$category = $this->categorymodel->fetchCategorySlug($object);
 		
 		if (!$category) {
 			show_404('');
@@ -69,6 +70,98 @@ class Api extends Controller {
 			case 'xml':
 				header('Content-type: text/xml');
 				echo $this->acmedata->toXML($data);
+				break;
+			default:
+				show_404('');
+				break;
+		}
+	}
+	
+	function category_content() {
+		$variables = explode('.', $this->uri->segment(5));
+		$format = $variables[1];
+		
+		$category = $this->categorymodel->fetchCategorySlug($this->uri->segment(4));
+		
+		if (!$category) {
+			show_404('');
+		}
+		$childrencategories = $this->categorymodel->fetchChildrenCategories($category['id']);
+		$content = $this->contentmodel->fetchContentByCategory($category['id']);
+		$config = $this->systemmodel->fetchConfig();
+		
+		if (!is_array($content)) {
+			$content = (Array) Array();
+		}
+		
+		if ($category['returnAllContent'] == 1 && is_array($childrencategories)) {
+			foreach($childrencategories as $cat) {
+				$c = $this->contentmodel->fetchContentByCategory($cat['id']);
+				$subc = $this->categorymodel->fetchChildrenCategories($cat['id']);
+				if (is_array($c)) {
+					$content = array_merge($content, $c);
+				}
+				if (is_array($subc)) {
+					foreach ($subc as $c) {
+						$cont = 	$this->contentmodel->fetchContentByCategory($c['id']);
+						$content = array_merge($cont, $content);
+					}
+				}
+			}
+		}
+		
+		uasort($content, 'cmp_content');
+		
+		if ($category['oldestFirst']) {
+			$content = array_reverse($content);
+		}
+		
+		$data = Array('category' => $category, 'content' => $content);
+		
+		switch ($format) {
+			case 'json':
+				header('Content-type: application/json');
+				echo json_encode($data);
+				break;
+			case 'php':
+				header('Content-type: text/plain');
+				echo serialize($data);
+				break;
+			case 'xml':
+				header('Content-type: text/xml');
+				echo $this->acmedata->toXML($data);
+				break;
+			case 'rss':
+				header('Content-type: application/rss+xml');
+				echo '<'.'?'.'xml version="1.0" encoding="UTF-8" '.'?'.">\n";
+				echo '<rss version="2.0">'."\n";
+				echo "<channel>\n";
+				echo "\t<title>".$category['name']."</title>\n";
+				echo "\t<link>".$this->config->item('base_url')."content/".$category['slug']."/</link>\n";
+				echo "\n";
+				foreach ($content as $piece) {
+					echo "\t<item>\n";
+					echo "\t\t<title>".$piece['name']."</title>\n";
+					echo "\t\t<description>";
+					if ($piece['customEmbed'] == "") {
+						switch ($piece['file']['type']) {
+							case 'image/png':
+							case 'image/gif':
+							case 'image/jpg':
+								echo '<img class="comic" src="'.$this->config->item('base_url').'api/1/file/'.$piece['main_attachment'].'" alt="'.$piece['name'].'" /><br />';
+								break;
+							default:
+								break;
+						}
+					}
+					echo $piece['body']."</description>\n";
+					echo "\t\t<link>".$this->config->item('base_url')."content/".$category['slug']."/".$piece['slug']."/</link>\n";
+					echo "\t\t<guid>".$category['id']."-".$category['slug']."/".$piece['id']."-".$piece['slug']."</guid>\n";
+					echo "\t\t<pubDate>".date('D, d M Y H:i:s +0000 ', $piece['date'])."</pubDate>\n";
+					echo "\t</item>\n";
+				}
+				echo "</channel>\n";
+				echo "</rss>";
 				break;
 			default:
 				show_404('');
