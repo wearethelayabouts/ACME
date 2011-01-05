@@ -23,7 +23,7 @@ class Categorymodel extends Model {
 		return $query;
 	}
 	function fetchChildrenCategories($cid) {
-		$this->db->order_by('listPriority', 'desc');
+		$this->db->order_by('listPriority', 'desc'); 
 		$this->db->order_by('name', 'asc'); 
 		$query = $this->db->get_where('categories', array('parent_id' => $cid));
 		if ($query->num_rows() == 0) {
@@ -67,6 +67,12 @@ class Categorymodel extends Model {
 		} else {
 			return false;
 		}
+	}
+	function fetchDefaultThumbnail($cid) {
+		$this->db->where('id',$cid);
+		$category = $this->db->get('categories');
+		$category = $category->row_array();
+		return $category['default_content_thumbnail'];
 	}
 	private function fetchParentCategory($cid, $data) {
 		$query = $this->db->get_where('categories', array('id' => $cid));

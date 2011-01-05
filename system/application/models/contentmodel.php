@@ -42,7 +42,7 @@ class Contentmodel extends Model {
 		}
 		
 		if ($query['content_thumbnail'] < 1) {
-			$query['content_thumbnail'] = $query['hub']['default_content_thumbnail'];
+			$query['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query['category_id']);
 		}
 		
 		$authors = $this->db->get_where('contentauthors', array('contentid' => $query['id']));
@@ -112,7 +112,7 @@ class Contentmodel extends Model {
 			$i = $item;
 			$i['hub'] = $this->categorymodel->fetchCategoryHub($item['category_id']);
 			if ($i['content_thumbnail'] < 1) {
-				$i['content_thumbnail'] = $i['hub']['default_content_thumbnail'];
+				$i['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($i['category_id']);;
 			}
 			$items[] = $i;
 		}
@@ -143,7 +143,7 @@ class Contentmodel extends Model {
 			}
 		
 			if ($query['content_thumbnail'] < 1) {
-				$query['content_thumbnail'] = $query['hub']['default_content_thumbnail'];
+				$query['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query['category_id']);
 			}
 			
 			$authors = $this->db->get_where('contentauthors', array('contentid' => $query['id']));
@@ -201,23 +201,22 @@ class Contentmodel extends Model {
 		$latest = $this->db->get_where('content', array('date' => $latesttimestamp['date'], 'hub_slug' => $content['hub_slug']), 1);
 		$latest = $latest->row_array();
 		
-		if (($first['content_thumbnail'] < 1) || ($before['content_thumbnail'] < 1) || ($after['content_thumbnail'] < 1) || ($latest['content_thumbnail'] < 1)) {
-			$this->db->where('slug',$content['hub_slug']);
-			$category = $this->db->get('categories');
-			$category = $category->row_array();
-			$dct = $category['default_content_thumbnail'];
-		}
+		$dct = 0;
 		
 		if ($first['content_thumbnail'] < 1) {
+			if ($dct == 0) $dct = $this->categorymodel->fetchDefaultThumbnail($first['category_id']);
 			$first['content_thumbnail'] = $dct;
 		}
 		if (isset($before['content_thumbnail'])) if ($before['content_thumbnail'] < 1) {
+			if ($dct == 0) $dct = $this->categorymodel->fetchDefaultThumbnail($before['category_id']);
 			$before['content_thumbnail'] = $dct;
 		}
 		if (isset($after['content_thumbnail'])) if ($after['content_thumbnail'] < 1) {
+			if ($dct == 0) $dct = $this->categorymodel->fetchDefaultThumbnail($after['category_id']);
 			$after['content_thumbnail'] = $dct;
 		}
 		if ($latest['content_thumbnail'] < 1) {
+			if ($dct == 0) $dct = $this->categorymodel->fetchDefaultThumbnail($latest['category_id']);
 			$latest['content_thumbnail'] = $dct;
 		}
 		
