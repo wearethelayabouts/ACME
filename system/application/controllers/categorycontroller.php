@@ -20,6 +20,7 @@ class Categorycontroller extends Controller {
 			show_404();
 		}
 		$childrencategories = $this->categorymodel->fetchChildrenCategories($category['id']);
+		$tree = $this->categorymodel->fetchTree($category['id']);
 		$content = $this->contentmodel->fetchContentByCategory($category['id']);
 		$config = $this->systemmodel->fetchConfig();
 		$userFields = $this->usermodel->fetchUserFields();
@@ -52,16 +53,20 @@ class Categorycontroller extends Controller {
 		}
 
 		$contentchunks = array_chunk($content,24);
-		if ($page < 1) $contentchunk = $contentchunks[0];
-		else $contentchunk = $contentchunks[$page-1];
+		if (isset($page)) {
+			if ($page < 1) $contentchunk = $contentchunks[0];
+			else $contentchunk = $contentchunks[$page-1];
+		} else $contentchunk = $contentchunks[0];
 		$pagesamount = sizeof($contentchunks);
+		
 		
 		$data = Array(
 					'links' => $links,
 					'category' => $category,
 					'children' => $childrencategories,
 					'content' => $contentchunk,
-					'pagesamount' => $pagesamount
+					'pagesamount' => $pagesamount,
+					'tree' => $tree
 				);
 		
 		$this->load->view($category['category_template'], $data);
