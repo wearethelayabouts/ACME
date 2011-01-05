@@ -54,8 +54,8 @@ class Categorycontroller extends Controller {
 
 		$contentchunks = array_chunk($content,24);
 		if (isset($page)) {
-			if ($page < 1) $contentchunk = $contentchunks[0];
-			else $contentchunk = $contentchunks[$page-1];
+			if ($page < 1) $page = 1;
+			$contentchunk = $contentchunks[$page-1];
 		} else $contentchunk = $contentchunks[0];
 		$pagesamount = sizeof($contentchunks);
 		
@@ -65,6 +65,7 @@ class Categorycontroller extends Controller {
 					'category' => $category,
 					'children' => $childrencategories,
 					'content' => $contentchunk,
+					'page' => $page,
 					'pagesamount' => $pagesamount,
 					'tree' => $tree
 				);
