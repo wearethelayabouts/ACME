@@ -99,8 +99,8 @@ class Contentmodel extends Model {
 		return $data;
 	}
 	
-	function fetchNewContent() {
-		$this->db->limit(5);
+	function fetchNewContent($limit) {
+		$this->db->limit($limit);
 		$this->db->order_by('date', 'desc'); 
 		$query = $this->db->get('content');
 		if ($query->num_rows() == 0) {
@@ -114,6 +114,8 @@ class Contentmodel extends Model {
 			if ($i['content_thumbnail'] < 1) {
 				$i['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($i['category_id']);;
 			}
+			$i['file'] = $this->db->get_where('files', array('id' => $i['main_attachment']));
+			$i['file'] = $i['file']->row_array();
 			$items[] = $i;
 		}
 		

@@ -15,7 +15,7 @@ class Welcome extends Controller {
 		$userFields = $this->usermodel->fetchUserFields();
 		$news = $this->contentmodel->fetchNews($userFields);
 		$links = $this->systemmodel->fetchLinks();
-		$newcontent = $this->contentmodel->fetchNewContent();
+		$newcontent = $this->contentmodel->fetchNewContent(5);
 		
 		$data = Array(
 					'news' => $news,
