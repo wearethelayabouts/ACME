@@ -88,12 +88,12 @@ class Contentmodel extends Model {
 		
 		foreach ($query as $content) {
 			$data[] = Array(
-						'slug' => $content['slug'],
-						'featured_image' => $content['featured_image'],
-						'hub_slug' => $content['hub_slug'],
-						'name' => $content['name'],
-						'featured_name' => $content['featured_name']
-						);
+				'slug' => $content['slug'],
+				'featured_image' => $content['featured_image'],
+				'hub_slug' => $content['hub_slug'],
+				'name' => $content['name'],
+				'featured_name' => $content['featured_name']
+			);
 		}			
 		
 		return $data;
@@ -109,14 +109,16 @@ class Contentmodel extends Model {
 		$query = $query->result_array();		
 		
 		foreach ($query as $item) {
-			$i = $item;
-			$i['hub'] = $this->categorymodel->fetchCategoryHub($item['category_id']);
-			if ($i['content_thumbnail'] < 1) {
-				$i['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($i['category_id']);;
+			if ($item['category_id'] > 0) {
+				$i = $item;
+				$i['hub'] = $this->categorymodel->fetchCategoryHub($item['category_id']);
+				if ($i['content_thumbnail'] < 1) {
+					$i['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($i['category_id']);;
+				}
+				$i['file'] = $this->db->get_where('files', array('id' => $i['main_attachment']));
+				$i['file'] = $i['file']->row_array();
+				$items[] = $i;
 			}
-			$i['file'] = $this->db->get_where('files', array('id' => $i['main_attachment']));
-			$i['file'] = $i['file']->row_array();
-			$items[] = $i;
 		}
 		
 		return $items;
