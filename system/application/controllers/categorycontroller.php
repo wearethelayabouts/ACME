@@ -25,6 +25,7 @@ class Categorycontroller extends Controller {
 		$config = $this->systemmodel->fetchConfig();
 		$userFields = $this->usermodel->fetchUserFields();
 		$links = $this->systemmodel->fetchLinks();
+		$hub = $this->categorymodel->fetchCategoryHub($category['id']);
 		
 		if (!is_array($content)) {
 			$content = (Array) Array();
@@ -39,7 +40,10 @@ class Categorycontroller extends Controller {
 				}
 				if (is_array($subc)) {
 					foreach ($subc as $c) {
-						$cont = 	$this->contentmodel->fetchContentByCategory($c['id']);
+						$cont = $this->contentmodel->fetchContentByCategory($c['id']);
+						if (!is_array($cont)) {
+							$cont = (Array) Array();
+						}
 						$content = array_merge($cont, $content);
 					}
 				}
@@ -52,12 +56,17 @@ class Categorycontroller extends Controller {
 			$content = array_reverse($content);
 		}
 
-		$contentchunks = array_chunk($content,24);
-		if (isset($page)) {
-			if ($page < 1) $page = 1;
-			$contentchunk = $contentchunks[$page-1];
-		} else $contentchunk = $contentchunks[0];
-		$pagesamount = sizeof($contentchunks);
+		if (count($content) > 0) {
+			$contentchunks = array_chunk($content,24);
+			if (isset($page)) {
+				if ($page < 1) $page = 1;
+				$contentchunk = $contentchunks[$page-1];
+			} else $contentchunk = $contentchunks[0];
+			$pagesamount = sizeof($contentchunks);
+		} else { 
+			$contentchunk = 0;
+			$pagesamount = 0;
+		}
 		
 		
 		$data = Array(
@@ -67,7 +76,8 @@ class Categorycontroller extends Controller {
 					'content' => $contentchunk,
 					'page' => $page,
 					'pagesamount' => $pagesamount,
-					'tree' => $tree
+					'tree' => $tree,
+					'hub' => $hub
 				);
 		
 		$this->load->view($category['category_template'], $data);
