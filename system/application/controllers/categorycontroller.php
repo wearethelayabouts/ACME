@@ -52,7 +52,7 @@ class Categorycontroller extends Controller {
 		
 		uasort($content, 'cmp_content');
 		
-		if ($category['oldestFirst']) {
+		if ($category['oldest_first']) {
 			$content = array_reverse($content);
 		}
 

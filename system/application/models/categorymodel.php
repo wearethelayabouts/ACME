@@ -23,7 +23,7 @@ class Categorymodel extends Model {
 		return $query;
 	}
 	function fetchChildrenCategories($cid) {
-		$this->db->order_by('listPriority', 'desc'); 
+		$this->db->order_by('list_priority', 'desc'); 
 		$this->db->order_by('name', 'asc'); 
 		$query = $this->db->get_where('categories', array('parent_id' => $cid));
 		if ($query->num_rows() == 0) {
@@ -57,7 +57,7 @@ class Categorymodel extends Model {
 		
 		$tree = array_reverse($tree);
 		foreach ($tree as $category) {
-			if ($category['isHub'] == '1') {
+			if ($category['is_hub'] == '1') {
 				$hub = $category;
 				break;
 			}
