@@ -21,6 +21,10 @@ class Systemmodel extends Model {
 	}
 	
 	function fetchLinks() {
+	
+		$this->db->order_by('list_priority', 'desc'); 
+		$this->db->order_by('id', 'asc');
+		
 		$query = $this->db->get('links');
 		if ($query->num_rows() == 0) {
 			return false;
