@@ -183,7 +183,7 @@ class Contentmodel extends Model {
 	function fetchContentNear($content) {
 	
 		$this->db->order_by('date', 'desc');
-		$before = $this->db->get_where('content', array('date <' => $content['date'], 'date <' => time(), 'hub_slug' => $content['hub_slug']), 1);
+		$before = $this->db->get_where('content', array('date <' => min(time(),$content['date']), 'hub_slug' => $content['hub_slug']), 1);
 		$before = $before->row_array();
 		
 		$this->db->order_by('date', 'asc');
