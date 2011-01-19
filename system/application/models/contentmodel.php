@@ -26,7 +26,7 @@ class Contentmodel extends Model {
 	}
 	
 	function fetchContentBySlug($hubslug, $slug) {
-		$query = $this->db->get_where('content', array('hub_slug' => $hubslug, 'slug' => $slug, 'date <' => time()));
+		$query = $this->db->get_where('content', array('hub_slug' => $hubslug, 'slug' => $slug, 'date <' => time(), 'published !=' => 0));
 		if ($query->num_rows() == 0) {
 			return false;
 		}
@@ -80,7 +80,7 @@ class Contentmodel extends Model {
 	
 	function fetchFeaturedContent() {
 		$this->db->order_by('date', 'desc');
-		$query = $this->db->get_where('content', array('featured_status' => '1', 'date <' => time()));
+		$query = $this->db->get_where('content', array('featured_status' => '1', 'date <' => time(), 'published !=' => 0));
 		if ($query->num_rows() == 0) {
 			return false;
 		}
@@ -100,25 +100,29 @@ class Contentmodel extends Model {
 	}
 	
 	function fetchNewContent($limit) {
-		$this->db->limit($limit);
 		$this->db->order_by('date', 'desc');
 		$query = $this->db->get_where('content', array('date <' => time()));
 		if ($query->num_rows() == 0) {
 			return false;
 		}
-		$query = $query->result_array();		
+		$query = $query->result_array();
 		
-		foreach ($query as $item) {
-			if ($item['category_id'] > 0) {
-				$i = $item;
-				$i['hub'] = $this->categorymodel->fetchCategoryHub($item['category_id']);
-				if ($i['content_thumbnail'] < 1) {
-					$i['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($i['category_id']);;
+		$i = 0;
+		$i2 = 0;
+		while ($i2 < min($limit,count($query))) {
+			$i++;
+			if (($query[$i]['category_id'] > 0) && ($query[$i]['published'] != 0)) {
+				$i2++;
+				$item = $query[$i];
+				$item['hub'] = $this->categorymodel->fetchCategoryHub($query[$i]['category_id']);
+				if ($item['content_thumbnail'] < 1) {
+					$item['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query[$i]['category_id']);;
 				}
-				$i['file'] = $this->db->get_where('files', array('id' => $i['main_attachment']));
-				$i['file'] = $i['file']->row_array();
-				$items[] = $i;
+				$item['file'] = $this->db->get_where('files', array('id' => $query[$i]['main_attachment']));
+				$item['file'] = $item['file']->row_array();
+				$items[] = $item;
 			}
+			if ($i2 >= $limit) break;
 		}
 		
 		return $items;
@@ -129,7 +133,7 @@ class Contentmodel extends Model {
 			$this->db->limit($limit[1], $limit[0]);
 		}
 		$this->db->order_by('date', 'desc'); 
-		$queryr = $this->db->get_where('content', array('category_id' => $cid, 'date <' => time()));
+		$queryr = $this->db->get_where('content', array('category_id' => $cid, 'date <' => time(), 'published !=' => 0));
 		if ($queryr->num_rows() == 0) {
 			return false;
 		}
@@ -187,7 +191,7 @@ class Contentmodel extends Model {
 		$before = $before->row_array();
 		
 		$this->db->order_by('date', 'asc');
-		$after = $this->db->get_where('content', array('date >' => $content['date'], 'date <' => time(), 'hub_slug' => $content['hub_slug']), 1);
+		$after = $this->db->get_where('content', array('date >' => $content['date'], 'date <' => time(), 'published !=' => 0, 'hub_slug' => $content['hub_slug']), 1);
 		$after = $after->row_array();
 		
 		$this->db->where('hub_slug',$content['hub_slug']);
