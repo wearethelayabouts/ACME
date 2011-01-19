@@ -11,7 +11,8 @@ class Categorymodel extends Model {
 		}
 		$query = $query->row_array();
 		
-		return $query;
+		if ($query['published'] != 0) return $query;
+		else return false;
 	}
 	function fetchCategorySlug($slug) {
 		$query = $this->db->get_where('categories', array('slug' => $slug));
@@ -20,16 +21,23 @@ class Categorymodel extends Model {
 		}
 		$query = $query->row_array();
 		
-		return $query;
+		if ($query['published'] != 0) return $query;
+		else return false;
 	}
 	function fetchChildrenCategories($cid) {
-		$this->db->order_by('list_priority', 'desc'); 
+		$this->db->order_by('listPriority', 'desc'); 
 		$this->db->order_by('name', 'asc'); 
 		$query = $this->db->get_where('categories', array('parent_id' => $cid));
 		if ($query->num_rows() == 0) {
 			return false;
 		}
 		$query = $query->result_array();
+		
+		$i = 0;
+		while ($i < count($query)) {
+			if ($query[$i]['published'] == 0) unset($query[$i]);
+			else $i++;
+		}
 		
 		return $query;
 	}
