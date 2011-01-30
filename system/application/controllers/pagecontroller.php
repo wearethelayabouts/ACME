@@ -12,6 +12,8 @@ class Pagecontroller extends Controller {
 	}
 	
 	function view() {
+		$this->output->cache(10);
+		
 		$page = $this->systemmodel->fetchPage($this->uri->segment(2));
 		if (!$page) {
 			show_404();

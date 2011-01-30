@@ -11,6 +11,8 @@ class Welcome extends Controller {
 	}
 	
 	function index() {
+		$this->output->cache(10);
+		
 		$config = $this->systemmodel->fetchConfig();
 		$userFields = $this->usermodel->fetchUserFields();
 		$news = $this->contentmodel->fetchNews($userFields);
@@ -25,6 +27,3 @@ class Welcome extends Controller {
 		$this->load->view($config['templategroup'].'_frontpage', $data);
 	}
 }
-
-/* End of file welcome.php */
-/* Location: ./system/application/controllers/welcome.php */

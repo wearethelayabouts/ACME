@@ -10,6 +10,8 @@ class Contentcontroller extends Controller {
 	}
 	
 	function view() {
+		$this->output->cache(10);
+		
 		$content = $this->contentmodel->fetchContentBySlug($this->uri->segment(2), $this->uri->segment(3));
 		if (!$content) {
 			show_404('');
@@ -28,6 +30,8 @@ class Contentcontroller extends Controller {
 		$this->load->view($config['templategroup'].'_contentpage', $data);
 	}
 	function downloadzip() {
+		$this->output->cache(10);
+		
 		$category = $this->uri->segment(2);
 		$config = $this->systemmodel->fetchConfig();
 		$links = $this->systemmodel->fetchLinks();
@@ -39,6 +43,8 @@ class Contentcontroller extends Controller {
 		$this->load->view($config['templategroup'].'_downloadzip', $data);
 	}
 	function playall() {
+		$this->output->cache(10);
+		
 		$category = $this->categorymodel->fetchCategorySlug($this->uri->segment(2));
 		
 		if (!$category) {

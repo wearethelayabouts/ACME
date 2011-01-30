@@ -11,6 +11,8 @@ class Usercontroller extends Controller {
 	}
 	
 	function view() {
+		$this->output->cache(10);
+		
 		$config = $this->systemmodel->fetchConfig();
 		
 		$object = substr($this->uri->segment(1), 1);

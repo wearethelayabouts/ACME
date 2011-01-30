@@ -12,6 +12,8 @@ class Categorycontroller extends Controller {
 	}
 	
 	function view() {
+		$this->output->cache(10);
+		
 		$category = $this->categorymodel->fetchCategorySlug($this->uri->segment(2));
 		$pagestr = $this->uri->segment(4);
 		$page = (int)$pagestr;
