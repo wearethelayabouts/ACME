@@ -110,7 +110,6 @@ class Contentmodel extends Model {
 		$i = 0;
 		$i2 = 0;
 		while ($i2 < min($limit,count($query))) {
-			$i++;
 			if (($query[$i]['category_id'] > 0) && ($query[$i]['published'] != 0)) {
 				$i2++;
 				$item = $query[$i];
@@ -123,6 +122,7 @@ class Contentmodel extends Model {
 				$items[] = $item;
 			}
 			if ($i2 >= $limit) break;
+			$i++;
 		}
 		
 		return $items;
