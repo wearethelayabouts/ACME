@@ -13,8 +13,6 @@ class Api extends Controller {
 	}
 	
 	function user_info() {
-		$this->output->cache(10);
-		
 		$variables = explode('.', $this->uri->segment(5));
 		$format = $variables[1];
 		$object = $this->uri->segment(4);
@@ -46,8 +44,6 @@ class Api extends Controller {
 	}
 	
 	function category_info() {
-		$this->output->cache(10);
-		
 		$variables = explode('.', $this->uri->segment(5));
 		$format = $variables[1];
 		$object = $this->uri->segment(4);
@@ -82,8 +78,6 @@ class Api extends Controller {
 	}
 	
 	function category_content() {
-		$this->output->cache(10);
-		
 		$variables = explode('.', $this->uri->segment(5));
 		$format = $variables[1];
 		
@@ -176,8 +170,6 @@ class Api extends Controller {
 	}
 	
 	function all_content() {
-		$this->output->cache(10);
-		
 		$variables = explode('.', $this->uri->segment(4));
 		$format = $variables[1];
 		
@@ -244,8 +236,6 @@ class Api extends Controller {
 	}
 	
 	function file() {
-		$this->output->cache(10);
-		
 		$file = $this->uri->segment(4);
 		
 		$query = $this->db->get_where('files', array('id' => $file));
@@ -269,8 +259,6 @@ class Api extends Controller {
 	}
 	
 	function content_featured() {
-		$this->output->cache(10);
-		
 		$variables = explode('.', $this->uri->segment(4));
 		$format = $variables[1];
 		
