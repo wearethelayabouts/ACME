@@ -12,7 +12,8 @@ class Categorycontroller extends Controller {
 	}
 	
 	function view() {
-		$this->output->cache(10);
+		$config = $this->systemmodel->fetchConfig();
+		$this->output->cache($this->config->item('cache_length'));
 		
 		$category = $this->categorymodel->fetchCategorySlug($this->uri->segment(2));
 		$pagestr = $this->uri->segment(4);
@@ -24,7 +25,6 @@ class Categorycontroller extends Controller {
 		$childrencategories = $this->categorymodel->fetchChildrenCategories($category['id']);
 		$tree = $this->categorymodel->fetchTree($category['id']);
 		$content = $this->contentmodel->fetchContentByCategory($category['id']);
-		$config = $this->systemmodel->fetchConfig();
 		$userFields = $this->usermodel->fetchUserFields();
 		$links = $this->systemmodel->fetchLinks();
 		$hub = $this->categorymodel->fetchCategoryHub($category['id']);

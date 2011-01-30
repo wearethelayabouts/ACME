@@ -11,13 +11,13 @@ class Welcome extends Controller {
 	}
 	
 	function index() {
-		$this->output->cache(10);
-		
 		$config = $this->systemmodel->fetchConfig();
+		$this->output->cache($this->config->item('cache_length'));
+		
 		$userFields = $this->usermodel->fetchUserFields();
 		$news = $this->contentmodel->fetchNews($userFields);
 		$links = $this->systemmodel->fetchLinks();
-		$newcontent = $this->contentmodel->fetchNewContent(5);
+		$newcontent = $this->contentmodel->fetchNewContent($this->config->item('frontpage_content_amount'));
 		
 		$data = Array(
 					'news' => $news,

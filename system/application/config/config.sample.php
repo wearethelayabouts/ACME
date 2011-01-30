@@ -325,5 +325,20 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 
+
+/*
+|--------------------------------------------------------------------------
+| ACME Stuff
+|--------------------------------------------------------------------------
+*/
+// Name of your site. Will show up in page titles unless overridden by the theme.
+$config['site_name'] = 'My ACME Site';
+// Amount of time in minutes to cache pages for. Default = 10.
+$config['cache_length'] = 10;
+// Amount of recent content to show on the front page. Default = 5.
+$config['frontpage_content_amount'] = 5;
+
+
+
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */

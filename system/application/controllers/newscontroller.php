@@ -11,7 +11,8 @@ class Newscontroller extends Controller {
 	}
 	
 	function view() {
-		$this->output->cache(10);
+		$config = $this->systemmodel->fetchConfig();
+		$this->output->cache($this->config->item('cache_length'));
 		
 		$specificpage = $this->uri->segment(2);
 		if (!isset($specificpage)) $specificpage = 0;

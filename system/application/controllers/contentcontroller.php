@@ -10,7 +10,8 @@ class Contentcontroller extends Controller {
 	}
 	
 	function view() {
-		$this->output->cache(10);
+		$config = $this->systemmodel->fetchConfig();
+		$this->output->cache($this->config->item('cache_length'));
 		
 		$content = $this->contentmodel->fetchContentBySlug($this->uri->segment(2), $this->uri->segment(3));
 		if (!$content) {
@@ -19,7 +20,6 @@ class Contentcontroller extends Controller {
 		
 		$near = $this->contentmodel->fetchContentNear($content);
 		
-		$config = $this->systemmodel->fetchConfig();
 		$links = $this->systemmodel->fetchLinks();
 		
 		$data = Array(

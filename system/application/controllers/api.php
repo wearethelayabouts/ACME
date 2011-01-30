@@ -202,7 +202,7 @@ class Api extends Controller {
 				echo '<'.'?'.'xml version="1.0" encoding="UTF-8" '.'?'.">\n";
 				echo '<rss version="2.0">'."\n";
 				echo "<channel>\n";
-				echo "\t<title>Site Name &bull; Latest Content </title>\n";
+				echo "\t<title>".$this->config->item('site_name')." &bull; Latest Content </title>\n";
 				echo "\t<link>".$this->config->item('base_url')."</link>\n";
 				echo "\n";
 				foreach ($content as $piece) {

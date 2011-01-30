@@ -12,13 +12,13 @@ class Pagecontroller extends Controller {
 	}
 	
 	function view() {
-		$this->output->cache(10);
+		$config = $this->systemmodel->fetchConfig();
+		$this->output->cache($this->config->item('cache_length'));
 		
 		$page = $this->systemmodel->fetchPage($this->uri->segment(2));
 		if (!$page) {
 			show_404();
 		}
-		$config = $this->systemmodel->fetchConfig();
 		$links = $this->systemmodel->fetchLinks();
 		
 		$data = Array(
