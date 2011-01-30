@@ -17,7 +17,6 @@ class Newscontroller extends Controller {
 		$specificpage = $this->uri->segment(2);
 		if (!isset($specificpage)) $specificpage = 0;
 		
-		$config = $this->systemmodel->fetchConfig();
 		$userFields = $this->usermodel->fetchUserFields();
 		$news = $this->contentmodel->fetchNews($userFields);
 		$links = $this->systemmodel->fetchLinks();
