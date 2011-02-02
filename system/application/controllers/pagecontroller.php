@@ -23,7 +23,8 @@ class Pagecontroller extends Controller {
 		
 		$data = Array(
 					'links' => $links,
-					'page' => $page['content']
+					'page' => $page['content'],
+					'css' => $page['custom_css']
 				);
 		$this->load->view($config['templategroup'].'_page', $data);
 	}
