@@ -1,12 +1,12 @@
 <?php
 class ACMEData {
-    function toXML($data, $rootNodeName = 'data', $xml=null) {
+    function toXML($data, $rootNodeName = 'data', $xml=null, $recursive=false) {
     	// turn off compatibility mode as simple xml throws a wobbly if you don't.
     	if (ini_get('zend.ze1_compatibility_mode') == 1) {
     		ini_set ('zend.ze1_compatibility_mode', 0);
     	}
     	
-    	if ($xml == null) {
+    	if (($xml == null) && (!$recursive)) {
     		$xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$rootNodeName />");
     	}
     	
@@ -25,7 +25,7 @@ class ACMEData {
     		if (is_array($value)) {
     			$node = $xml->addChild($key);
     			// recrusive call.
-    			$this->toXML($value, $rootNodeName, $node);
+    			$this->toXML($value, $rootNodeName, $node, true);
     		} else {
     			// add single node.
 				$value = htmlentities($value);
@@ -33,7 +33,7 @@ class ACMEData {
     		}
     		
     	}
-    	// pass back as string. or simple xml object if you want!
+		
     	return $xml->asXML();
     }
 }
