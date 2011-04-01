@@ -59,6 +59,7 @@ $route['api/1/file/:num/download'] = "api/file";
 
 // Regular routes
 $route['user/:num'] = "usercontroller/view";
+$route['user/forum'] = "usercontroller/forumprofile";
 
 $route['content/:any/download.zip'] = "contentcontroller/downloadzip";
 $route['content/:any/playall'] = "contentcontroller/playall";

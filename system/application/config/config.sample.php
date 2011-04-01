@@ -325,7 +325,6 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 
-
 /*
 |--------------------------------------------------------------------------
 | ACME Stuff
@@ -337,7 +336,15 @@ $config['site_name'] = 'My ACME Site';
 $config['cache_length'] = 10;
 // Amount of recent content to show on the front page. Default = 5.
 $config['frontpage_content_amount'] = 5;
-
+// URL to your website's message board -- no trailing slash!
+$config['forum_url'] = "http://community.wearethelayabouts.com";
+// The next two settings determine how ACME reaches your forum user profiles, if you've enabled it.
+// Example configuration:
+// A forum profile link is http://forum.whateveryoursiteis.com/profile.php?user=920&mode=view
+// $config['forum_profile_link_pre'] = "profile.php?user=";
+// $config['forum_profile_link_post'] = "&mode=view";
+$config['forum_profile_link_pre'] = "";
+$config['forum_profile_link_post'] = "";
 
 
 /* End of file config.php */
