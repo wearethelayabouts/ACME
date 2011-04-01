@@ -80,7 +80,8 @@ class Categorymodel extends Model {
 		$this->db->where('id',$cid);
 		$category = $this->db->get('categories');
 		$category = $category->row_array();
-		return $category['default_content_thumbnail'];
+		if (isset($category['default_content_thumbnail'])) return $category['default_content_thumbnail'];
+		else return 0;
 	}
 	private function fetchParentCategory($cid, $data) {
 		$query = $this->db->get_where('categories', array('id' => $cid));
