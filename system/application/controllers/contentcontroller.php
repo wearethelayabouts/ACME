@@ -56,9 +56,14 @@ class Contentcontroller extends Controller {
 		$config = $this->systemmodel->fetchConfig();
 		$links = $this->systemmodel->fetchLinks();
 		
-		if ($category['oldestFirst']) {
-			$content = array_reverse($content);
+		foreach($content as $k=>$v) {
+			$b[$k] = $v['date'];
 		}
+		asort($b);
+		foreach($b as $key=>$val) {
+			$c[] = $content[$key];
+		}
+		$content = $c;
 		
 		$data = Array(
 					'links' => $links,
