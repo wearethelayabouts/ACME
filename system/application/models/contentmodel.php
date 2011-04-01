@@ -62,6 +62,10 @@ class Contentmodel extends Model {
 			$query['authors'][] = $a;
 		}
 		
+		if (!isset($query['authors'])) {
+			$query['authors'] = Array();
+		}
+		
 		if ($query['votes_up'] == 0 && $query['votes_down'] == 0 && $query['votes_neutral'] == 0) {
 			$query['ratingstars'] = 0;
 		} else {
@@ -70,10 +74,6 @@ class Contentmodel extends Model {
 		
 		$query['file'] = $this->db->get_where('files', array('id' => $query['main_attachment']));
 		$query['file'] = $query['file']->row_array();
-		
-		if (!isset($query['authors'])) {
-			$query['authors'] = Array();
-		}
 		
 		return $query;
 	}
@@ -102,6 +102,7 @@ class Contentmodel extends Model {
 	function fetchNewContent($limit) {
 		$this->db->order_by('date', 'desc');
 		$query = $this->db->get_where('content', array('date <' => time()));
+
 		if ($query->num_rows() == 0) {
 			return false;
 		}
@@ -119,6 +120,24 @@ class Contentmodel extends Model {
 				}
 				$item['file'] = $this->db->get_where('files', array('id' => $query[$i]['main_attachment']));
 				$item['file'] = $item['file']->row_array();
+				
+				$authors = $this->db->get_where('contentauthors', array('contentid' => $item['id']));
+				$authors = $authors->result_array();
+				$authorroles = $this->db->get('contentroles');
+				$authorroles = $authorroles->result_array();
+				$userFields = $this->usermodel->fetchUserFields();
+				foreach ($authorroles as $role) {
+					$roles[$role['id']] = $role;
+				}				
+				foreach ($authors as $author) {
+					$a['role'] = $roles[$author['role']];
+					$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
+					$a['showIcon'] = $author['showIcon'];
+					$item['authors'][] = $a;
+				}				
+				if (!isset($item['authors'])) {
+					$item['authors'] = Array();
+				}				
 				$items[] = $item;
 			}
 			if ($i2 >= $limit) break;
@@ -167,8 +186,13 @@ class Contentmodel extends Model {
 			foreach ($authors as $author) {
 				$a['role'] = $roles[$author['role']];
 				$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
+				$a['showIcon'] = $author['showIcon'];
 				$query['authors'][] = $a;
 			}
+		
+		if (!isset($query['authors'])) {
+			$query['authors'] = Array();
+		}
 			
 			if ($query['votes_up'] == 0 && $query['votes_down'] == 0 && $query['votes_neutral'] == 0) {
 				$query['ratingstars'] = 0;
@@ -190,9 +214,25 @@ class Contentmodel extends Model {
 		$before = $this->db->get_where('content', array('date <' => min(time(),$content['date']), 'hub_slug' => $content['hub_slug']), 1);
 		$before = $before->row_array();
 		
+		if (isset($before['published'])) if ($before['published'] != 1) while ($before['published'] != 1) {
+			$this->db->order_by('date', 'desc');
+			$beforeagain = $this->db->get_where('content', array('date <' => min(time(),$before['date']), 'hub_slug' => $content['hub_slug']), 1);
+			$before = $beforeagain->row_array();
+			if (!isset($before['published'])) break;
+			if (!isset($before['date'])) break;
+		}
+		
 		$this->db->order_by('date', 'asc');
 		$after = $this->db->get_where('content', array('date >' => $content['date'], 'date <' => time(), 'published !=' => 0, 'hub_slug' => $content['hub_slug']), 1);
 		$after = $after->row_array();
+		
+		if (isset($after['published'])) if ($after['published'] != 1) while ($after['published'] != 1) {			
+			$this->db->order_by('date', 'desc');
+			$afteragain = $this->db->get_where('content', array('date >' => $after['date'], 'date <' => time(), 'published !=' => 0, 'hub_slug' => $content['hub_slug']), 1);
+			$after = $afteragain->row_array();
+			if (!isset($after['published'])) break;
+			if (!isset($after['date'])) break;
+		}
 		
 		$this->db->where('hub_slug',$content['hub_slug']);
 		$this->db->select_min('date');
