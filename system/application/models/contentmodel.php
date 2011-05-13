@@ -10,7 +10,7 @@ class Contentmodel extends Model {
 		$this->db->limit(5);
 		$this->load->model('usermodel');
 		$this->db->order_by('date', 'desc'); 
-		$query = $this->db->get('news');
+		$query = $this->db->get_where('news', array('published' => 1));
 		if ($query->num_rows() == 0) {
 			return false;
 		}
@@ -21,6 +21,22 @@ class Contentmodel extends Model {
 			$user = $this->usermodel->fetchUser($row['poster_id'], $userfields);
 			$result[] = Array('entry' => $row, 'poster' => $user);
 		}
+		
+		return $result;
+	}
+	
+	function fetchSingleNews($id,$userfields) {
+		$this->db->limit(5);
+		$this->load->model('usermodel');
+		$this->db->order_by('date', 'desc'); 
+		$query = $this->db->get_where('news', array('id' => $id, 'published' => 1));
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->row_array();
+		
+		$user = $this->usermodel->fetchUser($query['poster_id'], $userfields);
+		$result = Array('entry' => $query, 'poster' => $user);
 		
 		return $result;
 	}
