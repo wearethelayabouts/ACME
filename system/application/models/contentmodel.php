@@ -78,6 +78,59 @@ class Contentmodel extends Model {
 		return $query;
 	}
 	
+	function fetchContentByID($id) {
+		$query = $this->db->get_where('content', array('id' => $id));
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->row_array();
+		
+		$query['hub'] = $this->categorymodel->fetchCategoryHub($query['category_id']);
+		$query['tree'] = $this->categorymodel->fetchTree($query['category_id']);
+		$query['body'] = nl2br($query['body']);
+		
+		if ($query['rating'] == "") {
+			$query['rating'] = $query['hub']['rating'];
+			$query['rating_description'] = $query['hub']['rating_description'];
+		}
+		
+		if ($query['content_thumbnail'] < 1) {
+			$query['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query['category_id']);
+		}
+		
+		$authors = $this->db->get_where('contentauthors', array('contentid' => $id));
+		$authors = $authors->result_array();
+		$authorroles = $this->db->get('contentroles');
+		$authorroles = $authorroles->result_array();
+		$userFields = $this->usermodel->fetchUserFields();
+		
+		foreach ($authorroles as $role) {
+			$roles[$role['id']] = $role;
+		}
+		
+		foreach ($authors as $author) {
+			$a['role'] = $roles[$author['role']];
+			$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
+			$a['showIcon'] = $author['showIcon'];
+			$query['authors'][] = $a;
+		}
+		
+		if (!isset($query['authors'])) {
+			$query['authors'] = Array();
+		}
+		
+		if ($query['votes_up'] == 0 && $query['votes_down'] == 0 && $query['votes_neutral'] == 0) {
+			$query['ratingstars'] = 0;
+		} else {
+			$query['ratingstars'] = round((((($query['votes_up'] - $query['votes_down']) / ($query['votes_up'] + $query['votes_down'] + $query['votes_neutral'])) * 2) + 3), 0);
+		}
+		
+		$query['file'] = $this->db->get_where('files', array('id' => $query['main_attachment']));
+		$query['file'] = $query['file']->row_array();
+		
+		return $query;
+	}
+	
 	function fetchFeaturedContent() {
 		$this->db->order_by('date', 'desc');
 		$query = $this->db->get_where('content', array('featured_status' => '1', 'date <' => time(), 'published !=' => 0));
@@ -141,6 +194,68 @@ class Contentmodel extends Model {
 				$items[] = $item;
 			}
 			if ($i2 >= $limit) break;
+			$i++;
+		}
+		
+		return $items;
+	}
+	
+	function countAllContent() {
+		$query = $this->db->get('content');
+		return $query->num_rows();
+	}
+	
+	function fetchAllContent($sortby='date', $sortasc=false, $page=1, $pagesize=20) {
+		if (($sortby != 'name') && ($sortby != 'cat')) {
+			if ($sortasc) $sortorder = 'asc';
+			else $sortorder = 'desc';
+		} else {
+			if ($sortasc) $sortorder = 'desc';
+			else $sortorder = 'asc';
+		}
+		
+		if ($sortby == 'date') $this->db->order_by('date', $sortorder);
+		else if ($sortby == 'cat') $this->db->order_by('hub_slug', $sortorder);
+		else if ($sortby == 'name') $this->db->order_by('name', $sortorder);
+		else if ($sortby == 'id') $this->db->order_by('id', $sortorder);
+		
+		else $this->db->order_by('date', 'desc');
+		
+		$query = $this->db->get('content');
+
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->result_array();
+		
+		$i = ($page-1)*$pagesize;
+		while ($i < ($page)*$pagesize) {
+			$item = $query[$i];
+			$item['hub'] = $this->categorymodel->fetchCategoryHub($query[$i]['category_id']);
+			if ($item['content_thumbnail'] < 1) {
+				$item['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query[$i]['category_id']);;
+			}
+			$item['file'] = $this->db->get_where('files', array('id' => $query[$i]['main_attachment']));
+			$item['file'] = $item['file']->row_array();
+			
+			$authors = $this->db->get_where('contentauthors', array('contentid' => $item['id']));
+			$authors = $authors->result_array();
+			$authorroles = $this->db->get('contentroles');
+			$authorroles = $authorroles->result_array();
+			$userFields = $this->usermodel->fetchUserFields();
+			foreach ($authorroles as $role) {
+				$roles[$role['id']] = $role;
+			}				
+			foreach ($authors as $author) {
+				$a['role'] = $roles[$author['role']];
+				$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
+				$a['showIcon'] = $author['showIcon'];
+				$item['authors'][] = $a;
+			}				
+			if (!isset($item['authors'])) {
+				$item['authors'] = Array();
+			}				
+			$items[] = $item;
 			$i++;
 		}
 		
