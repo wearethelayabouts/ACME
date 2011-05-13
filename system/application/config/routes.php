@@ -67,47 +67,47 @@ $route['content/:any/page/:num'] = "categorycontroller/view";
 $route['content/:any/:any'] = "contentcontroller/view";
 $route['content/:any'] = "categorycontroller/view";
 
-$route['news/:any'] = "newscontroller/view";
+$route['news/:any'] = "newscontroller/single";
 $route['news'] = "newscontroller/view";
 
 $route['page/:any'] = "pagecontroller/view";// Admin routes
 
 // Admin routes
-$route['admin/content/add'] = "admincontroller/edit_content";
-$route['admin/content/edit/:any'] = "admincontroller/edit_content";
-$route['admin/content'] = "admincontroller/view_content";
+$route['toolbox/content/add'] = "admincontroller/edit_content";
+$route['toolbox/content/edit/:any'] = "admincontroller/edit_content";
+$route['toolbox/content'] = "admincontroller/view_content";
 
-$route['admin/categories/add'] = "admincontroller/edit_category";
-$route['admin/categories/edit/:any'] = "admincontroller/edit_category";
-$route['admin/categories'] = "admincontroller/view_categories";
+$route['toolbox/categories/add'] = "admincontroller/edit_category";
+$route['toolbox/categories/edit/:any'] = "admincontroller/edit_category";
+$route['toolbox/categories'] = "admincontroller/view_categories";
 
-$route['admin/files/add'] = "admincontroller/addnew_file";
-$route['admin/files/add/:any'] = "admincontroller/addnew_file";
-$route['admin/files/edit/:any'] = "admincontroller/edit_file";
-$route['admin/files'] = "admincontroller/view_files";
+$route['toolbox/files/add'] = "admincontroller/addnew_file";
+$route['toolbox/files/add/:any'] = "admincontroller/addnew_file";
+$route['toolbox/files/edit/:any'] = "admincontroller/edit_file";
+$route['toolbox/files'] = "admincontroller/view_files";
 
-$route['admin/news/add'] = "admincontroller/edit_news";
-$route['admin/news/edit/:any'] = "admincontroller/edit_news";
-$route['admin/news'] = "admincontroller/view_news";
+$route['toolbox/news/add'] = "admincontroller/edit_news";
+$route['toolbox/news/edit/:any'] = "admincontroller/edit_news";
+$route['toolbox/news'] = "admincontroller/view_news";
 
-$route['admin/pages/add'] = "admincontroller/edit_page";
-$route['admin/pages/edit/:any'] = "admincontroller/edit_page";
-$route['admin/'] = "admincontroller/view_pages";
+$route['toolbox/pages/add'] = "admincontroller/edit_page";
+$route['toolbox/pages/edit/:any'] = "admincontroller/edit_page";
+$route['toolbox/'] = "admincontroller/view_pages";
 
-$route['admin/users/add'] = "admincontroller/edit_user";
-$route['admin/users/edit/:any'] = "admincontroller/edit_user";
-$route['admin/users'] = "admincontroller/view_users";
+$route['toolbox/users/add'] = "admincontroller/edit_user";
+$route['toolbox/users/edit/:any'] = "admincontroller/edit_user";
+$route['toolbox/users'] = "admincontroller/view_users";
 
-$route['admin/user_fields/add'] = "admincontroller/edit_user_field";
-$route['admin/user_fields/edit/:any'] = "admincontroller/edit_user_field";
-$route['admin/user_fields'] = "admincontroller/view_user_fields";
+$route['toolbox/user_fields/add'] = "admincontroller/edit_user_field";
+$route['toolbox/user_fields/edit/:any'] = "admincontroller/edit_user_field";
+$route['toolbox/user_fields'] = "admincontroller/view_user_fields";
 
-$route['admin/author_roles/add'] = "admincontroller/edit_author_role";
-$route['admin/author_roles/edit/:any'] = "admincontroller/edit_author_role";
-$route['admin/author_roles'] = "admincontroller/view_author_roles";
+$route['toolbox/author_roles/add'] = "admincontroller/edit_author_role";
+$route['toolbox/author_roles/edit/:any'] = "admincontroller/edit_author_role";
+$route['toolbox/author_roles'] = "admincontroller/view_author_roles";
 
-$route['admin/:any'] = "admincontroller/view";
-$route['admin'] = "admincontroller/view";
+$route['toolbox/:any'] = "admincontroller/view";
+$route['toolbox'] = "admincontroller/view";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */
