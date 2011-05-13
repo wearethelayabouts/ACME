@@ -14,6 +14,27 @@ class Categorymodel extends Model {
 		if ($query['published'] != 0) return $query;
 		else return false;
 	}
+	
+	function fetchCategoryList($alphasort = true) {
+		
+		if ($alphasort) $this->db->order_by('name', 'asc');
+		
+		$query = $this->db->get('categories');
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->result_array();
+		
+		//print_r($query);
+		
+		$categories = Array();
+		foreach ($query as $category) {
+			$categories[$category['id']] = $category['name'];
+		}
+		
+		return $categories;
+	}
+	
 	function fetchCategorySlug($slug) {
 		$query = $this->db->get_where('categories', array('slug' => $slug));
 		if ($query->num_rows() == 0) {
