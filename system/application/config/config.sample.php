@@ -346,6 +346,8 @@ $config['forum_url'] = "http://community.wearethelayabouts.com";
 $config['forum_profile_link_pre'] = "";
 $config['forum_profile_link_post'] = "";
 
+// IDs of the usergroups (from your auth library) permitted to use the ACME Admin Toolbox. IMPORTANT!
+$config['admin_groups'] = array(1);
 
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */
