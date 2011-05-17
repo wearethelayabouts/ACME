@@ -168,9 +168,12 @@ class Contentmodel extends Model {
 		return $data;
 	}
 	
-	function fetchNewContent($limit) {
+	function fetchNewContent($limit,$filterlist=array()) {
 		$this->db->order_by('date', 'desc');
-		$query = $this->db->get_where('content', array('date <' => time()));
+	
+		$filterlist['date <'] = time();
+		
+		$query = $this->db->get_where('content', $filterlist);
 
 		if ($query->num_rows() == 0) {
 			return false;
