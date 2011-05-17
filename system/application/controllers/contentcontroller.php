@@ -11,23 +11,45 @@ class Contentcontroller extends Controller {
 	
 	function view() {
 		$config = $this->systemmodel->fetchConfig();
-		$this->output->cache($this->config->item('cache_length'));
+		$baseurl = $this->config->item('base_url');
 		
-		$content = $this->contentmodel->fetchContentBySlug($this->uri->segment(2), $this->uri->segment(3));
-		if (!$content) {
-			show_404('');
+		$addondomain = $this->categorymodel->fetchAddonDomain($this->uri->segment(2));
+		
+		if (($_SERVER['HTTP_HOST'] == substr($addondomain,7)) || (!$addondomain)) {
+			$this->output->cache($this->config->item('cache_length'));
+			
+			$content = $this->contentmodel->fetchContentBySlug($this->uri->segment(2), $this->uri->segment(3));
+			if (!$content) {
+				show_404('');
+			}
+			
+			$near = $this->contentmodel->fetchContentNear($content);
+			
+			$links = $this->systemmodel->fetchLinks();
+			
+			$acmeconfig = $this->systemmodel->fetchConfig();
+			if (isset($acmeconfig['sitemessage'])) {
+				if ($acmeconfig['sitemessage'] != "") $sitemessage = $acmeconfig['sitemessage'];
+				else $sitemessage = false;
+			} else $sitemessage = false;
+			
+			$data = Array(
+						'links' => $links,
+						'content' => $content,
+						'near' => $near,
+						'sitemessage' => $sitemessage
+					);
+			
+			$template = $this->categorymodel->fetchCategoryContentTemplate($content['category_id']);
+			
+			if ($template) $this->load->view($template, $data);
+			else $this->load->view($config['templategroup'].'_content_generic', $data);
+		} else {
+			$header = 'Location: ';
+			$header .= $addondomain;
+			if (substr($header, -1) != "/") $header .= "/"; 
+			header($header);
 		}
-		
-		$near = $this->contentmodel->fetchContentNear($content);
-		
-		$links = $this->systemmodel->fetchLinks();
-		
-		$data = Array(
-					'links' => $links,
-					'content' => $content,
-					'near' => $near
-				);
-		$this->load->view($config['templategroup'].'_contentpage', $data);
 	}
 	function downloadzip() {
 		$this->output->cache(10);
