@@ -21,7 +21,9 @@ class Systemmodel extends Model {
 	}
 	
 	function fetchLinks() {
-	
+		$config = $this->systemmodel->fetchConfig();
+		$baseurl = $this->config->item('base_url');
+		
 		$this->db->order_by('list_priority', 'desc'); 
 		$this->db->order_by('id', 'asc');
 		
@@ -35,6 +37,8 @@ class Systemmodel extends Model {
 			$tlink = $link;
 			switch ($link['link_type']) {
 				case '0': // URL
+					if (substr($tlink['url'],0,1) == "/") $tlink['url'] = $baseurl.substr($tlink['url'],1);
+					else if ((substr($tlink['url'],0,7) != "http://") && (substr($tlink['url'],0,6) != "ftp://") && (substr($tlink['url'],0,8) != "https://")) $tlink['url'] = $baseurl.$tlink['url'];
 					$pquery[] = $tlink;
 					break;
 				case '1': // Category
@@ -43,6 +47,8 @@ class Systemmodel extends Model {
 						// Bad link, ignore it.
 					} else {
 						$tlink['url'] = '/content/'.$category['slug'].'/';
+						if (substr($tlink['url'],0,1) == "/") $tlink['url'] = $baseurl.substr($tlink['url'],1);
+						else if ((substr($tlink['url'],0,7) != "http://") && (substr($tlink['url'],0,6) != "ftp://") && (substr($tlink['url'],0,8) != "https://")) $tlink['url'] = $baseurl.$tlink['url'];
 						$pquery[] = $tlink;
 					}
 					break;
@@ -78,6 +84,14 @@ class Systemmodel extends Model {
 		$query = $query->row_array();
 		
 		return $query;
+	}
+	
+	function base64url_encode($data) { 
+	  return rtrim(strtr(base64_encode($data), '+/', '-_'), '='); 
+	} 
+
+	function base64url_decode($data) { 
+	  return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT)); 
 	}
 	
 	function paginate($page,$pagesamount,$urlprepend,$urlappend="") {
