@@ -21,10 +21,17 @@ class Pagecontroller extends Controller {
 		}
 		$links = $this->systemmodel->fetchLinks();
 		
+		$acmeconfig = $this->systemmodel->fetchConfig();
+		if (isset($acmeconfig['sitemessage'])) {
+			if ($acmeconfig['sitemessage'] != "") $sitemessage = $acmeconfig['sitemessage'];
+			else $sitemessage = false;
+		} else $sitemessage = false;
+		
 		$data = Array(
 					'links' => $links,
 					'page' => $page['content'],
-					'css' => $page['custom_css']
+					'css' => $page['custom_css'],
+					'sitemessage' => $sitemessage
 				);
 		$this->load->view($config['templategroup'].'_page', $data);
 	}

@@ -22,7 +22,16 @@ class Usercontroller extends Controller {
 			//show_404('');
 		}
 		
-		$data = Array('user' => (Array) $user);
+		$acmeconfig = $this->systemmodel->fetchConfig();
+		if (isset($acmeconfig['sitemessage'])) {
+			if ($acmeconfig['sitemessage'] != "") $sitemessage = $acmeconfig['sitemessage'];
+			else $sitemessage = false;
+		} else $sitemessage = false;
+		
+		$data = Array(
+			'user' => (Array) $user,
+			'sitemessage' => $sitemessage
+		);
 		$this->load->view($config['templategroup'].'_user_view', $data);
 	}
 	

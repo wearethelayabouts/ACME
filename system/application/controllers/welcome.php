@@ -19,10 +19,18 @@ class Welcome extends Controller {
 		$links = $this->systemmodel->fetchLinks();
 		$newcontent = $this->contentmodel->fetchNewContent($this->config->item('frontpage_content_amount'));
 		
+		
+		$acmeconfig = $this->systemmodel->fetchConfig();
+		if (isset($acmeconfig['sitemessage'])) {
+			if ($acmeconfig['sitemessage'] != "") $sitemessage = $acmeconfig['sitemessage'];
+			else $sitemessage = false;
+		} else $sitemessage = false;
+		
 		$data = Array(
 					'news' => $news,
 					'links' => $links,
-					'content' => $newcontent
+					'content' => $newcontent,
+					'sitemessage' => $sitemessage
 				);
 		$this->load->view($config['templategroup'].'_frontpage', $data);
 	}

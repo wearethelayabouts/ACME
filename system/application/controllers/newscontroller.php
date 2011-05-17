@@ -19,9 +19,16 @@ class Newscontroller extends Controller {
 		
 		$links = $this->systemmodel->fetchLinks();
 		
+		$acmeconfig = $this->systemmodel->fetchConfig();
+		if (isset($acmeconfig['sitemessage'])) {
+			if ($acmeconfig['sitemessage'] != "") $sitemessage = $acmeconfig['sitemessage'];
+			else $sitemessage = false;
+		} else $sitemessage = false;
+		
 		$data = Array(
 					'news' => $news,
-					'links' => $links
+					'links' => $links,
+					'sitemessage' => $sitemessage
 				);
 		
 		$this->load->view($config['templategroup'].'_news', $data);
@@ -43,9 +50,16 @@ class Newscontroller extends Controller {
 		
 		$links = $this->systemmodel->fetchLinks();
 		
+		$acmeconfig = $this->systemmodel->fetchConfig();
+		if (isset($acmeconfig['sitemessage'])) {
+			if ($acmeconfig['sitemessage'] != "") $sitemessage = $acmeconfig['sitemessage'];
+			else $sitemessage = false;
+		} else $sitemessage = false;
+		
 		$data = Array(
 					'news' => $news,
-					'links' => $links
+					'links' => $links,
+					'sitemessage' => $sitemessage
 				);
 		
 		$this->load->view($config['templategroup'].'_singlenews', $data);
