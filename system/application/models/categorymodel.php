@@ -45,6 +45,18 @@ class Categorymodel extends Model {
 		if ($query['published'] != 0) return $query;
 		else return false;
 	}
+	
+	function fetchAddonDomain($slug) {
+		$query = $this->db->get_where('categories', array('slug' => $slug));
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->row_array();
+		
+		if (($query['published'] != 0) && (substr($query['addon_domain'],0,7) == "http://")) return $query['addon_domain'];
+		else return false;
+	}
+	
 	function fetchChildrenCategories($cid) {
 		$this->db->order_by('listPriority', 'desc'); 
 		$this->db->order_by('name', 'asc'); 
@@ -76,6 +88,26 @@ class Categorymodel extends Model {
 		}
 		
 		return array_reverse($data);
+	}
+	function fetchCategoryContentTemplate($cid) {
+		$template = false;
+		
+		$query = $this->db->get_where('categories', array('id' => $cid));
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->row_array();
+		
+		if (strlen($query['content_template']) >= 2) $template = $query['content_template'];
+		
+		while (!$template) {
+			if ($query['parent_id'] > 0) {
+				$query = $this->fetchCategory($query['parent_id']);
+				if (strlen($query['content_template']) >= 2) $template = $query['content_template'];
+			} else break;
+		}
+		
+		return $template;
 	}
 	function fetchCategoryHub($cid) {
 		$tree = $this->fetchTree($cid);
@@ -120,4 +152,5 @@ class Categorymodel extends Model {
 		
 		return $nData;
 	}
+	
 }
