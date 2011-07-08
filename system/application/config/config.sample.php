@@ -336,6 +336,8 @@ $config['site_name'] = 'My ACME Site';
 $config['cache_length'] = 10;
 // Amount of recent content to show on the front page. Default = 5.
 $config['frontpage_content_amount'] = 5;
+// Optimize category listings? This will hand the theme less content metadata but will decrease the amount of SQL queries. Default = true
+$config['optimize_category_listing'] = true;
 // URL to your website's message board -- no trailing slash!
 $config['forum_url'] = "http://community.wearethelayabouts.com";
 // The next two settings determine how ACME reaches your forum user profiles, if you've enabled it.

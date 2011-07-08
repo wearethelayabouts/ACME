@@ -295,14 +295,21 @@ class Contentmodel extends Model {
 		return $queryr;
 	}
 	
-	function processContentRows($queryr) {
+	function processContentRows($queryr, $fetchBareMinimum = false) {
+		if (!$this->config->item('optimize_category_listing')) $fetchBareMinimum = false;
+		
+		if (!$fetchBareMinimum) {
+			$authorroles = $this->db->get('contentroles');
+			$authorroles = $authorroles->result_array();
+		}
+		
 		foreach ($queryr as $bit) {
 			$query = $bit;
 			$query['hub'] = $this->categorymodel->fetchCategoryHub($query['category_id']);
-			$query['tree'] = $this->categorymodel->fetchTree($query['category_id']);
+			if (!$fetchBareMinimum) $query['tree'] = $this->categorymodel->fetchTree($query['category_id']);
 			$query['body'] = nl2br($bit['body']);
 			
-			if ($query['rating'] == "") {
+			if ($query['rating'] == "" && !$fetchBareMinimum) {
 				$query['rating'] = $query['hub']['rating'];
 				$query['rating_description'] = $query['hub']['rating_description'];
 			}
@@ -313,24 +320,25 @@ class Contentmodel extends Model {
 			
 			$authors = $this->db->get_where('contentauthors', array('contentid' => $query['id']));
 			$authors = $authors->result_array();
-			$authorroles = $this->db->get('contentroles');
-			$authorroles = $authorroles->result_array();
-			$userFields = $this->usermodel->fetchUserFields();
-				
-			foreach ($authorroles as $role) {
-				$roles[$role['id']] = $role;
-			}
 			
-			foreach ($authors as $author) {
-				$a['role'] = $roles[$author['role']];
-				$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
-				$a['showIcon'] = $author['showIcon'];
-				$query['authors'][] = $a;
+			if (!$fetchBareMinimum) {	
+				$userFields = $this->usermodel->fetchUserFields();
+				
+				foreach ($authorroles as $role) {
+					$roles[$role['id']] = $role;
+				}
+				
+				foreach ($authors as $author) {
+					$a['role'] = $roles[$author['role']];
+					$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
+					$a['showIcon'] = $author['showIcon'];
+					$query['authors'][] = $a;
+				}
 			}
 		
-		if (!isset($query['authors'])) {
-			$query['authors'] = Array();
-		}
+			if (!isset($query['authors'])) {
+				$query['authors'] = Array();
+			}
 			
 			if ($query['votes_up'] == 0 && $query['votes_down'] == 0 && $query['votes_neutral'] == 0) {
 				$query['ratingstars'] = 0;
@@ -338,8 +346,8 @@ class Contentmodel extends Model {
 				$query['ratingstars'] = round((((($query['votes_up'] - $query['votes_down']) / ($query['votes_up'] + $query['votes_down'] + $query['votes_neutral'])) * 2) + 3), 0);
 			}
 			
-			$query['file'] = $this->db->get_where('files', array('id' => $query['main_attachment']));
-			$query['file'] = $query['file']->row_array();
+			if (!$fetchBareMinimum) $query['file'] = $this->db->get_where('files', array('id' => $query['main_attachment']));
+			if (!$fetchBareMinimum) $query['file'] = $query['file']->row_array();
 			
 			$bits[] = $query;
 		}

@@ -82,7 +82,7 @@ class Categorycontroller extends Controller {
 			$pagesamount = 0;
 		}
 		
-		$contentchunk = $this->contentmodel->processContentRows($contentchunk);
+		$contentchunk = $this->contentmodel->processContentRows($contentchunk, true);
 		
 		$acmeconfig = $this->systemmodel->fetchConfig();
 		if (isset($acmeconfig['sitemessage'])) {
