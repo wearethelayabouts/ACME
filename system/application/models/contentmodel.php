@@ -281,7 +281,7 @@ class Contentmodel extends Model {
 		return $items;
 	}
 	
-	function fetchContentByCategory($cid, $limit = 0) {
+	function fetchContentRowsByCategory($cid, $limit = 0) {
 		if ($limit != 0) {
 			$this->db->limit($limit[1], $limit[0]);
 		}
@@ -292,6 +292,10 @@ class Contentmodel extends Model {
 		}
 		$queryr = $queryr->result_array();
 		
+		return $queryr;
+	}
+	
+	function processContentRows($queryr) {
 		foreach ($queryr as $bit) {
 			$query = $bit;
 			$query['hub'] = $this->categorymodel->fetchCategoryHub($query['category_id']);
@@ -341,6 +345,22 @@ class Contentmodel extends Model {
 		}
 		
 		return $bits;
+	}
+		
+	function fetchContentByCategory($cid, $limit = 0) {
+		if ($limit != 0) {
+			$this->db->limit($limit[1], $limit[0]);
+		}
+		$this->db->order_by('date', 'desc'); 
+		$queryr = $this->db->get_where('content', array('category_id' => $cid, 'date <' => time(), 'published !=' => 0));
+		if ($queryr->num_rows() == 0) {
+			return false;
+		}
+		$queryr = $queryr->result_array();
+		
+		$process = $this->processContentRows($queryr);
+		
+		return $process;
 	}
 	function fetchContentNear($content) {
 	
