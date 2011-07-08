@@ -48,48 +48,7 @@ class Contentmodel extends CI_Model {
 		}
 		$query = $query->row_array();
 		
-		$query['hub'] = $this->categorymodel->fetchCategoryHub($query['category_id']);
-		$query['tree'] = $this->categorymodel->fetchTree($query['category_id']);
-		$query['body'] = nl2br($query['body']);
-		
-		if ($query['rating'] == "") {
-			$query['rating'] = $query['hub']['rating'];
-			$query['rating_description'] = $query['hub']['rating_description'];
-		}
-		
-		if ($query['content_thumbnail'] < 1) {
-			$query['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query['category_id']);
-		}
-		
-		$authors = $this->db->get_where('contentauthors', array('contentid' => $query['id']));
-		$authors = $authors->result_array();
-		$authorroles = $this->db->get('contentroles');
-		$authorroles = $authorroles->result_array();
-		$userFields = $this->usermodel->fetchUserFields();
-		
-		foreach ($authorroles as $role) {
-			$roles[$role['id']] = $role;
-		}
-		
-		foreach ($authors as $author) {
-			$a['role'] = $roles[$author['role']];
-			$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
-			$a['showIcon'] = $author['showIcon'];
-			$query['authors'][] = $a;
-		}
-		
-		if (!isset($query['authors'])) {
-			$query['authors'] = Array();
-		}
-		
-		if ($query['votes_up'] == 0 && $query['votes_down'] == 0 && $query['votes_neutral'] == 0) {
-			$query['ratingstars'] = 0;
-		} else {
-			$query['ratingstars'] = round((((($query['votes_up'] - $query['votes_down']) / ($query['votes_up'] + $query['votes_down'] + $query['votes_neutral'])) * 2) + 3), 0);
-		}
-		
-		$query['file'] = $this->db->get_where('files', array('id' => $query['main_attachment']));
-		$query['file'] = $query['file']->row_array();
+		$query = $this->processContentRows($query);
 		
 		return $query;
 	}
@@ -101,48 +60,7 @@ class Contentmodel extends CI_Model {
 		}
 		$query = $query->row_array();
 		
-		$query['hub'] = $this->categorymodel->fetchCategoryHub($query['category_id']);
-		$query['tree'] = $this->categorymodel->fetchTree($query['category_id']);
-		$query['body'] = nl2br($query['body']);
-		
-		if ($query['rating'] == "") {
-			$query['rating'] = $query['hub']['rating'];
-			$query['rating_description'] = $query['hub']['rating_description'];
-		}
-		
-		if ($query['content_thumbnail'] < 1) {
-			$query['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query['category_id']);
-		}
-		
-		$authors = $this->db->get_where('contentauthors', array('contentid' => $id));
-		$authors = $authors->result_array();
-		$authorroles = $this->db->get('contentroles');
-		$authorroles = $authorroles->result_array();
-		$userFields = $this->usermodel->fetchUserFields();
-		
-		foreach ($authorroles as $role) {
-			$roles[$role['id']] = $role;
-		}
-		
-		foreach ($authors as $author) {
-			$a['role'] = $roles[$author['role']];
-			$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
-			$a['showIcon'] = $author['showIcon'];
-			$query['authors'][] = $a;
-		}
-		
-		if (!isset($query['authors'])) {
-			$query['authors'] = Array();
-		}
-		
-		if ($query['votes_up'] == 0 && $query['votes_down'] == 0 && $query['votes_neutral'] == 0) {
-			$query['ratingstars'] = 0;
-		} else {
-			$query['ratingstars'] = round((((($query['votes_up'] - $query['votes_down']) / ($query['votes_up'] + $query['votes_down'] + $query['votes_neutral'])) * 2) + 3), 0);
-		}
-		
-		$query['file'] = $this->db->get_where('files', array('id' => $query['main_attachment']));
-		$query['file'] = $query['file']->row_array();
+		$query = $this->processContentRows($query);
 		
 		return $query;
 	}
@@ -186,30 +104,7 @@ class Contentmodel extends CI_Model {
 			if (($query[$i]['category_id'] > 0) && ($query[$i]['published'] != 0)) {
 				$i2++;
 				$item = $query[$i];
-				$item['hub'] = $this->categorymodel->fetchCategoryHub($query[$i]['category_id']);
-				if ($item['content_thumbnail'] < 1) {
-					$item['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query[$i]['category_id']);;
-				}
-				$item['file'] = $this->db->get_where('files', array('id' => $query[$i]['main_attachment']));
-				$item['file'] = $item['file']->row_array();
-				
-				$authors = $this->db->get_where('contentauthors', array('contentid' => $item['id']));
-				$authors = $authors->result_array();
-				$authorroles = $this->db->get('contentroles');
-				$authorroles = $authorroles->result_array();
-				$userFields = $this->usermodel->fetchUserFields();
-				foreach ($authorroles as $role) {
-					$roles[$role['id']] = $role;
-				}				
-				foreach ($authors as $author) {
-					$a['role'] = $roles[$author['role']];
-					$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
-					$a['showIcon'] = $author['showIcon'];
-					$item['authors'][] = $a;
-				}				
-				if (!isset($item['authors'])) {
-					$item['authors'] = Array();
-				}				
+				$item = $this->processContentRow($item, false);
 				$items[] = $item;
 			}
 			if ($i2 >= $limit) break;
@@ -246,34 +141,12 @@ class Contentmodel extends CI_Model {
 			return false;
 		}
 		$query = $query->result_array();
-		
+		$authorroles = $this->db->get('contentroles');
+		$authorroles = $authorroles->result_array();
 		$i = ($page-1)*$pagesize;
 		while ($i < ($page)*$pagesize) {
 			$item = $query[$i];
-			$item['hub'] = $this->categorymodel->fetchCategoryHub($query[$i]['category_id']);
-			if ($item['content_thumbnail'] < 1) {
-				$item['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query[$i]['category_id']);;
-			}
-			$item['file'] = $this->db->get_where('files', array('id' => $query[$i]['main_attachment']));
-			$item['file'] = $item['file']->row_array();
-			
-			$authors = $this->db->get_where('contentauthors', array('contentid' => $item['id']));
-			$authors = $authors->result_array();
-			$authorroles = $this->db->get('contentroles');
-			$authorroles = $authorroles->result_array();
-			$userFields = $this->usermodel->fetchUserFields();
-			foreach ($authorroles as $role) {
-				$roles[$role['id']] = $role;
-			}				
-			foreach ($authors as $author) {
-				$a['role'] = $roles[$author['role']];
-				$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
-				$a['showIcon'] = $author['showIcon'];
-				$item['authors'][] = $a;
-			}				
-			if (!isset($item['authors'])) {
-				$item['authors'] = Array();
-			}				
+			$item = $this->processContentRow($item, false, $authorroles);	
 			$items[] = $item;
 			$i++;
 		}
@@ -304,55 +177,66 @@ class Contentmodel extends CI_Model {
 		}
 		
 		foreach ($queryr as $bit) {
-			$query = $bit;
-			$query['hub'] = $this->categorymodel->fetchCategoryHub($query['category_id']);
-			if (!$fetchBareMinimum) $query['tree'] = $this->categorymodel->fetchTree($query['category_id']);
-			$query['body'] = nl2br($bit['body']);
-			
-			if ($query['rating'] == "" && !$fetchBareMinimum) {
-				$query['rating'] = $query['hub']['rating'];
-				$query['rating_description'] = $query['hub']['rating_description'];
-			}
-		
-			if ($query['content_thumbnail'] < 1) {
-				$query['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query['category_id']);
-			}
-			
-			$authors = $this->db->get_where('contentauthors', array('contentid' => $query['id']));
-			$authors = $authors->result_array();
-			
-			if (!$fetchBareMinimum) {	
-				$userFields = $this->usermodel->fetchUserFields();
-				
-				foreach ($authorroles as $role) {
-					$roles[$role['id']] = $role;
-				}
-				
-				foreach ($authors as $author) {
-					$a['role'] = $roles[$author['role']];
-					$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
-					$a['showIcon'] = $author['showIcon'];
-					$query['authors'][] = $a;
-				}
-			}
-		
-			if (!isset($query['authors'])) {
-				$query['authors'] = Array();
-			}
-			
-			if ($query['votes_up'] == 0 && $query['votes_down'] == 0 && $query['votes_neutral'] == 0) {
-				$query['ratingstars'] = 0;
-			} else {
-				$query['ratingstars'] = round((((($query['votes_up'] - $query['votes_down']) / ($query['votes_up'] + $query['votes_down'] + $query['votes_neutral'])) * 2) + 3), 0);
-			}
-			
-			if (!$fetchBareMinimum) $query['file'] = $this->db->get_where('files', array('id' => $query['main_attachment']));
-			if (!$fetchBareMinimum) $query['file'] = $query['file']->row_array();
+			$this->processContentRow($bit, $fetchBareMinimum, $authorroles);
 			
 			$bits[] = $query;
 		}
 		
 		return $bits;
+	}
+	
+	function processContentRow($queryr, $fetchBareMinimum = false, $authorroles = Array()) {
+		$query = $queryr;
+		$query['hub'] = $this->categorymodel->fetchCategoryHub($query['category_id']);
+		if (!$fetchBareMinimum) $query['tree'] = $this->categorymodel->fetchTree($query['category_id']);
+		$query['body'] = nl2br($query['body']);
+		
+		if ($query['rating'] == "" && !$fetchBareMinimum) {
+			$query['rating'] = $query['hub']['rating'];
+			$query['rating_description'] = $query['hub']['rating_description'];
+		}
+	
+		if ($query['content_thumbnail'] < 1) {
+			$query['content_thumbnail'] = $this->categorymodel->fetchDefaultThumbnail($query['category_id']);
+		}
+		
+		$authors = $this->db->get_where('contentauthors', array('contentid' => $query['id']));
+		$authors = $authors->result_array();
+		
+		if (!$fetchBareMinimum) {	
+			$userFields = $this->usermodel->fetchUserFields();
+			
+			if ($authorroles == Array()) {
+				$authorroles = $this->db->get('contentroles');
+				$authorroles = $authorroles->result_array();
+			}
+			
+			foreach ($authorroles as $role) {
+				$roles[$role['id']] = $role;
+			}
+			
+			foreach ($authors as $author) {
+				$a['role'] = $roles[$author['role']];
+				$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
+				$a['showIcon'] = $author['showIcon'];
+				$query['authors'][] = $a;
+			}
+		}
+	
+		if (!isset($query['authors'])) {
+			$query['authors'] = Array();
+		}
+		
+		if ($query['votes_up'] == 0 && $query['votes_down'] == 0 && $query['votes_neutral'] == 0) {
+			$query['ratingstars'] = 0;
+		} else {
+			$query['ratingstars'] = round((((($query['votes_up'] - $query['votes_down']) / ($query['votes_up'] + $query['votes_down'] + $query['votes_neutral'])) * 2) + 3), 0);
+		}
+		
+		if (!$fetchBareMinimum) $query['file'] = $this->db->get_where('files', array('id' => $query['main_attachment']));
+		if (!$fetchBareMinimum) $query['file'] = $query['file']->row_array();
+		
+		return $query;
 	}
 		
 	function fetchContentByCategory($cid, $limit = 0) {
