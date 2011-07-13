@@ -48,7 +48,9 @@ class Contentcontroller extends CI_Controller {
 			$header = 'Location: ';
 			$header .= $addondomain;
 			if (substr($header, -1) != "/") $header .= "/"; 
+			$header .= $this->uri->segment(3);
 			header($header);
+			die();
 		}
 	}
 	function downloadzip() {

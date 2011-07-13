@@ -21,6 +21,7 @@ class Categorycontroller extends CI_Controller {
 			$addondomain = $this->categorymodel->fetchAddonDomain($this->uri->segment(2));
 			if (($_SERVER['HTTP_HOST'] !== substr($addondomain,7)) && $addondomain !== false) {
 				header('Location: '.$addondomain);
+				die();
 			}
 		} 
 		
