@@ -25,8 +25,6 @@ class Categorycontroller extends CI_Controller {
 				die();
 			}
 		} 
-		
-		$this->output->cache($this->config->item('cache_length'));
 	
 		$category = $this->categorymodel->fetchCategorySlug($this->uri->segment(2));
 		
