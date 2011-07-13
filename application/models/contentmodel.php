@@ -48,7 +48,7 @@ class Contentmodel extends CI_Model {
 		}
 		$query = $query->row_array();
 		
-		$query = $this->processContentRows($query);
+		$query = $this->processContentRow($query);
 		
 		return $query;
 	}
@@ -60,7 +60,7 @@ class Contentmodel extends CI_Model {
 		}
 		$query = $query->row_array();
 		
-		$query = $this->processContentRows($query);
+		$query = $this->processContentRow($query);
 		
 		return $query;
 	}
@@ -177,9 +177,7 @@ class Contentmodel extends CI_Model {
 		}
 		
 		foreach ($queryr as $bit) {
-			$this->processContentRow($bit, $fetchBareMinimum, $authorroles);
-			
-			$bits[] = $query;
+			$bits[] = $this->processContentRow($bit, $fetchBareMinimum, $authorroles);
 		}
 		
 		return $bits;
