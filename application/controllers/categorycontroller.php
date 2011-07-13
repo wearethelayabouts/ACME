@@ -16,9 +16,10 @@ class Categorycontroller extends CI_Controller {
 		$baseurl = $this->config->item('base_url');
 		$basehost = parse_url($baseurl);
 		$basehost = str_replace('www.', '', $basehost['host']);
+		$addondomain = $this->categorymodel->fetchAddonDomain($this->uri->segment(2));
+		if ($addondomain == false) $this->output->cache($this->config->item('cache_length'));
 		
 		if ($basehost != $_SERVER['HTTP_HOST'] or 'www.'.$basehost != $_SERVER['HTTP_HOST']) {
-			$addondomain = $this->categorymodel->fetchAddonDomain($this->uri->segment(2));
 			if (($_SERVER['HTTP_HOST'] !== substr($addondomain,7)) && $addondomain !== false) {
 				header('Location: '.$addondomain);
 				die();
