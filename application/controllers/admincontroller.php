@@ -57,7 +57,7 @@ class Admincontroller extends CI_Controller {
 		$baseurl = $this->config->item('base_url');
 		
 		if ($this->uri->segment(3) >= 1) $page = $this->uri->segment(3);
-		else $page = 1 ;
+		else $page = 1;
 		
 		//$this->uri->segment(4)
 		
@@ -333,15 +333,93 @@ class Admincontroller extends CI_Controller {
 		
 		if (!$canview) die("You are not authorized to access this page.");
 		
+		// uri segment 3 = page
+		// uri segment 4 = sort
+		// uri segment 5 = sort type
+		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		if ($this->uri->segment(3) >= 1) $page = $this->uri->segment(3);
+		else $page = 1;
+		
+		if ($this->uri->segment(4)) {
+			$sortby = strtolower($this->uri->segment(4));
+			if (($sortby != "id") && ($sortby != "dscr") && ($sortby != "mime") && ($sortby != "fname")) $sortby = "id";
+			if ($this->uri->segment(5)) {
+				if ((strtolower($this->uri->segment(5)) == "desc") || (strtolower($this->uri->segment(5)) == "d")) $sortasc = false;
+				else if ((strtolower($this->uri->segment(5)) == "asc") || (strtolower($this->uri->segment(5)) == "a")) $sortasc = true;
+				else $sortasc = false;
+			} else $sortasc = false;
+		} else {
+			$sortby = "id";
+			$sortasc = false;
+		}
+		
+		if (($sortby != 'mime') && ($sortby != 'fname') && ($sortby != 'dscr')) {
+			if ($sortasc) $sortorder = 'asc';
+			else $sortorder = 'desc';
+		} else {
+			if ($sortasc) $sortorder = 'desc';
+			else $sortorder = 'asc';
+		}
+		
+		if ($sortby == 'dscr') $this->db->order_by('internalDescription', $sortorder);
+		else if ($sortby == 'mime') $this->db->order_by('type', $sortorder);
+		else if ($sortby == 'fname') $this->db->order_by('name', $sortorder);
+		else if ($sortby == 'id') $this->db->order_by('id', $sortorder);
+
+		else $this->db->order_by('id', 'desc');
+		
+		$query = $this->db->get('files');
+		$filecount = $query->num_rows();
+		$pagesamount = ceil($filecount/25);
+		
+		if ($query->num_rows() == 0) {
+			$files = Array();
+		} else {
+			$query = $query->result_array();
+			$i = ($page-1)*25;
+			while ($i < ($page)*25) {
+				$file = $query[$i];
+				$files[] = $file;
+				$i++;
+			}
+		}
+		
+		if ($this->uri->segment(4)) {
+			if ($this->uri->segment(5)) $urlappend = "/" . $this->uri->segment(4) . "/" . $this->uri->segment(5);
+			else $urlappend = "/" . $this->uri->segment(4);
+		} else $urlappend = "";
+		
+		$paginationhtml = $this->systemmodel->paginate($page,$pagesamount,"/toolbox/files/",$urlappend);
+		
+		$messagecode = $this->input->get('m');
+		if ($messagecode == 'editsuccess') {
+			$messagetype = 1;
+			$message = "Your file has been modified successfully.";
+		} else if ($messagecode == 'addsuccess') {
+			$messagetype = 1;
+			$message = "Your file has been added successfully.";
+		} else {
+			$messagetype = 0;
+			$message = "";
+		}
+		
 		$data = Array(
+			'files' => $files,
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'page' => $page,
+			'pagesamount' => $pagesamount,
+			'paginationhtml' => $paginationhtml,
+			'sortby' => $sortby,
+			'sortasc' => $sortasc,
+			'message' => $message,
+			'messagetype' => $messagetype
 		);
 		
-		$this->load->view('admin/file_edit', $data);
+		$this->load->view('admin/file_view', $data);
 	}
 	
 	function addnew_file($amount = 1) {
