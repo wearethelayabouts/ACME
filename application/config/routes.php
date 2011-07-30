@@ -76,35 +76,43 @@ $route['page/:any'] = "pagecontroller/view";// Admin routes
 $route['toolbox/content/add'] = "admincontroller/edit_content";
 $route['toolbox/content/edit/:any'] = "admincontroller/edit_content";
 $route['toolbox/content'] = "admincontroller/view_content";
+$route['toolbox/content/:any'] = "admincontroller/view_content";
 
 $route['toolbox/categories/add'] = "admincontroller/edit_category";
 $route['toolbox/categories/edit/:any'] = "admincontroller/edit_category";
 $route['toolbox/categories'] = "admincontroller/view_categories";
+$route['toolbox/categories/:any'] = "admincontroller/view_categories";
 
 $route['toolbox/files/add'] = "admincontroller/addnew_file";
 $route['toolbox/files/add/:any'] = "admincontroller/addnew_file";
 $route['toolbox/files/edit/:any'] = "admincontroller/edit_file";
 $route['toolbox/files'] = "admincontroller/view_files";
+$route['toolbox/files/:any'] = "admincontroller/view_files";
 
 $route['toolbox/news/add'] = "admincontroller/edit_news";
 $route['toolbox/news/edit/:any'] = "admincontroller/edit_news";
 $route['toolbox/news'] = "admincontroller/view_news";
+$route['toolbox/news/:any'] = "admincontroller/view_news";
 
 $route['toolbox/pages/add'] = "admincontroller/edit_page";
 $route['toolbox/pages/edit/:any'] = "admincontroller/edit_page";
-$route['toolbox/'] = "admincontroller/view_pages";
+$route['toolbox/pages'] = "admincontroller/view_pages";
+$route['toolbox/pages/:any'] = "admincontroller/view_pages";
 
 $route['toolbox/users/add'] = "admincontroller/edit_user";
 $route['toolbox/users/edit/:any'] = "admincontroller/edit_user";
 $route['toolbox/users'] = "admincontroller/view_users";
+$route['toolbox/users/:any'] = "admincontroller/view_users";
 
 $route['toolbox/user_fields/add'] = "admincontroller/edit_user_field";
 $route['toolbox/user_fields/edit/:any'] = "admincontroller/edit_user_field";
 $route['toolbox/user_fields'] = "admincontroller/view_user_fields";
+$route['toolbox/user_fields/:any'] = "admincontroller/view_user_fields";
 
 $route['toolbox/author_roles/add'] = "admincontroller/edit_author_role";
 $route['toolbox/author_roles/edit/:any'] = "admincontroller/edit_author_role";
 $route['toolbox/author_roles'] = "admincontroller/view_author_roles";
+$route['toolbox/author_roles/:any'] = "admincontroller/view_author_roles";
 
 $route['toolbox/:any'] = "admincontroller/view";
 $route['toolbox'] = "admincontroller/view";
