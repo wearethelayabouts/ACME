@@ -224,7 +224,7 @@ $config['encryption_key'] = "";
 | Session Variables
 |--------------------------------------------------------------------------
 |
-| 'session_cookie_name' = the name you want for the cookie
+| '	ion_cookie_name' = the name you want for the cookie
 | 'encrypt_sess_cookie' = TRUE/FALSE (boolean).  Whether to encrypt the cookie
 | 'session_expiration'  = the number of SECONDS you want the session to last.
 |  by default sessions last 7200 seconds (two hours).  Set to zero for no expiration.
@@ -234,7 +234,7 @@ $config['encryption_key'] = "";
 $config['sess_cookie_name']		= 'ci_session';
 $config['sess_expiration']		= 7200;
 $config['sess_encrypt_cookie']	= FALSE;
-$config['sess_use_database']	= FALSE;
+$config['sess_use_database']	= TRUE;
 $config['sess_table_name']		= 'ci_sessions';
 $config['sess_match_ip']		= FALSE;
 $config['sess_match_useragent']	= TRUE;

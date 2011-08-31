@@ -8,6 +8,8 @@ class Welcome extends CI_Controller {
 		$this->load->model('usermodel');
 		$this->load->model('systemmodel');
 		$this->load->model('contentmodel');
+		$this->load->helper('url');
+		$this->load->library('tank_auth');
 	}
 	
 	function index() {
