@@ -29,7 +29,7 @@ class Api extends CI_Controller {
 				header('Content-type: application/json');
 				echo json_encode($user);
 				break;
-			case 'php':
+			case 'sphp':
 				header('Content-type: text/plain');
 				echo serialize($user);
 				break;
@@ -63,7 +63,7 @@ class Api extends CI_Controller {
 				header('Content-type: application/json');
 				echo json_encode($data);
 				break;
-			case 'php':
+			case 'sphp':
 				header('Content-type: text/plain');
 				echo serialize($data);
 				break;
@@ -123,7 +123,7 @@ class Api extends CI_Controller {
 				header('Content-type: application/json');
 				echo json_encode($data);
 				break;
-			case 'php':
+			case 'sphp':
 				header('Content-type: text/plain');
 				echo serialize($data);
 				break;
@@ -189,7 +189,7 @@ class Api extends CI_Controller {
 				header('Content-type: application/json');
 				echo json_encode($data);
 				break;
-			case 'php':
+			case 'sphp':
 				header('Content-type: text/plain');
 				echo serialize($data);
 				break;
@@ -275,7 +275,7 @@ class Api extends CI_Controller {
 				header('Content-type: application/json');
 				echo json_encode($data);
 				break;
-			case 'php':
+			case 'sphp':
 				header('Content-type: text/plain');
 				echo serialize($data);
 				break;
