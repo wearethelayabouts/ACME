@@ -6,10 +6,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<title><?=$sitename?> &bull; View All Files (Admin)</title>
-		<link href="<?=$baseurl?>static/acme/admin.css" rel="stylesheet" type="text/css" />
+		<link href="<?=$baseurl?>includes/acme/admin.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
-		<img src="<?=$baseurl?>static/acme/logo.png" alt="ACME: Awesome Creative Media Engine" title="ACME: Awesome Creative Media Engine" />
+		<img src="<?=$baseurl?>includes/acme/logo.png" alt="ACME: Awesome Creative Media Engine" title="ACME: Awesome Creative Media Engine" />
 		<h1><?=$sitename?> Admin Toolbox</h1>
 		<h2>View Files</h1>
 		<div class="mainbox">
