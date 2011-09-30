@@ -4,24 +4,20 @@ class Admincontroller extends CI_Controller {
 		parent::__construct();
 		$this->load->database();
 		$this->load->library('ACMEData');
-		$this->load->library('ACMEAuth');
 		$this->load->model('usermodel');
 		$this->load->model('systemmodel');
 		$this->load->model('contentmodel');
 		$this->load->model('categorymodel');
+		$this->load->helper('url');
+		$this->load->library('tank_auth');
 	}
 	
 	function view() {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -37,21 +33,11 @@ class Admincontroller extends CI_Controller {
 	// CONTENT //
 	
 	function view_content($page = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
-		
-		// uri segment 3 = page
-		// uri segment 4 = sort
-		// uri segment 5 = sort type
-		
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -120,16 +106,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_content($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -251,16 +232,11 @@ class Admincontroller extends CI_Controller {
 	// CATEGORIES //
 	
 	function view_categories($page = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -274,16 +250,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_category($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -297,16 +268,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function commit_category($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -322,16 +288,11 @@ class Admincontroller extends CI_Controller {
 	// FILES //
 	
 	function view_files($tags = "", $page = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		// uri segment 3 = page
 		// uri segment 4 = sort
@@ -423,16 +384,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function addnew_file($amount = 1) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -446,16 +402,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_file($id) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -469,16 +420,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function commit_file($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -494,16 +440,11 @@ class Admincontroller extends CI_Controller {
 	// NEWS //
 	
 	function view_news($page = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -517,22 +458,29 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_news($id = 0) {
-		if (!$ipbwi->member->isAdmin()) die("You are not authorized to access this page.");
-		$data = Array();
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		}
+		
+		$config = $this->systemmodel->fetchConfig();
+		
+		$sitename = $this->config->item('site_name');
+		$baseurl = $this->config->item('base_url');
+		
+		$data = Array(
+			'sitename' => $sitename,
+			'baseurl' => $baseurl
+		);
+		
 		$this->load->view('admin/news_edit', $data);
 	}
 	
 	function commit_news($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -548,16 +496,11 @@ class Admincontroller extends CI_Controller {
 	// PAGES //
 	
 	function view_pages($page = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -571,16 +514,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_page($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -594,16 +532,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function commit_page($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -619,16 +552,11 @@ class Admincontroller extends CI_Controller {
 	// USERS //
 	
 	function view_users($page = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -642,16 +570,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_user($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -665,16 +588,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function commit_user($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -690,16 +608,11 @@ class Admincontroller extends CI_Controller {
 	// USER FIELDS //
 	
 	function view_user_fields($page = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -713,16 +626,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_user_field($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -736,16 +644,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function commit_user_field($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -761,16 +664,11 @@ class Admincontroller extends CI_Controller {
 	// AUTHOR ROLES //
 	
 	function view_author_roles($page = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -784,16 +682,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_author_role($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
@@ -807,16 +700,11 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function commit_author_role($id = 0) {
-		$config = $this->systemmodel->fetchConfig();
-		$admingroups = $this->config->item('admin_groups');
-		$usergroup = $this->acmeauth->getUserGroup();
-		$canview = false;
-		foreach ($admingroups as $id) if ($id == $usergroup) {
-			$canview = true;
-			break;
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
 		}
 		
-		if (!$canview) die("You are not authorized to access this page.");
+		$config = $this->systemmodel->fetchConfig();
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
