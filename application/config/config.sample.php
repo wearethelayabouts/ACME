@@ -332,8 +332,8 @@ $config['proxy_ips'] = '';
 */
 // Name of your site. Will show up in page titles unless overridden by the theme.
 $config['site_name'] = 'My ACME Site';
-// Amount of time in minutes to cache pages for. Default = 10.
-$config['cache_length'] = 10;
+// Amount of time in minutes to cache pages for. Default = 0.
+$config['cache_length'] = 0;
 // Amount of recent content to show on the front page. Default = 5.
 $config['frontpage_content_amount'] = 5;
 // Optimize category listings? This will hand the theme less content metadata but will decrease the amount of SQL queries. Default = true

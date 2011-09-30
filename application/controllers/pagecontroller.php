@@ -13,7 +13,8 @@ class Pagecontroller extends CI_Controller {
 	
 	function view() {
 		$config = $this->systemmodel->fetchConfig();
-		$this->output->cache($this->config->item('cache_length'));
+		$cachelength = $this->config->item('cache_length');
+		if ($cachelength >= 1) $this->output->cache($cachelength);
 		
 		$page = $this->systemmodel->fetchPage($this->uri->segment(2));
 		if (!$page) {

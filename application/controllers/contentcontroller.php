@@ -14,7 +14,8 @@ class Contentcontroller extends CI_Controller {
 		$baseurl = $this->config->item('base_url');
 		
 		$addondomain = $this->categorymodel->fetchAddonDomain($this->uri->segment(2));
-		if ($addondomain == false) $this->output->cache($this->config->item('cache_length'));
+		$cachelength = $this->config->item('cache_length');
+		if (($cachelength >= 1) && ($addondomain == false)) $this->output->cache($cachelength);
 		
 		if (($_SERVER['HTTP_HOST'] == substr($addondomain,7)) || (!$addondomain)) {
 			$content = $this->contentmodel->fetchContentBySlug($this->uri->segment(2), $this->uri->segment(3));

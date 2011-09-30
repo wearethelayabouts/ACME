@@ -12,7 +12,8 @@ class Newscontroller extends CI_Controller {
 	
 	function view() {
 		$config = $this->systemmodel->fetchConfig();
-		$this->output->cache($this->config->item('cache_length'));
+		$cachelength = $this->config->item('cache_length');
+		if ($cachelength >= 1) $this->output->cache($cachelength);
 		
 		$userFields = $this->usermodel->fetchUserFields();
 		$news = $this->contentmodel->fetchNews($userFields);
