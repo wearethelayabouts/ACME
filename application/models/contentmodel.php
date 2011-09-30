@@ -144,12 +144,10 @@ class Contentmodel extends CI_Model {
 			return false;
 		}
 		$query = $query->result_array();
-		$authorroles = $this->db->get('contentroles');
-		$authorroles = $authorroles->result_array();
 		$i = ($page-1)*$pagesize;
 		while ($i < ($page)*$pagesize) {
 			$item = $query[$i];
-			$item = $this->processContentRow($item, false, $authorroles);	
+			$item = $this->processContentRow($item, false);	
 			$items[] = $item;
 			$i++;
 		}
@@ -178,19 +176,14 @@ class Contentmodel extends CI_Model {
 	function processContentRows($queryr, $fetchBareMinimum = false) {
 		if (!$this->config->item('optimize_category_listing')) $fetchBareMinimum = false;
 		
-		if (!$fetchBareMinimum) {
-			$authorroles = $this->db->get('contentroles');
-			$authorroles = $authorroles->result_array();
-		}
-		
 		foreach ($queryr as $bit) {
-			$bits[] = $this->processContentRow($bit, $fetchBareMinimum, $authorroles);
+			$bits[] = $this->processContentRow($bit, $fetchBareMinimum);
 		}
 		
 		return $bits;
 	}
 	
-	function processContentRow($queryr, $fetchBareMinimum = false, $authorroles = Array()) {
+	function processContentRow($queryr, $fetchBareMinimum = false) {
 		$query = $queryr;
 		$query['hub'] = $this->categorymodel->fetchCategoryHub($query['category_id']);
 		if (!$fetchBareMinimum) $query['tree'] = $this->categorymodel->fetchTree($query['category_id']);
@@ -211,17 +204,8 @@ class Contentmodel extends CI_Model {
 		if (!$fetchBareMinimum) {	
 			$userFields = $this->usermodel->fetchUserFields();
 			
-			if ($authorroles == Array()) {
-				$authorroles = $this->db->get('contentroles');
-				$authorroles = $authorroles->result_array();
-			}
-			
-			foreach ($authorroles as $role) {
-				$roles[$role['id']] = $role;
-			}
-			
 			foreach ($authors as $author) {
-				$a['role'] = $roles[$author['role']];
+				$a['role'] = $author['rolename'];
 				$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
 				$a['showIcon'] = $author['showIcon'];
 				$query['authors'][] = $a;
