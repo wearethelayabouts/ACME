@@ -153,4 +153,34 @@ class Categorymodel extends CI_Model {
 		return $nData;
 	}
 	
+	function fetchCategoryShowType($cid) {
+		$showonly = $this->db->get_where('categories', array('id' => $cid));
+		$showonly = $showonly->row_array();
+		return $showonly['only_show'];
+	}
+	
+	function fetchCategoryLatestID($cid) {
+		$this->db->select('max(date)');
+		$this->db->where('category_id',$cid);
+		$query = $this->db->get('content');
+		$query = $query->row_array();
+		$date = $query['max(date)'];
+		$this->db->select('id,date');
+		$query = $this->db->get_where('content', array('category_id' => $cid, 'date' => $date));
+		$query = $query->row_array();
+		return $query['id'];
+	}
+	
+	function fetchCategoryFirstID($cid) {
+		$this->db->select('min(date)');
+		$this->db->where('category_id',$cid);
+		$query = $this->db->get('content');
+		$query = $query->row_array();
+		$date = $query['min(date)'];
+		$this->db->select('id,date');
+		$query = $this->db->get_where('content', array('category_id' => $cid, 'date' => $date));
+		$query = $query->row_array();
+		return $query['id'];
+	}
+	
 }

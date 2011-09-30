@@ -37,7 +37,7 @@ class Categorycontroller extends CI_Controller {
 		}
 		$childrencategories = $this->categorymodel->fetchChildrenCategories($category['id']);
 		$tree = $this->categorymodel->fetchTree($category['id']);
-		$content = $this->contentmodel->fetchContentRowsByCategory($category['id']);
+		$content = $this->contentmodel->fetchContentRowsByCategory($category['id'],0,0);
 		$userFields = $this->usermodel->fetchUserFields();
 		$links = $this->systemmodel->fetchLinks();
 		$hub = $this->categorymodel->fetchCategoryHub($category['id']);

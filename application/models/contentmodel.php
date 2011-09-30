@@ -102,10 +102,13 @@ class Contentmodel extends CI_Model {
 		$i2 = 0;
 		while ($i2 < min($limit,count($query))) {
 			if (($query[$i]['category_id'] > 0) && ($query[$i]['published'] != 0)) {
-				$i2++;
-				$item = $query[$i];
-				$item = $this->processContentRow($item, false);
-				$items[] = $item;
+				$showtype = $this->categorymodel->fetchCategoryShowType($query[$i]['category_id']);
+				if (($showtype == 0) || (($showtype == 1) && ($this->categorymodel->fetchCategoryFirstID($query[$i]['category_id']) == $query[$i]['id'])) || (($showtype == 2) && ($this->categorymodel->fetchCategoryLatestID($query[$i]['category_id']) == $query[$i]['id']))) {
+					$i2++;
+					$item = $query[$i];
+					$item = $this->processContentRow($item, false);
+					$items[] = $item;
+				}
 			}
 			if ($i2 >= $limit) break;
 			$i++;
@@ -154,11 +157,15 @@ class Contentmodel extends CI_Model {
 		return $items;
 	}
 	
-	function fetchContentRowsByCategory($cid, $limit = 0) {
-		if ($limit != 0) {
-			$this->db->limit($limit[1], $limit[0]);
-		}
-		$this->db->order_by('date', 'desc'); 
+	function fetchContentRowsByCategory($cid, $limit = 0, $showonly = -2) {
+		if ($showonly == -2) $showonly = $this->categorymodel->fetchCategoryShowType($cid);
+		
+		if ($showonly == 0) {
+			if ($limit != 0) $this->db->limit($limit[1], $limit[0]);
+		} else $this->db->limit(1);
+		
+		if ($showonly == 1) $this->db->order_by('date', 'asc'); 
+		else $this->db->order_by('date', 'desc');
 		$queryr = $this->db->get_where('content', array('category_id' => $cid, 'date <' => time(), 'published !=' => 0));
 		if ($queryr->num_rows() == 0) {
 			return false;
@@ -237,11 +244,15 @@ class Contentmodel extends CI_Model {
 		return $query;
 	}
 		
-	function fetchContentByCategory($cid, $limit = 0) {
-		if ($limit != 0) {
-			$this->db->limit($limit[1], $limit[0]);
-		}
-		$this->db->order_by('date', 'desc'); 
+	function fetchContentByCategory($cid, $limit = 0, $showonly = -2) {
+		if ($showonly == -2) $showonly = $this->categorymodel->fetchCategoryShowType($cid);
+		
+		if ($showonly == 0) {
+			if ($limit != 0) $this->db->limit($limit[1], $limit[0]);
+		} else $this->db->limit(1);
+		
+		if ($showonly == 1) $this->db->order_by('date', 'asc'); 
+		else $this->db->order_by('date', 'desc');
 		$queryr = $this->db->get_where('content', array('category_id' => $cid, 'date <' => time(), 'published !=' => 0));
 		if ($queryr->num_rows() == 0) {
 			return false;
