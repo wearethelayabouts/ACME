@@ -46,7 +46,7 @@ class Categorycontroller extends CI_Controller {
 			$content = (Array) Array();
 		}
 		
-		if ($category['returnAllContent'] == 1 && is_array($childrencategories)) {
+		if ($category['return_all_content'] == 1 && is_array($childrencategories)) {
 			foreach($childrencategories as $cat) {
 				$c = $this->contentmodel->fetchContentRowsByCategory($cat['id']);
 				$subc = $this->categorymodel->fetchChildrenCategories($cat['id']);

@@ -207,7 +207,7 @@ class Contentmodel extends CI_Model {
 			foreach ($authors as $author) {
 				$a['role'] = $author['rolename'];
 				$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
-				$a['showIcon'] = $author['showIcon'];
+				$a['show_icon'] = $author['show_icon'];
 				$query['authors'][] = $a;
 			}
 		}
