@@ -1,4 +1,4 @@
-oa<?php
+<?php
 class Categorymodel extends CI_Model {
 	function __construct() {
 		parent::__construct();

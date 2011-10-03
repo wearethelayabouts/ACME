@@ -91,7 +91,7 @@ CREATE TABLE `contentauthors` (
   `contentid` int(10) unsigned NOT NULL COMMENT 'id of the object being referenced',
   `user` int(10) unsigned NOT NULL COMMENT 'id of the user being referenced',
   `show_icon` int(1) NOT NULL DEFAULT '1',
-  `rolename` text unsigned NOT NULL COMMENT 'the role that the user had in the project.`',
+  `rolename` text NOT NULL COMMENT 'the role that the user had in the project.',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
