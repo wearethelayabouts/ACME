@@ -82,7 +82,7 @@ class Categorycontroller extends CI_Controller {
 		
 		uasort($content, 'cmp_content');
 		
-		if ($sort) {
+		if ($sortasc) {
 			$content = array_reverse($content);
 		}
 
