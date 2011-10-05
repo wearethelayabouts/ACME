@@ -145,10 +145,11 @@ class Api extends CI_Controller {
 					echo "\t\t<description>";
 					if ($piece['customEmbed'] == "") {
 						switch ($piece['file']['type']) {
-							case 'image/png':
-							case 'image/gif':
-							case 'image/jpg':
-								echo '<img class="comic" src="'.$this->config->item('base_url').'api/1/file/'.$piece['main_attachment'].'" alt="'.$piece['name'].'" /><br />';
+							case 'png':
+							case 'gif':
+							case 'jpg':
+								echo '<img class="comic" src="'.$this->config->item('base_url').'api/1/file/'.$piece['main_attachment'].'" alt="'.$piece['name'].'" 
+/><br />';
 								break;
 							default:
 								break;
@@ -211,10 +212,11 @@ class Api extends CI_Controller {
 					echo "\t\t<description>";
 					if ($piece['customEmbed'] == "") {
 						switch ($piece['file']['type']) {
-							case 'image/png':
-							case 'image/gif':
-							case 'image/jpg':
-								echo '<img class="comic" src="'.$this->config->item('base_url').'api/1/file/'.$piece['main_attachment'].'" alt="'.$piece['name'].'" /><br />';
+							case 'png':
+							case 'gif':
+							case 'jpg':
+								echo '<img class="comic" src="'.$this->config->item('base_url').'api/1/file/'.$piece['main_attachment'].'" alt="'.$piece['name'].'" 
+/><br />';
 								break;
 							default:
 								break;
@@ -246,16 +248,17 @@ class Api extends CI_Controller {
 		
 		$query = $query->row_array();
 		
-		header('Content-type: '.$query['type']);
-		if ($this->uri->segment(5) == "download") {
-			if ($query['name'] != "") {
-				header('Content-Disposition: attachment; filename="'.$query['name'].'"');
+		if (file_exists('files/'.$query['id'].'.'.$query['type'])) {
+			if ($this->uri->segment(5) == "download") {
+				header('Location: /files/'.$query['id'].'.'.$query['type'].'?dl=1');
+				die();
 			} else {
-				header('Content-Disposition: attachment');
+				header('Location: /files/'.$query['id'].'.'.$query['type']);
+				die();
 			}
+		} else {
+			show_404('');
 		}
-		header('Content-Length: '.filesize('./files/'.$query['id']));
-		readfile('./files/'.$query['id']);
 	}
 	
 	function content_featured() {
@@ -305,7 +308,7 @@ class Api extends CI_Controller {
 		foreach ($categorycontent as $content) {
 			$f = $this->db->get_where('files', array('id' => $content['main_attachment']));
 			$f = $f->row_array();
-			if ($f['isDownloadable'] == 1) {
+			if ($f['is_downloadable'] == 1) {
 				$zip->addFile('./files/'.$f['id'], $f['name']);
 			}
 			$f = Array();
