@@ -29,6 +29,12 @@ class Categorycontroller extends CI_Controller {
 	
 		$category = $this->categorymodel->fetchCategorySlug($this->uri->segment(2));
 		
+		$sort = $this->uri->segment(3);
+		if ($sort == "sortasc") $sort = true;
+		else if ($sort == "sortdesc") $sort = false;
+		else if ($category['oldest_first']) $sort = true;
+		else $sort = false;
+		
 		$pagestr = $this->uri->segment(4);
 		$page = (int)$pagestr;
 		
@@ -67,23 +73,25 @@ class Categorycontroller extends CI_Controller {
 		
 		uasort($content, 'cmp_content');
 		
-		if ($category['oldest_first']) {
+		if ($sort) {
 			$content = array_reverse($content);
 		}
 
-		if (count($content) > 0) {
-			$contentchunks = array_chunk($content,24);
-			if (isset($page)) {
-				if ($page < 1) $page = 1;
-				$contentchunk = $contentchunks[$page-1];
-			} else $contentchunk = $contentchunks[0];
-			$pagesamount = sizeof($contentchunks);
-		} else { 
-			$contentchunk = 0;
-			$pagesamount = 0;
-		}
+		if ($config['paginate'] == true) {
+			if (count($content) > 0) {
+				$contentchunks = array_chunk($content,24);
+				if (isset($page)) {
+					if ($page < 1) $page = 1;
+					$contentchunk = $contentchunks[$page-1];
+				} else $contentchunk = $contentchunks[0];
+				$pagesamount = sizeof($contentchunks);
+			} else { 
+				$contentchunk = 0;
+				$pagesamount = 0;
+			}
+			$contentchunk = $this->contentmodel->processContentRows($contentchunk, true);
+		} else $contentchunk = $content;
 		
-		$contentchunk = $this->contentmodel->processContentRows($contentchunk, true);
 		
 		$acmeconfig = $this->systemmodel->fetchConfig();
 		if (isset($acmeconfig['sitemessage'])) {
@@ -100,6 +108,7 @@ class Categorycontroller extends CI_Controller {
 					'pagesamount' => $pagesamount,
 					'tree' => $tree,
 					'hub' => $hub,
+					'sortasc' => $sort,
 					'sitemessage' => $sitemessage,
 					'baseurl' => $baseurl
 				);

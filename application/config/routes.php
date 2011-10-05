@@ -61,6 +61,8 @@ $route['api/1/file/:num/download'] = "api/file";
 $route['user/:num'] = "usercontroller/view";
 $route['user/forum'] = "usercontroller/forumprofile";
 
+$route['content/:any/sortasc'] = "categorycontroller/view";
+$route['content/:any/sortdesc'] = "categorycontroller/view";
 $route['content/:any/download.zip'] = "contentcontroller/downloadzip";
 $route['content/:any/playall'] = "contentcontroller/playall";
 $route['content/:any/page/:num'] = "categorycontroller/view";

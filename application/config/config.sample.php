@@ -340,6 +340,8 @@ $config['frontpage_content_amount'] = 5;
 $config['optimize_category_listing'] = true;
 // URL to your website's message board -- no trailing slash!
 $config['forum_url'] = "http://community.wearethelayabouts.com";
+// Split category listings into pages? Default: true. HIGHLY RECOMMENDED NOT TO TOUCH THIS.
+$config['paginate'] = true;
 // The next two settings determine how ACME reaches your forum user profiles, if you've enabled it.
 // Example configuration:
 // A forum profile link is http://forum.whateveryoursiteis.com/profile.php?user=920&mode=view
