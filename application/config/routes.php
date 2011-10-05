@@ -66,6 +66,8 @@ $route['content/:any/sortdesc'] = "categorycontroller/view";
 $route['content/:any/download.zip'] = "contentcontroller/downloadzip";
 $route['content/:any/playall'] = "contentcontroller/playall";
 $route['content/:any/page/:num'] = "categorycontroller/view";
+$route['content/:any/sortasc/:num'] = "categorycontroller/view";
+$route['content/:any/sortdesc/:num'] = "categorycontroller/view";
 $route['content/:any/:any'] = "contentcontroller/view";
 $route['content/:any'] = "categorycontroller/view";
 
