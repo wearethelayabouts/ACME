@@ -36,7 +36,7 @@ class Categorycontroller extends CI_Controller {
 		} else if ($sort == "sortdesc") {
 			$sortasc = false;
 			$manualsort = true;
-		else if ($category['oldest_first']) {
+		} else if ($category['oldest_first']) {
 			$sortasc = true;
 			$manualsort = false;
 		} else {
