@@ -338,10 +338,12 @@ $config['cache_length'] = 0;
 $config['frontpage_content_amount'] = 5;
 // Optimize category listings? This will hand the theme less content metadata but will decrease the amount of SQL queries. Default = true
 $config['optimize_category_listing'] = true;
-// URL to your website's message board -- no trailing slash!
-$config['forum_url'] = "http://community.wearethelayabouts.com";
 // Split category listings into pages? Default: true. HIGHLY RECOMMENDED NOT TO TOUCH THIS.
 $config['paginate'] = true;
+// Pass the first/last/previous/next relative content data along with content from fetchNewContent. Can give small performance hit when not caching, but useful for something like a webcomic site where you want to display the latest comic and have the Previous/First buttons for it. Default: false.
+$config['new_content_near'] = false;
+// URL to your website's message board -- no trailing slash!
+$config['forum_url'] = "http://community.wearethelayabouts.com";
 // The next two settings determine how ACME reaches your forum user profiles, if you've enabled it.
 // Example configuration:
 // A forum profile link is http://forum.whateveryoursiteis.com/profile.php?user=920&mode=view
