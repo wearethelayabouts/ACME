@@ -118,6 +118,7 @@ CREATE TABLE `news` (
 CREATE TABLE `pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` tinytext NOT NULL,
+  `title` text NOT NULL,
   `custom_css` text NOT NULL,
   `content` text NOT NULL,
   PRIMARY KEY (`id`)

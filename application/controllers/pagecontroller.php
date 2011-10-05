@@ -32,6 +32,7 @@ class Pagecontroller extends CI_Controller {
 					'links' => $links,
 					'page' => $page['content'],
 					'css' => $page['custom_css'],
+					'title' => $page['title'],
 					'sitemessage' => $sitemessage
 				);
 		$this->load->view($config['templategroup'].'_page', $data);
