@@ -20,7 +20,6 @@ class Pagecontroller extends CI_Controller {
 		if (!$page) {
 			show_404();
 		}
-		$links = $this->systemmodel->fetchLinks();
 		
 		$acmeconfig = $this->systemmodel->fetchConfig();
 		if (isset($acmeconfig['sitemessage'])) {
@@ -29,7 +28,6 @@ class Pagecontroller extends CI_Controller {
 		} else $sitemessage = false;
 		
 		$data = Array(
-					'links' => $links,
 					'page' => $page['content'],
 					'css' => $page['custom_css'],
 					'title' => $page['title'],

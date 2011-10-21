@@ -1,17 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "gttp://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
-		<title><?=$sitename?> &bull; View All Content (Admin)</title>
-		<link href="<?=$baseurl?>includes/acme/admin.css" rel="stylesheet" type="text/css" />
+		<title><?php echo $sitename; ?> &bull; View All Content (Admin)</title>
+		<link href="<?php echo $baseurl; ?>includes/acme/admin.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
-		<img src="<?=$baseurl?>includes/acme/logo.png" alt="ACME: Awesome Creative Media Engine" title="ACME: Awesome Creative Media Engine" />
-		<h1><?=$sitename?> Admin Toolbox</h1>
+		<img src="<?php echo $baseurl; ?>includes/acme/logo.png" alt="ACME: Awesome Creative Media Engine" title="ACME: Awesome Creative Media Engine" />
+		<h1><?php echo $sitename; ?> Admin Toolbox</h1>
 		<h2><?php if ($editexisting) echo "Edit"; else echo "Add New"; ?> Content</h1>
 		<div class="mainbox" style="text-align: center;">
 			<p>Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.</p>
-			<form action="<?=$thispageurl?>" method="post">
+			<form action="<?php echo $thispageurl; ?>" method="post">
 				<input type="hidden" name="commit" value="true" />
+				<input type="hidden" name="id" value="<?php echo $file['id']; ?>" />
 				<table class="maintable" style="text-align: left;">
 					<tr class="tralt">
 						<td style="width: 150px;">
@@ -20,7 +21,7 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="name" style="width: 300px;" value="<?php echo $content['name']; ?>" />
-							<?php if ($errors['name']) { ?><p class="message-error"><strong>ERROR:</strong> <?=$errors['name']?></p><?php } ?>
+							<?php if ($errors['name']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -48,7 +49,7 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="slug" style="width: 120px;" value="<?php echo $content['slug']; ?>" />
-							<?php if ($errors['slug']) { ?><p class="message-error"><strong>ERROR:</strong> <?=$errors['slug']?></p><?php } ?>
+							<?php if ($errors['slug']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['slug']; ?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -59,11 +60,11 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="year" maxlength="4" style="width: 50px;" value="<?php if ($content['date'] > 0) echo date("Y", $content['date']); ?>" /> <input type="text" name="month" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("m", $content['date']); ?>" /> <input type="text" name="day" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("d", $content['date']); ?>" /> at <input type="text" name="hour" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("H", $content['date']); ?>" />:<input type="text" name="minute" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("i", $content['date']); ?>" />
-							<?php if ($errors['year']) { ?><p class="message-error"><strong>ERROR:</strong> <?=$errors['year']?></p><?php } ?>
-							<?php if ($errors['month']) { ?><p class="message-error"><strong>ERROR:</strong> <?=$errors['month']?></p><?php } ?>
-							<?php if ($errors['day']) { ?><p class="message-error"><strong>ERROR:</strong> <?=$errors['day']?></p><?php } ?>
-							<?php if ($errors['hour']) { ?><p class="message-error"><strong>ERROR:</strong> <?=$errors['hour']?></p><?php } ?>
-							<?php if ($errors['minute']) { ?><p class="message-error"><strong>ERROR:</strong> <?=$errors['minute']?></p><?php } ?>
+							<?php if ($errors['year']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['year']; ?></p><?php } ?>
+							<?php if ($errors['month']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['month']; ?></p><?php } ?>
+							<?php if ($errors['day']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['day']; ?></p><?php } ?>
+							<?php if ($errors['hour']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['hour']; ?></p><?php } ?>
+							<?php if ($errors['minute']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['minute']; ?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -72,7 +73,7 @@
 							<p class="description">Descriptive text to be displayed alongside the content.</p>
 						</td>
 						<td class="tdalt">
-							<textarea name="body" rows="8" cols="60"><?=$content['body']?></textarea>
+							<textarea name="body" rows="8" cols="60"><?php echo $content['body']; ?></textarea>
 						</td>
 					</tr>
 					<tr class="tralt">
@@ -89,13 +90,63 @@
 					</tr>
 					<tr>
 						<td>
+							<p>Main File Attachment</p>
+							<p class="description">The main file attachment for this content (e.g. an image file for a comic, an mp3 for a song...). Not required.</p>
+						</td>
+						<td class="tdalt">
+							File ID: <input type="text" id="main_attachment_id" name="main_attachment" style="width: 80px;" value="<?php if ($content['main_attachment'] > 0) echo $content['main_attachment']; ?>" />
+							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+						</td>
+					</tr>
+					<tr class="tralt">
+						<td>
+							<p>Image File Attachment</p>
+							<p class="description">If your main attachment is something non-visual and you wish to have an image accompaniment (e.g. screenshots for a downloadable game), you can provide one here.</p>
+						</td>
+						<td class="tdalt">
+							File ID: <input type="text" name="image_attachment" style="width: 80px;" value="<?php if ($content['image_attachment'] > 0) echo $content['image_attachment']; ?>" />
+							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Download File Attachment</p>
+							<p class="description">If you wish to have a downloadable attachment differing from the previous two attachments, you can provide one here.</p>
+						</td>
+						<td class="tdalt">
+							File ID: <input type="text" name="download_attachment" style="width: 80px;" value="<?php if ($content['download_attachment'] > 0) echo $content['download_attachment']; ?>" />
+							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+						</td>
+					</tr>
+					<tr class="tralt">
+						<td>
+							<p>Content Thumbnail</p>
+							<p class="description">If your site uses content thumbnails, you can provide one here.</p>
+						</td>
+						<td class="tdalt">
+							File ID: <input type="text" name="content_thumbnail" style="width: 80px;" value="<?php if ($content['content_thumbnail'] > 0) echo $content['content_thumbnail']; ?>" />
+							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+						</td>
+					</tr>	
+					<tr>
+						<td>
 							<p>Custom Embed</p>
 							<p class="description">Any HTML in this field will be inserted into the page in the content area. This is useful for, say, embedding an external player like one from YouTube or SoundCloud, or a Flash movie.</p>
 						</td>
 						<td class="tdalt">
 							<textarea name="customembed" rows="8" cols="60"><?php echo $content['customEmbed']; ?></textarea>
 						</td>
-					</tr>					
+					</tr>
+					<tr class="tralt">
+						<td>
+							<p>Authors</p>
+							<p class="description">Add authors to your content here, if you so choose. The "role" is their position on the project, e.g. Artist, Editor, Lead Animator, Programming, Host... etc.</p>
+						</td>
+						<td class="tdalt">
+							Author ID: <input type="text" name="author_id_" style="width: 80px;" value="" />
+							 &nbsp; &nbsp; &nbsp; <a href="#">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_" style="width: 160px;" value="" />
+						</td>
+					</tr>				
 				</table>
 				<input type="submit" />
 			</form>

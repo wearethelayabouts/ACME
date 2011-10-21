@@ -18,8 +18,6 @@ class Newscontroller extends CI_Controller {
 		$userFields = $this->usermodel->fetchUserFields();
 		$news = $this->contentmodel->fetchNews($userFields);
 		
-		$links = $this->systemmodel->fetchLinks();
-		
 		$acmeconfig = $this->systemmodel->fetchConfig();
 		if (isset($acmeconfig['sitemessage'])) {
 			if ($acmeconfig['sitemessage'] != "") $sitemessage = $acmeconfig['sitemessage'];
@@ -28,7 +26,6 @@ class Newscontroller extends CI_Controller {
 		
 		$data = Array(
 					'news' => $news,
-					'links' => $links,
 					'sitemessage' => $sitemessage
 				);
 		

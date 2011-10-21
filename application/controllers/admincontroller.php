@@ -211,8 +211,11 @@ class Admincontroller extends CI_Controller {
 			
 			$allcategories = $this->categorymodel->fetchCategoryList();
 			
-			if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$this->uri->uri_string();
-			else $thispageurl = $baseurl.$this->uri->uri_string();
+			$uri_string = $this->uri->uri_string();
+			if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+	
+			if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+			else $thispageurl = $baseurl.$uri_string;
 			
 			$data = Array(
 				'sitename' => $sitename,
@@ -306,7 +309,7 @@ class Admincontroller extends CI_Controller {
 		
 		if ($this->uri->segment(4)) {
 			$sortby = strtolower($this->uri->segment(4));
-			if (($sortby != "id") && ($sortby != "dscr") && ($sortby != "mime") && ($sortby != "fname")) $sortby = "id";
+			if (($sortby != "id") && ($sortby != "dscr") && ($sortby != "type") && ($sortby != "fname")) $sortby = "id";
 			if ($this->uri->segment(5)) {
 				if ((strtolower($this->uri->segment(5)) == "desc") || (strtolower($this->uri->segment(5)) == "d")) $sortasc = false;
 				else if ((strtolower($this->uri->segment(5)) == "asc") || (strtolower($this->uri->segment(5)) == "a")) $sortasc = true;
@@ -317,7 +320,7 @@ class Admincontroller extends CI_Controller {
 			$sortasc = false;
 		}
 		
-		if (($sortby != 'mime') && ($sortby != 'fname') && ($sortby != 'dscr')) {
+		if (($sortby != 'type') && ($sortby != 'fname') && ($sortby != 'dscr')) {
 			if ($sortasc) $sortorder = 'asc';
 			else $sortorder = 'desc';
 		} else {
@@ -326,7 +329,7 @@ class Admincontroller extends CI_Controller {
 		}
 		
 		if ($sortby == 'dscr') $this->db->order_by('internalDescription', $sortorder);
-		else if ($sortby == 'mime') $this->db->order_by('type', $sortorder);
+		else if ($sortby == 'type') $this->db->order_by('type', $sortorder);
 		else if ($sortby == 'fname') $this->db->order_by('name', $sortorder);
 		else if ($sortby == 'id') $this->db->order_by('id', $sortorder);
 
@@ -383,25 +386,8 @@ class Admincontroller extends CI_Controller {
 		$this->load->view('admin/file_view', $data);
 	}
 	
-	function addnew_file($amount = 1) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
-		}
-		
-		$config = $this->systemmodel->fetchConfig();
-		
-		$sitename = $this->config->item('site_name');
-		$baseurl = $this->config->item('base_url');
-		
-		$data = Array(
-			'sitename' => $sitename,
-			'baseurl' => $baseurl
-		);
-		
-		$this->load->view('admin/file_add', $data);
-	}
-	
 	function edit_file($id) {
+		
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		}
@@ -410,13 +396,108 @@ class Admincontroller extends CI_Controller {
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
+			
+		$commit = $this->input->post('commit');
+		$valid = false;
+		$errors = Array();
+		$postdata = Array();
 		
-		$data = Array(
-			'sitename' => $sitename,
-			'baseurl' => $baseurl
-		);
+		$id = $this->uri->segment(4);
+		$editexisting = ($id != 0);
 		
-		$this->load->view('admin/file_edit', $data);
+		if ($commit) {
+			// validate content!
+			
+			$postdata['internal_description'] = $this->input->post('internal_description');
+			$postdata['type'] = $this->input->post('type');
+			$postdata['name'] = $this->input->post('name');
+			$postdata['is_downloadable'] = $this->input->post('is_downloadable');
+			$postdata['upload'] = $this->input->post('upload');
+			$postdata['id'] = $this->input->post('id');
+			$attach = $this->input->post('attachment_type');
+			
+			$namemeta = quotemeta($postdata['name']);
+			if ((ereg("/", $postdata['name'])) || ($namemeta != $postdata['name'])) $errors['name'] = "Filenames may not contain any of the following chracters: / \\ + * ? [ ^ ] ( $ )";
+			
+			$valid = (count($errors) <= 0);
+			if ($valid) {
+				if ($editexisting) $committype = 'editfile';
+				else $committype = 'addfile';
+				
+				$is_downloadable = false;
+				if ($postdata['is_downloadable'] == "on") $is_downloadable = true;
+				
+				$file = Array(
+					'type' => $postdata['type'],
+					'name' => $postdata['name'],
+					'is_downloadable' => $is_downloadable,
+					'internal_description' => $postdata['internal_description']
+				);
+				
+				if ($editexisting) {
+					$this->db->where('id', intval($postdata['id']));
+					$this->db->update('files',$file);
+				} else {
+					$this->db->insert('files',$file);
+					$insertid = $this->db->insert_id();
+				}
+				
+				$uploadconfig['upload_path'] = './files/';
+				$uploadconfig['allowed_types'] = '*';
+				if ($editexisting) $uploadconfig['file_name']  = $postdata['id'].".".$file['type'];
+				else $uploadconfig['file_name']  = $insertid.".".$file['type'];
+				$uploadconfig['remove_spaces']  = '0';
+				$uploadconfig['overwrite']  = 'TRUE';
+
+				$this->load->library('upload', $uploadconfig);
+
+				if (!$this->upload->do_upload()) {
+					$error = array('error' => $this->upload->display_errors());
+					//$this->load->view('upload_form', $error);
+					print_r($error);
+					die();
+				} else {
+					$data = Array(
+						'type' => $committype,
+						'object' => $file,
+						'attachment_type' => $attach
+					);
+					
+					$data['object']['upload_data'] = $this->upload->data();
+					
+					$this->load->view('admin/commit', $data);
+				}
+			}
+		}
+		
+		if (!$commit || !$valid) {			
+			if ($editexisting) {
+				$file = $this->db->get_where('files', array('id' => $id));
+				$file = $file->row_array();
+			} else {
+				$file = Array();
+				$file['id'] = "NULL";
+			}
+			if (count($postdata) > 0) foreach ($postdata as $key => $value) if ($key != 'upload') $file[$key] = $value;
+			
+			$uri_string = $this->uri->uri_string();
+			if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+	
+			if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+			else $thispageurl = $baseurl.$uri_string;
+			
+			$data = Array(
+				'sitename' => $sitename,
+				'baseurl' => $baseurl,
+				'editexisting' => $editexisting,
+				'file' => $file,
+				'thispageurl' => $thispageurl,
+				'errors' => $errors,
+				'editexisting' => $editexisting
+			);
+			
+			$this->load->view('admin/file_edit', $data);
+		}
 	}
 	
 	function commit_file($id = 0) {

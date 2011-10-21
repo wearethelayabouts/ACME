@@ -54,7 +54,6 @@ class Categorycontroller extends CI_Controller {
 		$tree = $this->categorymodel->fetchTree($category['id']);
 		$content = $this->contentmodel->fetchContentRowsByCategory($category['id'],0,0);
 		$userFields = $this->usermodel->fetchUserFields();
-		$links = $this->systemmodel->fetchLinks();
 		$hub = $this->categorymodel->fetchCategoryHub($category['id']);
 		
 		if (!is_array($content)) {
@@ -109,7 +108,6 @@ class Categorycontroller extends CI_Controller {
 		} else $sitemessage = false;
 		
 		$data = Array(
-					'links' => $links,
 					'category' => $category,
 					'children' => $childrencategories,
 					'content' => $contentchunk,

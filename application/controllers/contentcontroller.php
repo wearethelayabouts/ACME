@@ -25,8 +25,6 @@ class Contentcontroller extends CI_Controller {
 			
 			$near = $this->contentmodel->fetchContentNear($content);
 			
-			$links = $this->systemmodel->fetchLinks();
-			
 			$acmeconfig = $this->systemmodel->fetchConfig();
 			if (isset($acmeconfig['sitemessage'])) {
 				if ($acmeconfig['sitemessage'] != "") $sitemessage = $acmeconfig['sitemessage'];
@@ -34,7 +32,6 @@ class Contentcontroller extends CI_Controller {
 			} else $sitemessage = false;
 			
 			$data = Array(
-						'links' => $links,
 						'content' => $content,
 						'near' => $near,
 						'sitemessage' => $sitemessage

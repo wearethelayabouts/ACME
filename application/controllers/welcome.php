@@ -19,7 +19,6 @@ class Welcome extends CI_Controller {
 		
 		$userFields = $this->usermodel->fetchUserFields();
 		$news = $this->contentmodel->fetchNews($userFields);
-		$links = $this->systemmodel->fetchLinks();
 		if ($this->config->item('new_content_near') == true) {
 			$newcontent = $this->contentmodel->fetchNewContent($this->config->item('frontpage_content_amount'));
 			$content = Array();
@@ -36,7 +35,6 @@ class Welcome extends CI_Controller {
 		
 		$data = Array(
 					'news' => $news,
-					'links' => $links,
 					'content' => $content,
 					'sitemessage' => $sitemessage
 				);
