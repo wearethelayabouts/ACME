@@ -13,7 +13,6 @@
 			<li><a href="<?php echo $baseurl; ?>toolbox/categories/">Categories</a></li>
 			<li><a href="<?php echo $baseurl; ?>toolbox/users/">Users</a></li>
 			<li><a href="<?php echo $baseurl; ?>toolbox/user_fields/">User Fields</a></li>
-			<li><a href="<?php echo $baseurl; ?>toolbox/author_roles/">Author Roles</a></li>
 			<li><a href="<?php echo $baseurl; ?>toolbox/news/">News</a></li>
 			<li><a href="<?php echo $baseurl; ?>toolbox/pages/">Pages</a></li>
 		</ul>

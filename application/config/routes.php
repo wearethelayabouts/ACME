@@ -114,11 +114,6 @@ $route['toolbox/user_fields/edit/:any'] = "admincontroller/edit_user_field";
 $route['toolbox/user_fields'] = "admincontroller/view_user_fields";
 $route['toolbox/user_fields/:any'] = "admincontroller/view_user_fields";
 
-$route['toolbox/author_roles/add'] = "admincontroller/edit_author_role";
-$route['toolbox/author_roles/edit/:any'] = "admincontroller/edit_author_role";
-$route['toolbox/author_roles'] = "admincontroller/view_author_roles";
-$route['toolbox/author_roles/:any'] = "admincontroller/view_author_roles";
-
 $route['toolbox/:any'] = "admincontroller/view";
 $route['toolbox'] = "admincontroller/view";
 
