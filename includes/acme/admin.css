@@ -41,15 +41,8 @@ td { padding: 6px 16px 6px 6px; margin: 0; }
 
 .maintable { margin: 10px auto; }
 
-tr td { background-color: #ccc; }
-
-tr.tralt { background-color: #bbb; }
-
-td.tdalt { background-color: #bbb; }
-
-tr.tralt td { background-color: #bbb; }
-
-tr.tralt td.tdalt { background-color: #aaa; }
+.maintable tr:nth-child(odd) { background-color: #bbb; }
+.maintable tr:nth-child(even) { background-color: #aaa; }
 
 .smallish { font-size: 0.9em; }
 
