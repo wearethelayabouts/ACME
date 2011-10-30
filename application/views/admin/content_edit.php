@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "gttp://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
-		<title><?php echo $sitename; ?> &bull; View All Content (Admin)</title>
+		<title><?php echo $sitename; ?> &bull; Edit Content (Admin)</title>
 		<link href="<?php echo $baseurl; ?>includes/acme/admin.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
@@ -73,7 +73,7 @@
 							<p class="description">Descriptive text to be displayed alongside the content.</p>
 						</td>
 						<td class="tdalt">
-							<textarea name="body" rows="8" cols="60"><?php echo $content['body']; ?></textarea>
+							<textarea name="desc" rows="8" cols="60"><?php echo $content['body']; ?></textarea>
 						</td>
 					</tr>
 					<tr class="tralt">

@@ -15,9 +15,10 @@ class Categorymodel extends CI_Model {
 		else return false;
 	}
 	
-	function fetchCategoryList($alphasort = true) {
+	function fetchCategoryList($alphasort = true, $fetchData = false) {
 		
 		if ($alphasort) $this->db->order_by('name', 'asc');
+		else $this->db->order_by('id', 'asc');
 		
 		$query = $this->db->get('categories');
 		if ($query->num_rows() == 0) {
@@ -29,7 +30,11 @@ class Categorymodel extends CI_Model {
 		
 		$categories = Array();
 		foreach ($query as $category) {
-			$categories[$category['id']] = $category['name'];
+		    if (!$fetchData) 
+			    $categories[$category['id']] = $category['name'];
+			    
+			if ($fetchData)
+			    $categories[$category['id']] = $category;
 		}
 		
 		return $categories;

@@ -244,9 +244,13 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		$categoryitems = $this->categorymodel->fetchCategoryList(false, true);
+		
 		$data = Array(
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'categories' => $categoryitems,
+			'paginationhtml' => ''
 		);
 		
 		$this->load->view('admin/category_view', $data);
@@ -262,9 +266,26 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		$category = $this->categorymodel->fetchCategory($this->uri->segment(4));
+		
+		$uri_string = $this->uri->uri_string();
+		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+
+		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+		else $thispageurl = $baseurl.$uri_string;
+		
+		$allcategories = $this->categorymodel->fetchCategoryList();
+		$allcategories[0] = 'Top category';
+		ksort($allcategories);
+		
 		$data = Array(
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'category' => $category,
+			'thispageurl' => $thispageurl,
+			'allcategories' => $allcategories,
+			'errors' => Array(),
+			'editexisting' => true
 		);
 		
 		$this->load->view('admin/category_edit', $data);
@@ -530,9 +551,14 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		$userFields = $this->usermodel->fetchUserFields();
+		$news = $this->contentmodel->fetchNews($userFields, 25);
+		
 		$data = Array(
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'paginationhtml' => '',
+			'news' => $news
 		);
 		
 		$this->load->view('admin/news_view', $data);
@@ -548,9 +574,22 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		$userFields = $this->usermodel->fetchUserFields();
+		$news = $this->contentmodel->fetchSingleNews($this->uri->segment(4), $userFields);
+		
+		$uri_string = $this->uri->uri_string();
+		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+
+		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+		else $thispageurl = $baseurl.$uri_string;
+		
 		$data = Array(
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'news' => $news,
+			'thispageurl' => $thispageurl,
+			'errors' => Array(),
+			'editexisting' => true
 		);
 		
 		$this->load->view('admin/news_edit', $data);
@@ -586,9 +625,13 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		$pages = $this->systemmodel->fetchPages(25, 0);
+		
 		$data = Array(
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'pages' => $pages,
+			'paginationhtml' => ''
 		);
 		
 		$this->load->view('admin/page_view', $data);
@@ -604,11 +647,22 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		$page = $this->systemmodel->fetchPage(null, $this->uri->segment(4));
+		
+		$uri_string = $this->uri->uri_string();
+		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+
+		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+		else $thispageurl = $baseurl.$uri_string;
+		
 		$data = Array(
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'page' => $page,
+			'thispageurl' => $thispageurl,
+			'errors' => Array(),
+			'editexisting' => true
 		);
-		
 		$this->load->view('admin/page_edit', $data);
 	}
 	
@@ -642,9 +696,13 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		$userFields = $this->usermodel->fetchUserFields();
+		$users = $this->usermodel->fetchUsers($userFields);
+		
 		$data = Array(
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'users' => $users
 		);
 		
 		$this->load->view('admin/user_view', $data);
@@ -660,9 +718,22 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		$userFields = $this->usermodel->fetchUserFields();
+		$user = $this->usermodel->fetchUser($this->uri->segment(4), $userFields, 1, 1);
+		
+		$uri_string = $this->uri->uri_string();
+		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+		
+		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+			else $thispageurl = $baseurl.$uri_string;
+		
 		$data = Array(
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'thispageurl' => $thispageurl,
+			'user' => $user,
+			'errors' => Array(),
+			'editexisting' => true
 		);
 		
 		$this->load->view('admin/user_edit', $data);
@@ -698,9 +769,13 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		$userFields = $this->usermodel->fetchUserFields();
+		
 		$data = Array(
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'userFields' => $userFields,
+			'paginationhtml' => ''
 		);
 		
 		$this->load->view('admin/userfield_view', $data);
@@ -716,9 +791,21 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
+		$userField = $this->usermodel->fetchUserField($this->uri->segment(4));
+		
+		$uri_string = $this->uri->uri_string();
+		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+		
+		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+	    	else $thispageurl = $baseurl.$uri_string;
+		
 		$data = Array(
 			'sitename' => $sitename,
-			'baseurl' => $baseurl
+			'baseurl' => $baseurl,
+			'thispageurl' => $thispageurl,
+			'field' => $userField,
+			'errors' => Array(),
+			'editexisting' => true
 		);
 		
 		$this->load->view('admin/userfield_edit', $data);

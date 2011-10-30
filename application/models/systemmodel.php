@@ -76,8 +76,30 @@ class Systemmodel extends CI_Model {
 		return $links;
 	}
 	
-	function fetchPage($slug) {
-		$query = $this->db->get_where('pages', array('slug' => $slug));
+	function fetchPages($limit = 5, $onlyPublished = 1) {
+		$this->db->limit($limit);
+		$this->db->order_by('id', 'desc'); 
+		
+		if ($onlyPublished == 1) {
+		    $query = $this->db->get_where('pages', array('published' => 1));
+		} else {
+		    $query = $this->db->get('pages');
+		}
+		
+		if ($query->num_rows() == 0) {
+			return false;
+		}
+		$query = $query->result_array();
+		
+		return $query;
+	}
+	
+	function fetchPage($slug, $id = null) {
+		if ($id == null) {
+		    $query = $this->db->get_where('pages', array('slug' => $slug));
+		} else {    
+		    $query = $this->db->get_where('pages', array('id' => $id));
+		}
 		if ($query->num_rows() == 0) {
 			return false;
 		}

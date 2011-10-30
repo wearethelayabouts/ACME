@@ -6,8 +6,8 @@ class Contentmodel extends CI_Model {
 		$this->load->model('usermodel');
 	}
 	
-	function fetchNews($userfields) {
-		$this->db->limit(5);
+	function fetchNews($userfields, $limit = 5) {
+		$this->db->limit($limit);
 		$this->load->model('usermodel');
 		$this->db->order_by('date', 'desc'); 
 		$query = $this->db->get_where('news', array('published' => 1));
