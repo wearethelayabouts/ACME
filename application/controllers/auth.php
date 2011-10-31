@@ -23,10 +23,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Login user on the site
-	 *
-	 * @return void
-	 */
+	* Login user on the site
+	*
+	* @return void
+	*/
 	function login()
 	{
 		if ($this->tank_auth->is_logged_in()) {									// logged in
@@ -97,10 +97,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Logout user
-	 *
-	 * @return void
-	 */
+	* Logout user
+	*
+	* @return void
+	*/
 	function logout()
 	{
 		$this->tank_auth->logout();
@@ -109,10 +109,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Register user on the site
-	 *
-	 * @return void
-	 */
+	* Register user on the site
+	*
+	* @return void
+	*/
 	function register()
 	{
 		if ($this->tank_auth->is_logged_in()) {									// logged in
@@ -193,10 +193,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Send activation email again, to the same or new email address
-	 *
-	 * @return void
-	 */
+	* Send activation email again, to the same or new email address
+	*
+	* @return void
+	*/
 	function send_again()
 	{
 		if (!$this->tank_auth->is_logged_in(FALSE)) {							// not logged in or activated
@@ -228,12 +228,12 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Activate user account.
-	 * User is verified by user_id and authentication code in the URL.
-	 * Can be called by clicking on link in mail.
-	 *
-	 * @return void
-	 */
+	* Activate user account.
+	* User is verified by user_id and authentication code in the URL.
+	* Can be called by clicking on link in mail.
+	*
+	* @return void
+	*/
 	function activate()
 	{
 		$user_id		= $this->uri->segment(3);
@@ -250,10 +250,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Generate reset code (to change password) and send it to user
-	 *
-	 * @return void
-	 */
+	* Generate reset code (to change password) and send it to user
+	*
+	* @return void
+	*/
 	function forgot_password()
 	{
 		if ($this->tank_auth->is_logged_in()) {									// logged in
@@ -288,12 +288,12 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Replace user password (forgotten) with a new one (set by user).
-	 * User is verified by user_id and authentication code in the URL.
-	 * Can be called by clicking on link in mail.
-	 *
-	 * @return void
-	 */
+	* Replace user password (forgotten) with a new one (set by user).
+	* User is verified by user_id and authentication code in the URL.
+	* Can be called by clicking on link in mail.
+	*
+	* @return void
+	*/
 	function reset_password()
 	{
 		$user_id		= $this->uri->segment(3);
@@ -333,10 +333,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Change user password
-	 *
-	 * @return void
-	 */
+	* Change user password
+	*
+	* @return void
+	*/
 	function change_password()
 	{
 		if (!$this->tank_auth->is_logged_in()) {								// not logged in or not activated
@@ -365,10 +365,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Change user email
-	 *
-	 * @return void
-	 */
+	* Change user email
+	*
+	* @return void
+	*/
 	function change_email()
 	{
 		if (!$this->tank_auth->is_logged_in()) {								// not logged in or not activated
@@ -402,12 +402,12 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Replace user email with a new one.
-	 * User is verified by user_id and authentication code in the URL.
-	 * Can be called by clicking on link in mail.
-	 *
-	 * @return void
-	 */
+	* Replace user email with a new one.
+	* User is verified by user_id and authentication code in the URL.
+	* Can be called by clicking on link in mail.
+	*
+	* @return void
+	*/
 	function reset_email()
 	{
 		$user_id		= $this->uri->segment(3);
@@ -424,10 +424,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Delete user from the site (only when user is logged in)
-	 *
-	 * @return void
-	 */
+	* Delete user from the site (only when user is logged in)
+	*
+	* @return void
+	*/
 	function unregister()
 	{
 		if (!$this->tank_auth->is_logged_in()) {								// not logged in or not activated
@@ -453,11 +453,11 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Show info message
-	 *
-	 * @param	string
-	 * @return	void
-	 */
+	* Show info message
+	*
+	* @param	string
+	* @return	void
+	*/
 	function _show_message($message)
 	{
 		$this->session->set_flashdata('message', $message);
@@ -465,13 +465,13 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Send email message of given type (activate, forgot_password, etc.)
-	 *
-	 * @param	string
-	 * @param	string
-	 * @param	array
-	 * @return	void
-	 */
+	* Send email message of given type (activate, forgot_password, etc.)
+	*
+	* @param	string
+	* @param	string
+	* @param	array
+	* @return	void
+	*/
 	function _send_email($type, $email, &$data)
 	{
 		$this->load->library('email');
@@ -485,10 +485,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Create CAPTCHA image to verify user as a human
-	 *
-	 * @return	string
-	 */
+	* Create CAPTCHA image to verify user as a human
+	*
+	* @return	string
+	*/
 	function _create_captcha()
 	{
 		$this->load->helper('captcha');
@@ -514,11 +514,11 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Callback function. Check if CAPTCHA test is passed.
-	 *
-	 * @param	string
-	 * @return	bool
-	 */
+	* Callback function. Check if CAPTCHA test is passed.
+	*
+	* @param	string
+	* @return	bool
+	*/
 	function _check_captcha($code)
 	{
 		$time = $this->session->flashdata('captcha_time');
@@ -541,10 +541,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Create reCAPTCHA JS and non-JS HTML to verify user as a human
-	 *
-	 * @return	string
-	 */
+	* Create reCAPTCHA JS and non-JS HTML to verify user as a human
+	*
+	* @return	string
+	*/
 	function _create_recaptcha()
 	{
 		$this->load->helper('recaptcha');
@@ -559,10 +559,10 @@ class Auth extends CI_Controller
 	}
 
 	/**
-	 * Callback function. Check if reCAPTCHA test is passed.
-	 *
-	 * @return	bool
-	 */
+	* Callback function. Check if reCAPTCHA test is passed.
+	*
+	* @return	bool
+	*/
 	function _check_recaptcha()
 	{
 		$this->load->helper('recaptcha');

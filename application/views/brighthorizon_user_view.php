@@ -7,17 +7,17 @@
 		<link rel="stylesheet" href="/static/brighthorizon/css/style.css" type="text/css" />
 	</head>
 	<body>
-		 <div id="UIPage">
-		 	<div id="UIHeader">&nbsp;
-		 		<div id="UIHeaderContent">
-		 			ACME
-		 		</div>
-		 	</div>
-		 	
-		 	<div id="UITitles">
-		 		<div id="UITitlesMain">Joe Pierce</div>
-		 		<div id="UITitlesSecondary">man known for many things</div>
-		 	</div>
-		 </div>
+		<div id="UIPage">
+			<div id="UIHeader">&nbsp;
+				<div id="UIHeaderContent">
+					ACME
+				</div>
+			</div>
+			
+			<div id="UITitles">
+				<div id="UITitlesMain">Joe Pierce</div>
+				<div id="UITitlesSecondary">man known for many things</div>
+			</div>
+		</div>
 	</body>
 </html>

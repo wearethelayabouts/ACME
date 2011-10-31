@@ -131,11 +131,15 @@ class Admincontroller extends CI_Controller {
 			$postdata['body'] = $this->input->post('body');
 			$postdata['rating'] = $this->input->post('rating');
 			$postdata['rating_description'] = $this->input->post('rating_description');
-			$postdata['customEmbed'] = $this->input->post('customembed');
+			$postdata['custom_embed'] = $this->input->post('custom_embed');
+			$postdata['main_attachment'] = $this->input->post('main_attachment');
+			$postdata['image_attachment'] = $this->input->post('image_attachment');
+			$postdata['download_attachment'] = $this->input->post('download_attachment');
+			$postdata['content_thumbnail'] = $this->input->post('content_attachment');
 			
 			$postdata['slug'] = $this->input->post('slug');
 			$slugmeta = quotemeta($postdata['slug']);
-			if ((ereg(" ", $postdata['slug'])) || (ereg("/", $postdata['slug'])) || ($slugmeta != $postdata['slug'])) $errors['slug'] = "Slugs may not contain spaces or any of the following chracters: / \\ + * ? [ ^ ] ( $ )";
+			if ((strstr($postdata['slug'], " ")) || (strstr($postdata['slug'], "/")) || ($slugmeta != $postdata['slug'])) $errors['slug'] = "Slugs may not contain spaces or any of the following chracters: / \\ + * ? [ ^ ] ( $ )";
 			
 			$postdata['year'] = $this->input->post('year');
 			if (strlen($postdata['year']) != 0) {
@@ -158,7 +162,7 @@ class Admincontroller extends CI_Controller {
 				if (($postdata['day'] >= 31) && ($postdata['month'] == 9)) $errors['day'] = "September only has 30 days!";
 				if (($postdata['day'] >= 31) && ($postdata['month'] == 11)) $errors['day'] = "November only has 30 days!";
 				
-				$leapyear = date("L", strtotime($year.'-02-22'));
+				$leapyear = date("L", strtotime($postdata['year'].'-02-22'));
 				if (($postdata['day'] >= 29) && ($month == 2) && ($leapyear == 0)) $errors['day'] = "February only has 28 days in ".$year."!";
 				if (($postdata['day'] >= 30) && ($month == 2) && ($leapyear == 1)) $errors['day'] = "February only has 29 days in ".$year."!";
 			} else $postdata['day'] = date("d");
@@ -193,7 +197,13 @@ class Admincontroller extends CI_Controller {
 					'object' => $content
 				);
 				
-				$this->load->view('admin/commit', $data);
+				if ($data['type'] == "editcontent") {
+					$this->db->where('id', $this->input->post('id'));
+					$this->db->update('content', $data['object']); 
+				} else {
+					$this->db->insert('content', $data['object']); 
+				}
+				header('Location: /toolbox/content/');
 			}
 		}
 		
@@ -202,7 +212,21 @@ class Admincontroller extends CI_Controller {
 				$content = $this->contentmodel->fetchContentByID($id);
 				$category = $this->categorymodel->fetchCategory($content['category_id']);
 			} else {
-				$content = Array();
+				$content = Array(
+								'id' => '',
+								'name' => '',
+								'category_id' => '',
+								'slug' => '',
+								'date' => 0,
+								'body' => '',
+								'rating' => '',
+								'rating_description' => '',
+								'main_attachment' => '',
+								'image_attachment' => '',
+								'download_attachment' => '',
+								'content_thumbnail' => '',
+								'customEmbed' => ''
+							);
 				$category = Array();
 				$category['name'] = "";
 				$category['id'] = 0;
@@ -217,6 +241,11 @@ class Admincontroller extends CI_Controller {
 			if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
 			else $thispageurl = $baseurl.$uri_string;
 			
+			if ($this->uri->segment(3) == "add")
+				$thingid = "add";
+			else
+				$thingid = $this->uri->segment(4);
+			
 			$data = Array(
 				'sitename' => $sitename,
 				'baseurl' => $baseurl,
@@ -225,6 +254,7 @@ class Admincontroller extends CI_Controller {
 				'thispageurl' => $thispageurl,
 				'category' => $category,
 				'allcategories' => $allcategories,
+				'thingid' => $thingid,
 				'errors' => $errors
 			);
 			
@@ -278,11 +308,17 @@ class Admincontroller extends CI_Controller {
 		$allcategories[0] = 'Top category';
 		ksort($allcategories);
 		
+		if ($this->uri->segment(3) == "add")
+			$thingid = "add";
+		else
+			$thingid = $this->uri->segment(4);
+		
 		$data = Array(
 			'sitename' => $sitename,
 			'baseurl' => $baseurl,
 			'category' => $category,
 			'thispageurl' => $thispageurl,
+			'thingid' => $thingid,
 			'allcategories' => $allcategories,
 			'errors' => Array(),
 			'editexisting' => true
@@ -300,6 +336,53 @@ class Admincontroller extends CI_Controller {
 		
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
+		
+		$errors = Array();
+		
+		if (!is_numeric($this->input->post('id')))
+			$add = true;
+		else
+			$add = false;
+			
+		if ($this->input->post('name') == "")
+			$errors['name'] = "Name cannot be empty!";
+			
+		if (!is_numeric($this->input->post('parent_id')))
+			$errors['parent_id'] = "Parent category must be set!";
+			
+		if ($this->input->post('slug') == "")
+			$errors['slug'] = "Slug must be set!";
+		
+		
+		$valid = (count($errors) <= 0);
+		if ($valid) {
+			$data = array(
+			               'name' => $this->input->post('name'),
+			               'desc' => $this->input->post('body'),
+			               'desc_bg' => $this->input->post('desc_bg'),
+			               'parent_id' => $this->input->post('parent_id'),
+			               'slug' => $this->input->post('slug'),
+			               'rating' => $this->input->post('rating'),
+			               'rating_description' => $this->input->post('rating_description'),
+			               'category_thumbnail' => $this->input->post('category_thumbnail'),
+			               'default_content_thumbnail' => $this->input->post('default_content_thumbnail'),
+			               'comicnav_first' => $this->input->post('comicnav_first'),
+			               'comicnav_back' => $this->input->post('comicnav_back'),
+			               'comicnav_next' => $this->input->post('comicnav_next'),
+			               'comicnav_last' => $this->input->post('comicnav_last'),
+			               'addon_domain' => $this->input->post('addon_domain')
+			            );
+			if ($add) {
+				$this->db->insert('categories', $data); 
+			} else {
+				$this->db->where('id', $this->input->post('id'));
+				$this->db->update('categories', $data); 
+			}
+			
+			header('Location: /toolbox/categories/');
+			die();
+		}
+		
 		
 		$data = Array(
 			'sitename' => $sitename,
@@ -438,7 +521,7 @@ class Admincontroller extends CI_Controller {
 			$attach = $this->input->post('attachment_type');
 			
 			$namemeta = quotemeta($postdata['name']);
-			if ((ereg("/", $postdata['name'])) || ($namemeta != $postdata['name'])) $errors['name'] = "Filenames may not contain any of the following chracters: / \\ + * ? [ ^ ] ( $ )";
+			if ((preg_match("/", $postdata['name'])) || ($namemeta != $postdata['name'])) $errors['name'] = "Filenames may not contain any of the following chracters: / \\ + * ? [ ^ ] ( $ )";
 			
 			$valid = (count($errors) <= 0);
 			if ($valid) {
@@ -797,7 +880,7 @@ class Admincontroller extends CI_Controller {
 		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
 		
 		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
-	    	else $thispageurl = $baseurl.$uri_string;
+			else $thispageurl = $baseurl.$uri_string;
 		
 		$data = Array(
 			'sitename' => $sitename,
@@ -827,5 +910,76 @@ class Admincontroller extends CI_Controller {
 		);
 		
 		//do something
+	}
+	
+	function popup_user_select() {
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		}
+		
+		$config = $this->systemmodel->fetchConfig();
+		
+		$sitename = $this->config->item('site_name');
+		$baseurl = $this->config->item('base_url');
+		
+		$userFields = $this->usermodel->fetchUserFields();
+		$users = $this->usermodel->fetchUsers($userFields);
+				
+		$data = Array(
+			'sitename' => $sitename,
+			'baseurl' => $baseurl,
+			'users' => $users,
+			'fieldnum' => $this->uri->segment(5),
+			'paginationhtml' => ''
+		);
+		
+		$this->load->view('admin/popup_user_select', $data);
+	}
+	
+	function popup_file_select() {
+				if (!$this->tank_auth->is_logged_in()) {
+					redirect('/auth/login/');
+				}
+				
+				$config = $this->systemmodel->fetchConfig();
+				
+				$sitename = $this->config->item('site_name');
+				$baseurl = $this->config->item('base_url');
+				
+				if ($this->uri->segment(5) >= 1) $page = $this->uri->segment(5);
+				else $page = 1;
+				
+				$this->db->order_by('id', 'desc');
+				
+				$query = $this->db->get('files');
+				$filecount = $query->num_rows();
+				$pagesamount = ceil($filecount/25);
+				
+				if ($query->num_rows() == 0) {
+					$files = Array();
+				} else {
+					$query = $query->result_array();
+					$i = ($page-1)*25;
+					while ($i < ($page)*25) {
+						$file = $query[$i];
+						$files[] = $file;
+						$i++;
+					}
+				}
+				
+				$paginationhtml = $this->systemmodel->paginate($page,$pagesamount,"/toolbox/popup/files/select/","/".$this->uri->segment(6));
+				
+				$data = Array(
+					'files' => $files,
+					'sitename' => $sitename,
+					'baseurl' => $baseurl,
+					'page' => $page,
+					'pagesamount' => $pagesamount,
+					'paginationhtml' => $paginationhtml,
+					'formid' => $this->uri->segment(6)
+				);
+				
+				$this->load->view('admin/popup_file_select', $data);
+					
 	}
 }

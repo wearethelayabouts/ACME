@@ -14,7 +14,7 @@
 				<input type="hidden" name="commit" value="true" />
 				<input type="hidden" name="id" value="<?php echo $user['id']; ?>" />
 				<table class="maintable" style="text-align: left;">
-				    <?php foreach ($user['fields'] as $field) { ?>
+				<?php foreach ($user['fields'] as $field) { ?>
 					<tr>
 						<td>
 							<p><?php echo $field['metadata']['name']; ?> <?php if ($field['metadata']['crucial'] == 1) { ?>(<span style="color: #f00;">*</span>)<?php } ?></p>
@@ -25,7 +25,7 @@
 							<?php if (isset($errors['name'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']; ?></p><?php } ?>
 						</td>
 					</tr>
-                    <?php } ?>
+					<?php } ?>
 				</table>
 				<input type="submit" />
 			</form>

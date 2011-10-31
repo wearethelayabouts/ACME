@@ -81,9 +81,9 @@ class Systemmodel extends CI_Model {
 		$this->db->order_by('id', 'desc'); 
 		
 		if ($onlyPublished == 1) {
-		    $query = $this->db->get_where('pages', array('published' => 1));
+		$query = $this->db->get_where('pages', array('published' => 1));
 		} else {
-		    $query = $this->db->get('pages');
+		$query = $this->db->get('pages');
 		}
 		
 		if ($query->num_rows() == 0) {
@@ -96,9 +96,9 @@ class Systemmodel extends CI_Model {
 	
 	function fetchPage($slug, $id = null) {
 		if ($id == null) {
-		    $query = $this->db->get_where('pages', array('slug' => $slug));
-		} else {    
-		    $query = $this->db->get_where('pages', array('id' => $id));
+		$query = $this->db->get_where('pages', array('slug' => $slug));
+		} else {	
+		$query = $this->db->get_where('pages', array('id' => $id));
 		}
 		if ($query->num_rows() == 0) {
 			return false;
@@ -109,11 +109,11 @@ class Systemmodel extends CI_Model {
 	}
 	
 	function base64url_encode($data) { 
-	  return rtrim(strtr(base64_encode($data), '+/', '-_'), '='); 
+	return rtrim(strtr(base64_encode($data), '+/', '-_'), '='); 
 	} 
 
 	function base64url_decode($data) { 
-	  return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT)); 
+	return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT)); 
 	}
 	
 	function paginate($page,$pagesamount,$urlprepend,$urlappend="") {

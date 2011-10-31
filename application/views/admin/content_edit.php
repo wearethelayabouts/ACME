@@ -10,9 +10,10 @@
 		<h2><?php if ($editexisting) echo "Edit"; else echo "Add New"; ?> Content</h1>
 		<div class="mainbox" style="text-align: center;">
 			<p>Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.</p>
-			<form action="<?php echo $thispageurl; ?>" method="post">
+			<form action="<?php echo $thispageurl; ?>" method="post" id="form" name="form">
+				<input type="hidden" name="<?php echo $this->security->get_csrf_token_name()?>" value="<?php echo $this->security->get_csrf_hash()?>" />
 				<input type="hidden" name="commit" value="true" />
-				<input type="hidden" name="id" value="<?php echo $file['id']; ?>" />
+				<input type="hidden" name="id" value="<?php echo $content['id']; ?>" />
 				<table class="maintable" style="text-align: left;">
 					<tr class="tralt">
 						<td style="width: 150px;">
@@ -21,7 +22,7 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="name" style="width: 300px;" value="<?php echo $content['name']; ?>" />
-							<?php if ($errors['name']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']?></p><?php } ?>
+							<?php if (isset($errors['name'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -49,7 +50,7 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="slug" style="width: 120px;" value="<?php echo $content['slug']; ?>" />
-							<?php if ($errors['slug']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['slug']; ?></p><?php } ?>
+							<?php if (isset($errors['slug'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['slug']; ?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -60,11 +61,11 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="year" maxlength="4" style="width: 50px;" value="<?php if ($content['date'] > 0) echo date("Y", $content['date']); ?>" /> <input type="text" name="month" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("m", $content['date']); ?>" /> <input type="text" name="day" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("d", $content['date']); ?>" /> at <input type="text" name="hour" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("H", $content['date']); ?>" />:<input type="text" name="minute" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("i", $content['date']); ?>" />
-							<?php if ($errors['year']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['year']; ?></p><?php } ?>
-							<?php if ($errors['month']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['month']; ?></p><?php } ?>
-							<?php if ($errors['day']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['day']; ?></p><?php } ?>
-							<?php if ($errors['hour']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['hour']; ?></p><?php } ?>
-							<?php if ($errors['minute']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['minute']; ?></p><?php } ?>
+							<?php if (isset($errors['year'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['year']; ?></p><?php } ?>
+							<?php if (isset($errors['month'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['month']; ?></p><?php } ?>
+							<?php if (isset($errors['day'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['day']; ?></p><?php } ?>
+							<?php if (isset($errors['hour'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['hour']; ?></p><?php } ?>
+							<?php if (isset($errors['minute'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['minute']; ?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -95,7 +96,7 @@
 						</td>
 						<td class="tdalt">
 							File ID: <input type="text" id="main_attachment_id" name="main_attachment" style="width: 80px;" value="<?php if ($content['main_attachment'] > 0) echo $content['main_attachment']; ?>" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/main_attachment_id','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>
 					<tr class="tralt">
@@ -105,7 +106,7 @@
 						</td>
 						<td class="tdalt">
 							File ID: <input type="text" name="image_attachment" style="width: 80px;" value="<?php if ($content['image_attachment'] > 0) echo $content['image_attachment']; ?>" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/image_attachment','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>
 					<tr>
@@ -115,8 +116,7 @@
 						</td>
 						<td class="tdalt">
 							File ID: <input type="text" name="download_attachment" style="width: 80px;" value="<?php if ($content['download_attachment'] > 0) echo $content['download_attachment']; ?>" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
-						</td>
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/download_attachment','new_win','width=650,height=850');">Browse Files...</a>
 					</tr>
 					<tr class="tralt">
 						<td>
@@ -125,7 +125,7 @@
 						</td>
 						<td class="tdalt">
 							File ID: <input type="text" name="content_thumbnail" style="width: 80px;" value="<?php if ($content['content_thumbnail'] > 0) echo $content['content_thumbnail']; ?>" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/content_thumbnail','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>	
 					<tr>
@@ -134,7 +134,7 @@
 							<p class="description">Any HTML in this field will be inserted into the page in the content area. This is useful for, say, embedding an external player like one from YouTube or SoundCloud, or a Flash movie.</p>
 						</td>
 						<td class="tdalt">
-							<textarea name="customembed" rows="8" cols="60"><?php echo $content['customEmbed']; ?></textarea>
+							<textarea name="custom_embed" rows="8" cols="60"><?php echo $content['custom_embed']; ?></textarea>
 						</td>
 					</tr>
 					<tr class="tralt">
@@ -143,8 +143,16 @@
 							<p class="description">Add authors to your content here, if you so choose. The "role" is their position on the project, e.g. Artist, Editor, Lead Animator, Programming, Host... etc.</p>
 						</td>
 						<td class="tdalt">
-							Author ID: <input type="text" name="author_id_" style="width: 80px;" value="" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_" style="width: 160px;" value="" />
+							Author ID: <input type="text" name="author_id_1" style="width: 80px;" value="" />
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/1','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_1" style="width: 160px;" value="" /><br />
+							Author ID: <input type="text" name="author_id_2" style="width: 80px;" value="" />
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/2','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_2" style="width: 160px;" value="" /><br />
+							Author ID: <input type="text" name="author_id_3" style="width: 80px;" value="" />
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/3','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_3" style="width: 160px;" value="" /><br />
+							Author ID: <input type="text" name="author_id_4" style="width: 80px;" value="" />
+								&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/4','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_4" style="width: 160px;" value="" /><br />
+							Author ID: <input type="text" name="author_id_5" style="width: 80px;" value="" />
+								&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/5','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_5" style="width: 160px;" value="" /><br />
 						</td>
 					</tr>				
 				</table>

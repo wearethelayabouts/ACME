@@ -15,21 +15,13 @@
 					<td>ID</td>
 					<td>Poster</td>
 					<td>Name</td>
-					
 					<td>Short Content</td>
-					
-					<!--<td><?php // if ($sortby == 'rating') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/content/1/rating/<?php // if ($changetoasc == 'rating') echo 'a'; else echo 'd'; ?>">User Rating<?php // if ($sortby == 'rating') if ($sortdesc) echo "&#9660;</strong>"; else echo "&#9650;</strong>"; ?></td>-->
-					
-					<td class="tdalt">Published?</td>
+					<td>Published?</td>
 				</tr>
-				<?php $altrow = false;				
-				foreach ($news as $piece) { ?>
-				<tr<?php if (!$altrow) $altrow = true;
-				else { echo " class=\"tralt\"";
-				$altrow = false;
-				}?>>
+				<?php foreach ($news as $piece) { ?>
+				<tr>
 					<td><strong><?php echo $piece['entry']['id']; ?></strong></td>
-					<td><? echo $piece['poster']['full_name']; ?></td>
+					<td><? echo $piece['poster']['fields']['full_name']; ?></td>
 					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/news/edit/<?php echo $piece['entry']['id']; ?>"><?php echo $piece['entry']['title']; ?></a></td>
 					<td class="smallish"><?php echo $piece['entry']['shortcontent']; ?> </td>
 					<td class="tdalt"><?php if ($piece['entry']['published'] != 0) echo "<span class=\"yes\">Yes</span>";

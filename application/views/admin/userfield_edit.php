@@ -25,26 +25,26 @@
 							<?php if (isset($errors['name'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']; ?></p><?php } ?>
 						</td>
 					</tr>
-                    <tr class="tralt">
-                    	<td>
-                    		<p>Slug (<span style="color: #f00;">*</span>)</p>
-                    		<p class="description">Short machine readable name for the field</p>
-                    	</td>
-                    	<td class="tdalt">
-                    		<input type="text" name="slug" style="width: 120px;" value="<?php echo $field['slug']; ?>" />
-                    		<?php if (isset($errors['slug'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']; ?></p><?php } ?>
-                    	</td>
-                    </tr>
-                    <tr class="tralt">
-                    	<td>
-                    		<p>Description (<span style="color: #f00;">*</span>)</p>
-                    		<p class="description">Human readable description for the field</p>
-                    	</td>
-                    	<td class="tdalt">
-                    		<input type="text" name="desc" style="width: 120px;" value="<?php echo $field['description']; ?>" />
-                    		<?php if (isset($errors['description'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['description']; ?></p><?php } ?>
-                    	</td>
-                    </tr>
+					<tr class="tralt">
+						<td>
+							<p>Slug (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Short machine readable name for the field</p>
+						</td>
+						<td class="tdalt">
+							<input type="text" name="slug" style="width: 120px;" value="<?php echo $field['slug']; ?>" />
+							<?php if (isset($errors['slug'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']; ?></p><?php } ?>
+						</td>
+					</tr>
+					<tr class="tralt">
+						<td>
+							<p>Description (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Human readable description for the field</p>
+						</td>
+						<td class="tdalt">
+							<input type="text" name="desc" style="width: 120px;" value="<?php echo $field['description']; ?>" />
+							<?php if (isset($errors['description'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['description']; ?></p><?php } ?>
+						</td>
+					</tr>
 				</table>
 				<input type="submit" />
 			</form>

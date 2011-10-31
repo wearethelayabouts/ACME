@@ -24,24 +24,24 @@
 							<?php if (isset($errors['slug'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['slug']; ?></p><?php } ?>
 						</td>
 					</tr>
-                    <tr>
-                    	<td>
-                    		<p>Custom CSS</p>
-                    		<p class="description">Shorter version of the article, displayed on the front page.</p>
-                    	</td>
-                    	<td class="td">
-                    		<textarea name="custom_css" rows="8" cols="60"><?php echo $page['custom_css']; ?></textarea>
-                    	</td>
-                    </tr>
-                    <tr>
-                    	<td>
-                    		<p>Content (<span style="color: #f00;">*</span>)</p>
-                    		<p class="description">Page itself.</p>
-                    	</td>
-                    	<td class="td">
-                    		<textarea name="content" rows="8" cols="60"><?php echo $page['content']; ?></textarea>
-                    	</td>
-                    </tr>
+					<tr>
+						<td>
+							<p>Custom CSS</p>
+							<p class="description">Shorter version of the article, displayed on the front page.</p>
+						</td>
+						<td class="td">
+							<textarea name="custom_css" rows="8" cols="60"><?php echo $page['custom_css']; ?></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Content (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Page itself.</p>
+						</td>
+						<td class="td">
+							<textarea name="content" rows="8" cols="60"><?php echo $page['content']; ?></textarea>
+						</td>
+					</tr>
 				</table>
 				<input type="submit" />
 			</form>

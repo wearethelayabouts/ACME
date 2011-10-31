@@ -25,12 +25,12 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Get user record by Id
-	 *
-	 * @param	int
-	 * @param	bool
-	 * @return	object
-	 */
+	* Get user record by Id
+	*
+	* @param	int
+	* @param	bool
+	* @return	object
+	*/
 	function get_user_by_id($user_id, $activated)
 	{
 		$this->db->where('id', $user_id);
@@ -42,11 +42,11 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Get user record by login (username or email)
-	 *
-	 * @param	string
-	 * @return	object
-	 */
+	* Get user record by login (username or email)
+	*
+	* @param	string
+	* @return	object
+	*/
 	function get_user_by_login($login)
 	{
 		$this->db->where('LOWER(username)=', strtolower($login));
@@ -58,11 +58,11 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Get user record by username
-	 *
-	 * @param	string
-	 * @return	object
-	 */
+	* Get user record by username
+	*
+	* @param	string
+	* @return	object
+	*/
 	function get_user_by_username($username)
 	{
 		$this->db->where('LOWER(username)=', strtolower($username));
@@ -73,11 +73,11 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Get user record by email
-	 *
-	 * @param	string
-	 * @return	object
-	 */
+	* Get user record by email
+	*
+	* @param	string
+	* @return	object
+	*/
 	function get_user_by_email($email)
 	{
 		$this->db->where('LOWER(email)=', strtolower($email));
@@ -88,11 +88,11 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Check if username available for registering
-	 *
-	 * @param	string
-	 * @return	bool
-	 */
+	* Check if username available for registering
+	*
+	* @param	string
+	* @return	bool
+	*/
 	function is_username_available($username)
 	{
 		$this->db->select('1', FALSE);
@@ -103,11 +103,11 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Check if email available for registering
-	 *
-	 * @param	string
-	 * @return	bool
-	 */
+	* Check if email available for registering
+	*
+	* @param	string
+	* @return	bool
+	*/
 	function is_email_available($email)
 	{
 		$this->db->select('1', FALSE);
@@ -119,12 +119,12 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Create new user record
-	 *
-	 * @param	array
-	 * @param	bool
-	 * @return	array
-	 */
+	* Create new user record
+	*
+	* @param	array
+	* @param	bool
+	* @return	array
+	*/
 	function create_user($data, $activated = TRUE)
 	{
 		$data['created'] = date('Y-m-d H:i:s');
@@ -139,14 +139,14 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Activate user if activation key is valid.
-	 * Can be called for not activated users only.
-	 *
-	 * @param	int
-	 * @param	string
-	 * @param	bool
-	 * @return	bool
-	 */
+	* Activate user if activation key is valid.
+	* Can be called for not activated users only.
+	*
+	* @param	int
+	* @param	string
+	* @param	bool
+	* @return	bool
+	*/
 	function activate_user($user_id, $activation_key, $activate_by_email)
 	{
 		$this->db->select('1', FALSE);
@@ -173,11 +173,11 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Purge table of non-activated users
-	 *
-	 * @param	int
-	 * @return	void
-	 */
+	* Purge table of non-activated users
+	*
+	* @param	int
+	* @return	void
+	*/
 	function purge_na($expire_period = 172800)
 	{
 		$this->db->where('activated', 0);
@@ -186,11 +186,11 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Delete user record
-	 *
-	 * @param	int
-	 * @return	bool
-	 */
+	* Delete user record
+	*
+	* @param	int
+	* @return	bool
+	*/
 	function delete_user($user_id)
 	{
 		$this->db->where('id', $user_id);
@@ -203,13 +203,13 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Set new password key for user.
-	 * This key can be used for authentication when resetting user's password.
-	 *
-	 * @param	int
-	 * @param	string
-	 * @return	bool
-	 */
+	* Set new password key for user.
+	* This key can be used for authentication when resetting user's password.
+	*
+	* @param	int
+	* @param	string
+	* @return	bool
+	*/
 	function set_password_key($user_id, $new_pass_key)
 	{
 		$this->db->set('new_password_key', $new_pass_key);
@@ -221,13 +221,13 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Check if given password key is valid and user is authenticated.
-	 *
-	 * @param	int
-	 * @param	string
-	 * @param	int
-	 * @return	void
-	 */
+	* Check if given password key is valid and user is authenticated.
+	*
+	* @param	int
+	* @param	string
+	* @param	int
+	* @return	void
+	*/
 	function can_reset_password($user_id, $new_pass_key, $expire_period = 900)
 	{
 		$this->db->select('1', FALSE);
@@ -240,14 +240,14 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Change user password if password key is valid and user is authenticated.
-	 *
-	 * @param	int
-	 * @param	string
-	 * @param	string
-	 * @param	int
-	 * @return	bool
-	 */
+	* Change user password if password key is valid and user is authenticated.
+	*
+	* @param	int
+	* @param	string
+	* @param	string
+	* @param	int
+	* @return	bool
+	*/
 	function reset_password($user_id, $new_pass, $new_pass_key, $expire_period = 900)
 	{
 		$this->db->set('password', $new_pass);
@@ -262,12 +262,12 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Change user password
-	 *
-	 * @param	int
-	 * @param	string
-	 * @return	bool
-	 */
+	* Change user password
+	*
+	* @param	int
+	* @param	string
+	* @return	bool
+	*/
 	function change_password($user_id, $new_pass)
 	{
 		$this->db->set('password', $new_pass);
@@ -278,15 +278,15 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Set new email for user (may be activated or not).
-	 * The new email cannot be used for login or notification before it is activated.
-	 *
-	 * @param	int
-	 * @param	string
-	 * @param	string
-	 * @param	bool
-	 * @return	bool
-	 */
+	* Set new email for user (may be activated or not).
+	* The new email cannot be used for login or notification before it is activated.
+	*
+	* @param	int
+	* @param	string
+	* @param	string
+	* @param	bool
+	* @return	bool
+	*/
 	function set_new_email($user_id, $new_email, $new_email_key, $activated)
 	{
 		$this->db->set($activated ? 'new_email' : 'email', $new_email);
@@ -299,12 +299,12 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Activate new email (replace old email with new one) if activation key is valid.
-	 *
-	 * @param	int
-	 * @param	string
-	 * @return	bool
-	 */
+	* Activate new email (replace old email with new one) if activation key is valid.
+	*
+	* @param	int
+	* @param	string
+	* @return	bool
+	*/
 	function activate_new_email($user_id, $new_email_key)
 	{
 		$this->db->set('email', 'new_email', FALSE);
@@ -318,14 +318,14 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Update user login info, such as IP-address or login time, and
-	 * clear previously generated (but not activated) passwords.
-	 *
-	 * @param	int
-	 * @param	bool
-	 * @param	bool
-	 * @return	void
-	 */
+	* Update user login info, such as IP-address or login time, and
+	* clear previously generated (but not activated) passwords.
+	*
+	* @param	int
+	* @param	bool
+	* @param	bool
+	* @return	void
+	*/
 	function update_login_info($user_id, $record_ip, $record_time)
 	{
 		$this->db->set('new_password_key', NULL);
@@ -339,12 +339,12 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Ban user
-	 *
-	 * @param	int
-	 * @param	string
-	 * @return	void
-	 */
+	* Ban user
+	*
+	* @param	int
+	* @param	string
+	* @return	void
+	*/
 	function ban_user($user_id, $reason = NULL)
 	{
 		$this->db->where('id', $user_id);
@@ -355,11 +355,11 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Unban user
-	 *
-	 * @param	int
-	 * @return	void
-	 */
+	* Unban user
+	*
+	* @param	int
+	* @return	void
+	*/
 	function unban_user($user_id)
 	{
 		$this->db->where('id', $user_id);
@@ -370,11 +370,11 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Create an empty profile for a new user
-	 *
-	 * @param	int
-	 * @return	bool
-	 */
+	* Create an empty profile for a new user
+	*
+	* @param	int
+	* @return	bool
+	*/
 	private function create_profile($user_id)
 	{
 		$this->db->set('user_id', $user_id);
@@ -382,11 +382,11 @@ class Users extends CI_Model
 	}
 
 	/**
-	 * Delete user profile
-	 *
-	 * @param	int
-	 * @return	void
-	 */
+	* Delete user profile
+	*
+	* @param	int
+	* @return	void
+	*/
 	private function delete_profile($user_id)
 	{
 		$this->db->where('user_id', $user_id);

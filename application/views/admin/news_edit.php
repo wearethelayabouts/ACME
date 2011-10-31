@@ -20,7 +20,7 @@
 							<p class="description">Name of the news item.</p>
 						</td>
 						<td class="td">
-    							<input type="text" name="name" style="width: 300px;" value="<?php echo $news['entry']['title']; ?>" />
+								<input type="text" name="name" style="width: 300px;" value="<?php echo $news['entry']['title']; ?>" />
 							<?php if (isset($errors['name'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']?></p><?php } ?>
 						</td>
 					</tr>
@@ -31,8 +31,8 @@
 						</td>
 						<td class="td">
 							<select name="pubished">
-							    <option value="1"<?php if($news['entry']['published'] == 1) echo ' selected="yes"';?>>Yes</option>
-							    <option value="0"<?php if($news['entry']['published'] == 0) echo ' selected="yes"';?>>No</option>
+							<option value="1"<?php if($news['entry']['published'] == 1) echo ' selected="yes"';?>>Yes</option>
+							<option value="0"<?php if($news['entry']['published'] == 0) echo ' selected="yes"';?>>No</option>
 							</select>
 						</td>
 					</tr>
@@ -51,24 +51,24 @@
 							<?php if (isset($errors['minute'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['minute']; ?></p><?php } ?>
 						</td>
 					</tr>
-                    <tr>
-                    	<td>
-                    		<p>Short Content</p>
-                    		<p class="description">Shorter version of the article, displayed on the front page.</p>
-                    	</td>
-                    	<td class="td">
-                    		<textarea name="shortcontent" rows="8" cols="60"><?php echo $news['entry']['shortcontent']; ?></textarea>
-                    	</td>
-                    </tr>
-                    <tr>
-                    	<td>
-                    		<p>Content (<span style="color: #f00;">*</span>)</p>
-                    		<p class="description">Article itself.</p>
-                    	</td>
-                    	<td class="td">
-                    		<textarea name="content" rows="8" cols="60"><?php echo $news['entry']['content']; ?></textarea>
-                    	</td>
-                    </tr>
+					<tr>
+						<td>
+							<p>Short Content</p>
+							<p class="description">Shorter version of the article, displayed on the front page.</p>
+						</td>
+						<td class="td">
+							<textarea name="shortcontent" rows="8" cols="60"><?php echo $news['entry']['shortcontent']; ?></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Content (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Article itself.</p>
+						</td>
+						<td class="td">
+							<textarea name="content" rows="8" cols="60"><?php echo $news['entry']['content']; ?></textarea>
+						</td>
+					</tr>
 					<tr class="tr">
 						<td>
 							<p>Poster (<span style="color: #f00;">*</span>)</p>

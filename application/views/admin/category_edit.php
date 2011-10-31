@@ -10,7 +10,8 @@
 		<h2><?php if ($editexisting) echo "Edit"; else echo "Add New"; ?> Category</h1>
 		<div class="mainbox" style="text-align: center;">
 			<p>Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.</p>
-			<form action="<?php echo $thispageurl; ?>" method="post">
+			<form action="<?php echo $baseurl; ?>toolbox/categories/commit/<?php echo $thingid; ?>" method="post" name="form" id="form">
+				<input type="hidden" name="<?php echo $this->security->get_csrf_token_name()?>" value="<?php echo $this->security->get_csrf_hash()?>" />
 				<input type="hidden" name="commit" value="true" />
 				<input type="hidden" name="id" value="<?php echo $category['id']; ?>" />
 				<table class="maintable" style="text-align: left;">
@@ -24,25 +25,25 @@
 							<?php if (isset($errors['name'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']?></p><?php } ?>
 						</td>
 					</tr>
-                    <tr>
-                    	<td>
-                    		<p>Description</p>
-                    		<p class="description">Descriptive text to be displayed alongside the content.</p>
-                    	</td>
-                    	<td class="td">
-                    		<textarea name="body" rows="8" cols="60"><?php echo $category['desc']; ?></textarea>
-                    	</td>
-                    </tr>
-                    <tr class="tr">
-                    	<td>
-                    		<p>desc_bg</p>
-                    		<p class="description"></p>
-                    	</td>
-                    	<td class="td">
-                    		File ID: <input type="text" name="desc_bg" style="width: 80px;" value="<?php if ($category['desc_bg'] > 0) echo $category['desc_bg']; ?>" />
-                    		 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
-                    	</td>
-                    </tr>	
+					<tr>
+						<td>
+							<p>Description</p>
+							<p class="description">Descriptive text to be displayed alongside the content.</p>
+						</td>
+						<td class="td">
+							<textarea name="body" rows="8" cols="60"><?php echo $category['desc']; ?></textarea>
+						</td>
+					</tr>
+					<tr class="tr">
+						<td>
+							<p>Description background</p>
+							<p class="description">Background displayed under the descriptive text.</p>
+						</td>
+						<td class="td">
+							File ID: <input type="text" name="desc_bg" style="width: 80px;" value="<?php if ($category['desc_bg'] > 0) echo $category['desc_bg']; ?>" />
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/desc_bg','new_win','width=650,height=850');">Browse Files...</a>
+						</td>
+					</tr>	
 					<tr>
 						<td>
 							<p>Parent Category (<span style="color: #f00;">*</span>)</p>
@@ -59,6 +60,7 @@
 									echo '</option>';
 								} ?>
 							</select>
+							<?php if (isset($errors['parent_id'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['parent_id']?></p><?php } ?>
 						</td>
 					</tr>
 					<tr class="tr">
@@ -85,71 +87,71 @@
 					</tr>
 					<tr>
 						<td>
-							<p>category_thumbnail</p>
+							<p>Category Thumbnail</p>
 							<p class="description"></p>
 						</td>
 						<td class="td">
 							File ID: <input type="text" id="category_thumbnail" name="category_thumbnail" style="width: 80px;" value="<?php if ($category['category_thumbnail'] > 0) echo $category['category_thumbnail']; ?>" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/category_thumbnail','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>
 					<tr class="tr">
 						<td>
-							<p>default_content_thumbnail</p>
+							<p>Default Content Thumbnail</p>
 							<p class="description"></p>
 						</td>
 						<td class="td">
 							File ID: <input type="text" name="default_content_thumbnail" style="width: 80px;" value="<?php if ($category['default_content_thumbnail'] > 0) echo $category['default_content_thumbnail']; ?>" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/default_content_thumbnail','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<p>comicnav_first</p>
+							<p>Comic Navigation: First</p>
 							<p class="description"></p>
 						</td>
 						<td class="td">
 							File ID: <input type="text" name="comicnav_first" style="width: 80px;" value="<?php if ($category['comicnav_first'] > 0) echo $category['comicnav_first']; ?>" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/comicnav_first','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>
 					<tr class="tr">
 						<td>
-							<p>comicnav_back</p>
+							<p>Comic Navigation: Back</p>
 							<p class="description"></p>
 						</td>
 						<td class="td">
 							File ID: <input type="text" name="comicnav_back" style="width: 80px;" value="<?php if ($category['comicnav_back'] > 0) echo $category['comicnav_back']; ?>" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/comicnav_back','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>
 					<tr class="tr">
 						<td>
-							<p>comicnav_next</p>
+							<p>Comic Navigation: Next</p>
 							<p class="description"></p>
 						</td>
 						<td class="td">
-							File ID: <input type="text" name="comicnav_back" style="width: 80px;" value="<?php if ($category['comicnav_next'] > 0) echo $category['comicnav_next']; ?>" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+							File ID: <input type="text" name="comicnav_next" style="width: 80px;" value="<?php if ($category['comicnav_next'] > 0) echo $category['comicnav_next']; ?>" />
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/comicnav_next','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>
 					<tr class="tr">
 						<td>
-							<p>comicnav_last</p>
+							<p>Comic Navigation: Last</p>
 							<p class="description"></p>
 						</td>
 						<td class="td">
 							File ID: <input type="text" name="comicnav_last" style="width: 80px;" value="<?php if ($category['comicnav_last'] > 0) echo $category['comicnav_last']; ?>" />
-							 &nbsp; &nbsp; &nbsp; <a href="#">+ Add New File...</a> &nbsp; &nbsp; &nbsp; <a href="#">Browse Files...</a>
+							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/comicnav_last','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>
 					<tr class="tr">
 						<td>
-							<p>addon_domain</p>
+							<p>Addon Domain</p>
 							<p class="description"></p>
 						</td>
 						<td class="td">
-							<input type="text" name="slug" style="width: 120px;" value="<?php echo $category['addon_domain']; ?>" />
+							<input type="text" name="addon_domain" style="width: 120px;" value="<?php echo $category['addon_domain']; ?>" />
 						</td>
 					</tr>
 				</table>

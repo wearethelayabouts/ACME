@@ -30,11 +30,11 @@ class Categorymodel extends CI_Model {
 		
 		$categories = Array();
 		foreach ($query as $category) {
-		    if (!$fetchData) 
-			    $categories[$category['id']] = $category['name'];
-			    
+		if (!$fetchData) 
+			$categories[$category['id']] = $category['name'];
+			
 			if ($fetchData)
-			    $categories[$category['id']] = $category;
+			$categories[$category['id']] = $category;
 		}
 		
 		return $categories;

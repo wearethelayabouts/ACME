@@ -84,12 +84,12 @@ $route['toolbox/content/:any'] = "admincontroller/view_content";
 
 $route['toolbox/categories/add'] = "admincontroller/edit_category";
 $route['toolbox/categories/edit/:any'] = "admincontroller/edit_category";
+$route['toolbox/categories/commit/:any'] = "admincontroller/commit_category";
 $route['toolbox/categories'] = "admincontroller/view_categories";
 $route['toolbox/categories/:any'] = "admincontroller/view_categories";
 
 $route['toolbox/files/upload'] = "admincontroller/upload_file";
 $route['toolbox/files/add'] = "admincontroller/edit_file";
-$route['toolbox/files/add/:any'] = "admincontroller/edit_file";
 $route['toolbox/files/edit/:any'] = "admincontroller/edit_file";
 $route['toolbox/files'] = "admincontroller/view_files";
 $route['toolbox/files/:any'] = "admincontroller/view_files";
@@ -113,6 +113,11 @@ $route['toolbox/user_fields/add'] = "admincontroller/edit_user_field";
 $route['toolbox/user_fields/edit/:any'] = "admincontroller/edit_user_field";
 $route['toolbox/user_fields'] = "admincontroller/view_user_fields";
 $route['toolbox/user_fields/:any'] = "admincontroller/view_user_fields";
+
+$route['toolbox/popup/users/select/:num'] = "admincontroller/popup_user_select";
+
+$route['toolbox/popup/files/select'] = "admincontroller/popup_file_select";
+$route['toolbox/popup/files/select/:any'] = "admincontroller/popup_file_select";
 
 $route['toolbox/:any'] = "admincontroller/view";
 $route['toolbox'] = "admincontroller/view";

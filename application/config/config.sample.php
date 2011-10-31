@@ -267,6 +267,23 @@ $config['global_xss_filtering'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
+| Cross Site Request Forgery
+|--------------------------------------------------------------------------
+| Enables a CSRF cookie token to be set. When set to TRUE, token will be
+| checked on a submitted form. If you are accepting user data, it is strongly
+| recommended CSRF protection be enabled.
+|
+| 'csrf_token_name' = The token name
+| 'csrf_cookie_name' = The cookie name
+| 'csrf_expire' = The number in seconds the token should expire.
+*/
+$config['csrf_protection'] = FALSE;
+$config['csrf_token_name'] = 'csrf_test_name';
+$config['csrf_cookie_name'] = 'csrf_cookie_name';
+$config['csrf_expire'] = 7200;
+
+/*
+|--------------------------------------------------------------------------
 | Output Compression
 |--------------------------------------------------------------------------
 |
@@ -279,7 +296,7 @@ $config['global_xss_filtering'] = FALSE;
 | means you are prematurely outputting something to your browser. It could
 | even be a line of whitespace at the end of one of your scripts.  For
 | compression to work, nothing can be sent before the output buffer is called
-| by the output class.  Do not "echo" any values with compression enabled.
+| by the output class.  Do not 'echo' any values with compression enabled.
 |
 */
 $config['compress_output'] = FALSE;
