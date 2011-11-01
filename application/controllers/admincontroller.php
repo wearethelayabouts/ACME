@@ -163,8 +163,8 @@ class Admincontroller extends CI_Controller {
 				if (($postdata['day'] >= 31) && ($postdata['month'] == 11)) $errors['day'] = "November only has 30 days!";
 				
 				$leapyear = date("L", strtotime($postdata['year'].'-02-22'));
-				if (($postdata['day'] >= 29) && ($month == 2) && ($leapyear == 0)) $errors['day'] = "February only has 28 days in ".$year."!";
-				if (($postdata['day'] >= 30) && ($month == 2) && ($leapyear == 1)) $errors['day'] = "February only has 29 days in ".$year."!";
+				if (($postdata['day'] >= 29) && ($postdata['month'] == 2) && ($leapyear == 0)) $errors['day'] = "February only has 28 days in ".$year."!";
+				if (($postdata['day'] >= 30) && ($postdata['month'] == 2) && ($leapyear == 1)) $errors['day'] = "February only has 29 days in ".$year."!";
 			} else $postdata['day'] = date("d");
 			
 			$postdata['hour'] = $this->input->post('hour');
@@ -178,6 +178,13 @@ class Admincontroller extends CI_Controller {
 				if (strlen($postdata['minute']) != 2) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
 				if (($postdata['minute'] > 59) || ($postdata['minute'] < 0)) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
 			} else $postdata['minute'] = date("i");
+			
+			for ($i = 1; $i!=($this->input->post('author_amt')+1); $i++) {
+				if ($this->input->post("author_id_".$i) == "")
+					$errors['authors'] = "You have an empty field!";
+				if ($this->input->post("author_role_".$i) == "")
+					$errors['authors'] = "You have an empty field!";
+			}
 			
 			$valid = (count($errors) <= 0);
 			if ($valid) {
@@ -196,6 +203,26 @@ class Admincontroller extends CI_Controller {
 					'type' => $committype,
 					'object' => $content
 				);
+				
+				for ($i = 1; $i!=($this->input->post('author_amt')+1); $i++) {
+					if ($this->input->post('author_dbid_'.$i) == "nopechucktesta") {
+						$dbdata = Array(
+									'contentid' => $this->input->post('id'),
+									'user' => $this->input->post('author_id_'.$i),
+									'rolename' => $this->input->post('author_role_'.$i),
+									'show_icon' => 1
+									);
+						$this->db->insert('contentauthors', $dbdata);
+					} else {
+						$dbdata = Array(
+									'user' => $this->input->post('author_id_'.$i),
+									'rolename' => $this->input->post('author_role_'.$i),
+									'show_icon' => 1
+									);
+						$this->db->where('id', $this->input->post('author_dbid_'.$i));
+						$this->db->update('contentauthors', $dbdata);
+					}
+				}
 				
 				if ($data['type'] == "editcontent") {
 					$this->db->where('id', $this->input->post('id'));
@@ -225,7 +252,8 @@ class Admincontroller extends CI_Controller {
 								'image_attachment' => '',
 								'download_attachment' => '',
 								'content_thumbnail' => '',
-								'customEmbed' => ''
+								'custom_embed' => '',
+								'authors' => Array()
 							);
 				$category = Array();
 				$category['name'] = "";
@@ -296,100 +324,91 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
-		$category = $this->categorymodel->fetchCategory($this->uri->segment(4));
-		
-		$uri_string = $this->uri->uri_string();
-		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
-
-		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
-		else $thispageurl = $baseurl.$uri_string;
-		
-		$allcategories = $this->categorymodel->fetchCategoryList();
-		$allcategories[0] = 'Top category';
-		ksort($allcategories);
-		
-		if ($this->uri->segment(3) == "add")
-			$thingid = "add";
-		else
-			$thingid = $this->uri->segment(4);
-		
-		$data = Array(
-			'sitename' => $sitename,
-			'baseurl' => $baseurl,
-			'category' => $category,
-			'thispageurl' => $thispageurl,
-			'thingid' => $thingid,
-			'allcategories' => $allcategories,
-			'errors' => Array(),
-			'editexisting' => true
-		);
-		
-		$this->load->view('admin/category_edit', $data);
-	}
-	
-	function commit_category($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
-		}
-		
-		$config = $this->systemmodel->fetchConfig();
-		
-		$sitename = $this->config->item('site_name');
-		$baseurl = $this->config->item('base_url');
-		
+		$commit = $this->input->post('commit');
+		$valid = false;
 		$errors = Array();
+		$postdata = Array();
 		
-		if (!is_numeric($this->input->post('id')))
-			$add = true;
-		else
-			$add = false;
-			
-		if ($this->input->post('name') == "")
-			$errors['name'] = "Name cannot be empty!";
-			
-		if (!is_numeric($this->input->post('parent_id')))
-			$errors['parent_id'] = "Parent category must be set!";
-			
-		if ($this->input->post('slug') == "")
-			$errors['slug'] = "Slug must be set!";
+		$id = $this->uri->segment(4);
+		$editexisting = ($id != 0);
 		
-		
-		$valid = (count($errors) <= 0);
-		if ($valid) {
-			$data = array(
-			               'name' => $this->input->post('name'),
-			               'desc' => $this->input->post('body'),
-			               'desc_bg' => $this->input->post('desc_bg'),
-			               'parent_id' => $this->input->post('parent_id'),
-			               'slug' => $this->input->post('slug'),
-			               'rating' => $this->input->post('rating'),
-			               'rating_description' => $this->input->post('rating_description'),
-			               'category_thumbnail' => $this->input->post('category_thumbnail'),
-			               'default_content_thumbnail' => $this->input->post('default_content_thumbnail'),
-			               'comicnav_first' => $this->input->post('comicnav_first'),
-			               'comicnav_back' => $this->input->post('comicnav_back'),
-			               'comicnav_next' => $this->input->post('comicnav_next'),
-			               'comicnav_last' => $this->input->post('comicnav_last'),
-			               'addon_domain' => $this->input->post('addon_domain')
-			            );
-			if ($add) {
-				$this->db->insert('categories', $data); 
-			} else {
-				$this->db->where('id', $this->input->post('id'));
-				$this->db->update('categories', $data); 
+		if ($commit) {
+			if (!is_numeric($this->input->post('id')))
+				$add = true;
+			else
+				$add = false;
+				
+			if ($this->input->post('name') == "")
+				$errors['name'] = "Name cannot be empty!";
+				
+			if (!is_numeric($this->input->post('parent_id')))
+				$errors['parent_id'] = "Parent category must be set!";
+				
+			if ($this->input->post('slug') == "")
+				$errors['slug'] = "Slug must be set!";
+			
+			
+			$valid = (count($errors) <= 0);
+			if ($valid) {
+				$data = array(
+				               'name' => $this->input->post('name'),
+				               'desc' => $this->input->post('body'),
+				               'desc_bg' => $this->input->post('desc_bg'),
+				               'parent_id' => $this->input->post('parent_id'),
+				               'slug' => $this->input->post('slug'),
+				               'rating' => $this->input->post('rating'),
+				               'rating_description' => $this->input->post('rating_description'),
+				               'category_thumbnail' => $this->input->post('category_thumbnail'),
+				               'default_content_thumbnail' => $this->input->post('default_content_thumbnail'),
+				               'comicnav_first' => $this->input->post('comicnav_first'),
+				               'comicnav_back' => $this->input->post('comicnav_back'),
+				               'comicnav_next' => $this->input->post('comicnav_next'),
+				               'comicnav_last' => $this->input->post('comicnav_last'),
+				               'addon_domain' => $this->input->post('addon_domain')
+				            );
+				if ($add) {
+					$this->db->insert('categories', $data); 
+				} else {
+					$this->db->where('id', $this->input->post('id'));
+					$this->db->update('categories', $data); 
+				}
+				
+				header('Location: /toolbox/categories/');
+				die();
 			}
-			
-			header('Location: /toolbox/categories/');
-			die();
 		}
 		
-		
-		$data = Array(
-			'sitename' => $sitename,
-			'baseurl' => $baseurl
-		);
-		
-		//do something
+		if (!$commit||!$valid) {
+			$category = $this->categorymodel->fetchCategory($this->uri->segment(4));
+			
+			$uri_string = $this->uri->uri_string();
+			if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+	
+			if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+			else $thispageurl = $baseurl.$uri_string;
+			
+			$allcategories = $this->categorymodel->fetchCategoryList();
+			$allcategories[0] = 'Top category';
+			ksort($allcategories);
+			
+			if ($this->uri->segment(3) == "add")
+				$thingid = "add";
+			else
+				$thingid = $this->uri->segment(4);
+			
+			$data = Array(
+				'sitename' => $sitename,
+				'baseurl' => $baseurl,
+				'category' => $category,
+				'thispageurl' => $thispageurl,
+				'thingid' => $thingid,
+				'allcategories' => $allcategories,
+				'errors' => $errors,
+				'editexisting' => true
+			);
+			
+			$this->load->view('admin/category_edit', $data);
+		}
 	}
 	
 	// FILES //
@@ -490,7 +509,7 @@ class Admincontroller extends CI_Controller {
 		$this->load->view('admin/file_view', $data);
 	}
 	
-	function edit_file($id) {
+	function edit_file() {
 		
 		if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
@@ -521,7 +540,7 @@ class Admincontroller extends CI_Controller {
 			$attach = $this->input->post('attachment_type');
 			
 			$namemeta = quotemeta($postdata['name']);
-			if ((preg_match("/", $postdata['name'])) || ($namemeta != $postdata['name'])) $errors['name'] = "Filenames may not contain any of the following chracters: / \\ + * ? [ ^ ] ( $ )";
+			if ((strstr($postdata['name'], "/")) || ($namemeta != $postdata['name'])) $errors['name'] = "Filenames may not contain any of the following chracters: / \\ + * ? [ ^ ] ( $ )";
 			
 			$valid = (count($errors) <= 0);
 			if ($valid) {
@@ -569,7 +588,11 @@ class Admincontroller extends CI_Controller {
 					
 					$data['object']['upload_data'] = $this->upload->data();
 					
-					$this->load->view('admin/commit', $data);
+					if ($this->uri->segment(4) !== "popup") {
+						header('Location: /toolbox/files/');
+					} else {
+						echo "<script type='text/javascript'>window.opener.document.forms['form'].".$this->uri->segment(5).".value = '".$insertid."'; window.close();</script> Saved file…";
+					}
 				}
 			}
 		}
@@ -579,7 +602,12 @@ class Admincontroller extends CI_Controller {
 				$file = $this->db->get_where('files', array('id' => $id));
 				$file = $file->row_array();
 			} else {
-				$file = Array();
+				$file = Array(
+							'internal_description' => '',
+							'type' => '',
+							'name' => '',
+							'is_downloadable' => ''
+						);
 				$file['id'] = "NULL";
 			}
 			if (count($postdata) > 0) foreach ($postdata as $key => $value) if ($key != 'upload') $file[$key] = $value;
@@ -604,24 +632,6 @@ class Admincontroller extends CI_Controller {
 		}
 	}
 	
-	function commit_file($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
-		}
-		
-		$config = $this->systemmodel->fetchConfig();
-		
-		$sitename = $this->config->item('site_name');
-		$baseurl = $this->config->item('base_url');
-		
-		$data = Array(
-			'sitename' => $sitename,
-			'baseurl' => $baseurl
-		);
-		
-		//do something
-	}
-	
 	// NEWS //
 	
 	function view_news($page = 0) {
@@ -635,7 +645,7 @@ class Admincontroller extends CI_Controller {
 		$baseurl = $this->config->item('base_url');
 		
 		$userFields = $this->usermodel->fetchUserFields();
-		$news = $this->contentmodel->fetchNews($userFields, 25);
+		$news = $this->contentmodel->fetchNews($userFields, 25, false);
 		
 		$data = Array(
 			'sitename' => $sitename,
@@ -657,25 +667,118 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
-		$userFields = $this->usermodel->fetchUserFields();
-		$news = $this->contentmodel->fetchSingleNews($this->uri->segment(4), $userFields);
+		$id = $this->uri->segment(4);
+		$editexisting = ($id != 0);
 		
-		$uri_string = $this->uri->uri_string();
-		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
-
-		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
-		else $thispageurl = $baseurl.$uri_string;
+		$commit = $this->input->post('commit');
+		$valid = false;
+		$errors = Array();
+		$postdata = Array();
 		
-		$data = Array(
-			'sitename' => $sitename,
-			'baseurl' => $baseurl,
-			'news' => $news,
-			'thispageurl' => $thispageurl,
-			'errors' => Array(),
-			'editexisting' => true
-		);
-		
-		$this->load->view('admin/news_edit', $data);
+		if ($commit) {
+			$postdata['title'] = $this->input->post('name');
+			$postdata['published'] = intval($this->input->post('published'));
+			$postdata['shortcontent'] = $this->input->post('shortcontent');
+			$postdata['content'] = $this->input->post('content');
+			$postdata['poster_id'] = $this->input->post('author_id_1');
+			
+			if ($postdata['title'] == "")
+				$errors['title'] = "Name cannot be empty!";
+			
+			if ($postdata['content'] == "")
+				$errors['content'] = "Content cannot be empty!";
+				
+			if ($postdata['poster_id'] == "")
+				$errors['poster_id'] = "Content cannot be empty!";
+			
+			
+			$postdata['year'] = $this->input->post('year');
+			if (strlen($postdata['year']) != 0) {
+				if (strlen($postdata['year']) != 4) $errors['year'] = "Years must be 4-digit numbers, 1970 or higher.";
+				if ($postdata['year'] < 1970) $errors['year'] = "Years must be 4-digit numbers, 1970 or higher.";
+			} else $postdata['year'] = date("Y");
+			
+			$postdata['month'] = $this->input->post('month');
+			if (strlen($postdata['month']) != 0) {
+				if (strlen($postdata['month']) != 2) $errors['month'] = "Months must be 2-digit numbers, from 01 to 12.";
+				if (($postdata['month'] > 12) || ($postdata['month'] < 1)) $errors['month'] = "Months must be 2-digit numbers, from 01 to 12.";
+			} else $postdata['month'] = date("m");
+			
+			$postdata['day'] = $this->input->post('day');
+			if (strlen($postdata['day']) != 0) {
+				if (strlen($postdata['day']) != 2) $errors['day'] = "Days must be 2-digit numbers, from 01 to 31.";
+				if (($postdata['day'] > 31) || ($postdata['day'] < 1)) $errors['day'] = "Days must be 2-digit numbers, from 01 to 31.";
+				if (($postdata['day'] >= 31) && ($postdata['month'] == 4)) $errors['day'] = "April only has 30 days!";
+				if (($postdata['day'] >= 31) && ($postdata['month'] == 6)) $errors['day'] = "June only has 30 days!";
+				if (($postdata['day'] >= 31) && ($postdata['month'] == 9)) $errors['day'] = "September only has 30 days!";
+				if (($postdata['day'] >= 31) && ($postdata['month'] == 11)) $errors['day'] = "November only has 30 days!";
+				
+				$leapyear = date("L", strtotime($postdata['year'].'-02-22'));
+				if (($postdata['day'] >= 29) && ($postdata['month'] == 2) && ($leapyear == 0)) $errors['day'] = "February only has 28 days in ".$year."!";
+				if (($postdata['day'] >= 30) && ($postdata['month'] == 2) && ($leapyear == 1)) $errors['day'] = "February only has 29 days in ".$year."!";
+			} else $postdata['day'] = date("d");
+			
+			$postdata['hour'] = $this->input->post('hour');
+			if (strlen($postdata['hour']) != 0) {
+				if (strlen($postdata['hour']) != 2) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
+				if (($postdata['hour'] > 23) || ($postdata['hour'] < 0)) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
+			} else $postdata['hour'] = date("h");
+			
+			$postdata['minute'] = $this->input->post('minute');
+			if (strlen($postdata['minute']) != 0) {
+				if (strlen($postdata['minute']) != 2) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
+				if (($postdata['minute'] > 59) || ($postdata['minute'] < 0)) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
+			} else $postdata['minute'] = date("i");
+			
+			
+			$valid = (count($errors) <= 0);
+			if ($valid) {
+				if ($editexisting) $committype = 'editcontent';
+				else $committype = 'addcontent';
+				
+				$content = Array(
+					'date' => strtotime($postdata['year']."-".$postdata['month']."-".$postdata['day']." ".$postdata['hour'].":".$postdata['minute'].":00")
+				);
+				
+				foreach ($postdata as $key => $value)
+					if (($key != 'year') && ($key != 'month') && ($key != 'day') && ($key != 'hour') && ($key != 'minute'))
+						$content[$key] = $value;
+				
+				$data = Array(
+					'type' => $committype,
+					'object' => $content
+				);
+				
+				if ($data['type'] == "editcontent") {
+					$this->db->where('id', $this->input->post('id'));
+					$this->db->update('news', $data['object']); 
+				} else {
+					$this->db->insert('news', $data['object']); 
+				}
+				header('Location: /toolbox/news/');
+			}
+		}
+		if (!$commit||!$valid) {
+			$userFields = $this->usermodel->fetchUserFields();
+			$news = $this->contentmodel->fetchSingleNews($this->uri->segment(4), $userFields, false);
+			
+			$uri_string = $this->uri->uri_string();
+			if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+	
+			if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+			else $thispageurl = $baseurl.$uri_string;
+			
+			$data = Array(
+				'sitename' => $sitename,
+				'baseurl' => $baseurl,
+				'news' => $news,
+				'thispageurl' => $thispageurl,
+				'errors' => $errors,
+				'editexisting' => true
+			);
+			
+			$this->load->view('admin/news_edit', $data);
+		}
 	}
 	
 	function commit_news($id = 0) {
@@ -730,41 +833,68 @@ class Admincontroller extends CI_Controller {
 		$sitename = $this->config->item('site_name');
 		$baseurl = $this->config->item('base_url');
 		
-		$page = $this->systemmodel->fetchPage(null, $this->uri->segment(4));
+		$id = $this->uri->segment(4);
+		$editexisting = ($id != 0);
 		
-		$uri_string = $this->uri->uri_string();
-		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
-
-		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
-		else $thispageurl = $baseurl.$uri_string;
+		$commit = $this->input->post('commit');
+		$valid = false;
+		$errors = Array();
+		$postdata = Array();
 		
-		$data = Array(
-			'sitename' => $sitename,
-			'baseurl' => $baseurl,
-			'page' => $page,
-			'thispageurl' => $thispageurl,
-			'errors' => Array(),
-			'editexisting' => true
-		);
-		$this->load->view('admin/page_edit', $data);
-	}
-	
-	function commit_page($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		if ($commit) {
+			$postdata['slug'] = $this->input->post('slug');
+			$postdata['custom_css'] = intval($this->input->post('custom_css'));
+			$postdata['content'] = $this->input->post('content');
+			
+			if ($postdata['slug'] == "")
+				$errors['slug'] = "Slug cannot be empty!";
+			
+			if ($postdata['content'] == "")
+				$errors['content'] = "Content cannot be empty!";
+			
+			$valid = (count($errors) <= 0);
+			if ($valid) {
+				if ($editexisting) $committype = 'editcontent';
+				else $committype = 'addcontent';
+				
+				foreach ($postdata as $key => $value)
+					if (($key != 'year') && ($key != 'month') && ($key != 'day') && ($key != 'hour') && ($key != 'minute'))
+						$content[$key] = $value;
+				
+				$data = Array(
+					'type' => $committype,
+					'object' => $content
+				);
+				
+				if ($data['type'] == "editcontent") {
+					$this->db->where('id', $this->input->post('id'));
+					$this->db->update('pages', $data['object']); 
+				} else {
+					$this->db->insert('pages', $data['object']); 
+				}
+				header('Location: /toolbox/pages/');
+			}		
 		}
 		
-		$config = $this->systemmodel->fetchConfig();
-		
-		$sitename = $this->config->item('site_name');
-		$baseurl = $this->config->item('base_url');
-		
-		$data = Array(
-			'sitename' => $sitename,
-			'baseurl' => $baseurl
-		);
-		
-		//do something
+		if (!$commit||!$valid) {
+			$page = $this->systemmodel->fetchPage(null, $this->uri->segment(4));
+			
+			$uri_string = $this->uri->uri_string();
+			if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+	
+			if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+			else $thispageurl = $baseurl.$uri_string;
+			
+			$data = Array(
+				'sitename' => $sitename,
+				'baseurl' => $baseurl,
+				'page' => $page,
+				'thispageurl' => $thispageurl,
+				'errors' => $errors,
+				'editexisting' => true
+			);
+			$this->load->view('admin/page_edit', $data);
+		}
 	}
 	
 	// USERS //
@@ -792,7 +922,7 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_user($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
+		/*if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		}
 		
@@ -819,25 +949,8 @@ class Admincontroller extends CI_Controller {
 			'editexisting' => true
 		);
 		
-		$this->load->view('admin/user_edit', $data);
-	}
-	
-	function commit_user($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
-		}
-		
-		$config = $this->systemmodel->fetchConfig();
-		
-		$sitename = $this->config->item('site_name');
-		$baseurl = $this->config->item('base_url');
-		
-		$data = Array(
-			'sitename' => $sitename,
-			'baseurl' => $baseurl
-		);
-		
-		//do something
+		$this->load->view('admin/user_edit', $data);*/
+		echo "Coming soon.";
 	}
 	
 	// USER FIELDS //
@@ -865,7 +978,7 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_user_field($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
+		/*if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
 		}
 		
@@ -891,7 +1004,8 @@ class Admincontroller extends CI_Controller {
 			'editexisting' => true
 		);
 		
-		$this->load->view('admin/userfield_edit', $data);
+		$this->load->view('admin/userfield_edit', $data);*/
+		echo "Coming soon.";
 	}
 	
 	function commit_user_field($id = 0) {

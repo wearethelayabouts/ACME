@@ -39,7 +39,7 @@ $config['phpass_hash_strength'] = 8;
 | 'password_max_length' = Max length of user's password.
 |--------------------------------------------------------------------------
 */
-$config['allow_registration'] = TRUE;
+$config['allow_registration'] = FALSE;
 $config['captcha_registration'] = TRUE;
 $config['email_activation'] = TRUE;
 $config['email_activation_expire'] = 60*60*24*2;

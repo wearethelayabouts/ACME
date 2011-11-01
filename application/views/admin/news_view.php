@@ -9,7 +9,7 @@
 		<h1><?php echo $sitename; ?> Admin Toolbox</h1>
 		<h2>View News</h1>
 		<div class="mainbox">
-			<p style="text-align: center;"><a href="<?php echo $baseurl; ?>toolbox/categories/add">+ Add New News Item...</a></p>
+			<p style="text-align: center;"><a href="<?php echo $baseurl; ?>toolbox/news/add">+ Add New News Item...</a></p>
 			<table class="maintable">
 				<tr class="tralt">
 					<td>ID</td>

@@ -9,8 +9,12 @@
 		<h1><?php echo $sitename; ?> Admin Toolbox</h1>
 		<h2><?php if ($editexisting) echo "Edit"; else echo "Add New"; ?> File</h1>
 		<div class="mainbox" style="text-align: center;">
+			<?php foreach ($errors as $error) { ?>
+			<p class="message-error"><strong>ERROR:</strong> <?php echo $error?></p>
+			<?php } ?>
 			<p>Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.</p>
 			<form action="<?php echo $thispageurl; ?>" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+				<input type="hidden" name="<?php echo $this->security->get_csrf_token_name()?>" value="<?php echo $this->security->get_csrf_hash()?>" />
 				<input type="hidden" name="commit" value="true" />
 				<input type="hidden" name="id" value="<?php echo $file['id']; ?>" />
 				<table class="maintable" style="text-align: left;">
@@ -30,7 +34,6 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="type" style="width: 300px;" value="<?php echo $file['type']; ?>" />
-							<?php if ($errors['type']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['type']?></p><?php } ?>
 						</td>
 					</tr>
 					<tr class="tralt">
@@ -40,7 +43,6 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="name" style="width: 300px;" value="<?php echo $file['name']; ?>" />
-							<?php if ($errors['name']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -59,7 +61,6 @@
 						</td>
 						<td class="tdalt">
 							<input type="file" name="userfile" enctype="multipart/form-data" style="width: 300px;" />
-							<?php if ($errors['userfile']) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['userfile']?></p><?php } ?>
 						</td>
 					</tr>			
 				</table>

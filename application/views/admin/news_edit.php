@@ -9,8 +9,12 @@
 		<h1><?php echo $sitename; ?> Admin Toolbox</h1>
 		<h2><?php if ($editexisting) echo "Edit"; else echo "Add New"; ?> News Post</h1>
 		<div class="mainbox" style="text-align: center;">
+			<?php foreach ($errors as $error) { ?>
+			<p class="message-error"><strong>ERROR:</strong> <?php echo $error?></p>
+			<?php } ?>
 			<p>Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.</p>
-			<form action="<?php echo $thispageurl; ?>" method="post">
+			<form action="<?php echo $thispageurl; ?>" method="post" name="form" id="form">
+				<input type="hidden" name="<?php echo $this->security->get_csrf_token_name()?>" value="<?php echo $this->security->get_csrf_hash()?>" />
 				<input type="hidden" name="commit" value="true" />
 				<input type="hidden" name="id" value="<?php echo $news['entry']['id']; ?>" />
 				<table class="maintable" style="text-align: left;">
@@ -21,7 +25,6 @@
 						</td>
 						<td class="td">
 								<input type="text" name="name" style="width: 300px;" value="<?php echo $news['entry']['title']; ?>" />
-							<?php if (isset($errors['name'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -30,7 +33,7 @@
 							<p class="description">Should this be displayed to the users</p>
 						</td>
 						<td class="td">
-							<select name="pubished">
+							<select name="published">
 							<option value="1"<?php if($news['entry']['published'] == 1) echo ' selected="yes"';?>>Yes</option>
 							<option value="0"<?php if($news['entry']['published'] == 0) echo ' selected="yes"';?>>No</option>
 							</select>
@@ -44,11 +47,6 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="year" maxlength="4" style="width: 50px;" value="<?php if ($news['entry']['date'] > 0) echo date("Y", $news['entry']['date']); ?>" /> <input type="text" name="month" maxlength="2" style="width: 30px;" value="<?php if ($news['entry']['date'] > 0) echo date("m", $news['entry']['date']); ?>" /> <input type="text" name="day" maxlength="2" style="width: 30px;" value="<?php if ($news['entry']['date'] > 0) echo date("d", $news['entry']['date']); ?>" /> at <input type="text" name="hour" maxlength="2" style="width: 30px;" value="<?php if ($news['entry']['date'] > 0) echo date("H", $news['entry']['date']); ?>" />:<input type="text" name="minute" maxlength="2" style="width: 30px;" value="<?php if ($news['entry']['date'] > 0) echo date("i", $news['entry']['date']); ?>" />
-							<?php if (isset($errors['year'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['year']; ?></p><?php } ?>
-							<?php if (isset($errors['month'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['month']; ?></p><?php } ?>
-							<?php if (isset($errors['day'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['day']; ?></p><?php } ?>
-							<?php if (isset($errors['hour'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['hour']; ?></p><?php } ?>
-							<?php if (isset($errors['minute'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['minute']; ?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -75,8 +73,7 @@
 							<p class="description">User ID of the person that the post should be attributed to</p>
 						</td>
 						<td class="td">
-							<input type="text" name="posterid" style="width: 120px;" value="<?php echo $news['poster']['id']; ?>" />
-							<?php if (isset($errors['posterid'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['posterid']; ?></p><?php } ?>
+							<input type="text" name="author_id_1" id="author_id_1" style="width: 120px;" value="<?php echo $news['poster']['id']; ?>" /> &nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/1','new_win','width=350,height=650');">Browse Users...</a>
 						</td>
 					</tr>
 				</table>

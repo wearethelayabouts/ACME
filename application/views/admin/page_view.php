@@ -9,17 +9,11 @@
 		<h1><?php echo $sitename; ?> Admin Toolbox</h1>
 		<h2>View Pages</h1>
 		<div class="mainbox">
-			<p style="text-align: center;"><a href="<?php echo $baseurl; ?>toolbox/pages/add">+ Add New Page…</a></p>
+			<p style="text-align: center;"><a href="<?php echo $baseurl; ?>toolbox/pages/add">+ Add New Page...</a></p>
 			<table class="maintable">
 				<tr class="tralt">
 					<td>ID</td>
 					<td>Name</td>
-					
-					<!--<td>Short Content</td>
-					
-					<!--<td><?php // if ($sortby == 'rating') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/content/1/rating/<?php // if ($changetoasc == 'rating') echo 'a'; else echo 'd'; ?>">User Rating<?php // if ($sortby == 'rating') if ($sortdesc) echo "&#9660;</strong>"; else echo "&#9650;</strong>"; ?></td>
-					
-					<td class="tdalt">Published?</td>-->
 				</tr>
 				<?php $altrow = false;				
 				foreach ($pages as $piece) { ?>
@@ -29,9 +23,6 @@
 				}?>>
 					<td><strong><?php echo $piece['id']; ?></strong></td>
 					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/pages/edit/<?php echo $piece['id']; ?>"><?php echo $piece['slug']; ?></a></td>
-					<!--<td class="smallish"><?php echo $piece['entry']['shortcontent']; ?> </td>
-					<td class="tdalt"><?php if ($piece['entry']['published'] != 0) echo "<span class=\"yes\">Yes</span>";
-					else echo "<span class=\"no\">No</span>";?></td>-->
 				</tr>
 				<?php } ?>
 			</table>

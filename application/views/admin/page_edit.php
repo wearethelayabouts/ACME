@@ -9,8 +9,12 @@
 		<h1><?php echo $sitename; ?> Admin Toolbox</h1>
 		<h2><?php if ($editexisting) echo "Edit"; else echo "Add New"; ?> Page</h1>
 		<div class="mainbox" style="text-align: center;">
+			<?php foreach ($errors as $error) { ?>
+			<p class="message-error"><strong>ERROR:</strong> <?php echo $error?></p>
+			<?php } ?>
 			<p>Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.</p>
 			<form action="<?php echo $thispageurl; ?>" method="post">
+				<input type="hidden" name="<?php echo $this->security->get_csrf_token_name()?>" value="<?php echo $this->security->get_csrf_hash()?>" />
 				<input type="hidden" name="commit" value="true" />
 				<input type="hidden" name="id" value="<?php echo $page['id']; ?>" />
 				<table class="maintable" style="text-align: left;">
@@ -21,7 +25,6 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="slug" style="width: 120px;" value="<?php echo $page['slug']; ?>" />
-							<?php if (isset($errors['slug'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['slug']; ?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>

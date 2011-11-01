@@ -3,12 +3,25 @@
 	<head>
 		<title><?php echo $sitename; ?> &bull; Edit Content (Admin)</title>
 		<link href="<?php echo $baseurl; ?>includes/acme/admin.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+		<script type="text/javascript">
+			function addAuthorFields() {
+				nextauthor = parseInt($("#author_amt").attr("value")) + 1;
+				$("#author_amt").attr("value", nextauthor);
+				content = "<input type=\"hidden\" name=\"author_dbid_"+nextauthor+"\" style=\"width: 80px;\" value=\"nopechucktesta\" />Author ID: <input type=\"text\" name=\"author_id_"+nextauthor+"\" style=\"width: 80px;\" value=\"\" /> &nbsp; &nbsp; &nbsp; <a href=\"javascript:void();\" onclick=\"window.open('/toolbox/popup/users/select/"+nextauthor+"','new_win','width=350,height=650');\">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type=\"text\" name=\"author_role_"+nextauthor+"\" style=\"width: 160px;\" value=\"\" /><br />";
+				
+				$("#authorsbox").append(content);
+			}
+		</script>
 	</head>
 	<body>
 		<img src="<?php echo $baseurl; ?>includes/acme/logo.png" alt="ACME: Awesome Creative Media Engine" title="ACME: Awesome Creative Media Engine" />
 		<h1><?php echo $sitename; ?> Admin Toolbox</h1>
 		<h2><?php if ($editexisting) echo "Edit"; else echo "Add New"; ?> Content</h1>
 		<div class="mainbox" style="text-align: center;">
+			<?php foreach ($errors as $error) { ?>
+			<p class="message-error"><strong>ERROR:</strong> <?php echo $error?></p>
+			<?php } ?>
 			<p>Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.</p>
 			<form action="<?php echo $thispageurl; ?>" method="post" id="form" name="form">
 				<input type="hidden" name="<?php echo $this->security->get_csrf_token_name()?>" value="<?php echo $this->security->get_csrf_hash()?>" />
@@ -22,7 +35,6 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="name" style="width: 300px;" value="<?php echo $content['name']; ?>" />
-							<?php if (isset($errors['name'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -50,7 +62,6 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="slug" style="width: 120px;" value="<?php echo $content['slug']; ?>" />
-							<?php if (isset($errors['slug'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['slug']; ?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -61,11 +72,6 @@
 						</td>
 						<td class="tdalt">
 							<input type="text" name="year" maxlength="4" style="width: 50px;" value="<?php if ($content['date'] > 0) echo date("Y", $content['date']); ?>" /> <input type="text" name="month" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("m", $content['date']); ?>" /> <input type="text" name="day" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("d", $content['date']); ?>" /> at <input type="text" name="hour" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("H", $content['date']); ?>" />:<input type="text" name="minute" maxlength="2" style="width: 30px;" value="<?php if ($content['date'] > 0) echo date("i", $content['date']); ?>" />
-							<?php if (isset($errors['year'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['year']; ?></p><?php } ?>
-							<?php if (isset($errors['month'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['month']; ?></p><?php } ?>
-							<?php if (isset($errors['day'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['day']; ?></p><?php } ?>
-							<?php if (isset($errors['hour'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['hour']; ?></p><?php } ?>
-							<?php if (isset($errors['minute'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['minute']; ?></p><?php } ?>
 						</td>
 					</tr>
 					<tr>
@@ -95,7 +101,7 @@
 							<p class="description">The main file attachment for this content (e.g. an image file for a comic, an mp3 for a song...). Not required.</p>
 						</td>
 						<td class="tdalt">
-							File ID: <input type="text" id="main_attachment_id" name="main_attachment" style="width: 80px;" value="<?php if ($content['main_attachment'] > 0) echo $content['main_attachment']; ?>" />
+							File ID: <input type="text" id="main_attachment_id" name="main_attachment" style="width: 80px;" value="<?php if ($content['main_attachment'] > 0) echo $content['main_attachment']; ?>" /> &nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/files/add/popup/main_attachment_id','new_win','width=650,height=850');">Add File...</a>
 							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/main_attachment_id','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>
@@ -105,7 +111,7 @@
 							<p class="description">If your main attachment is something non-visual and you wish to have an image accompaniment (e.g. screenshots for a downloadable game), you can provide one here.</p>
 						</td>
 						<td class="tdalt">
-							File ID: <input type="text" name="image_attachment" style="width: 80px;" value="<?php if ($content['image_attachment'] > 0) echo $content['image_attachment']; ?>" />
+							File ID: <input type="text" name="image_attachment" style="width: 80px;" value="<?php if ($content['image_attachment'] > 0) echo $content['image_attachment']; ?>" /> &nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/files/add/popup/image_attachment','new_win','width=650,height=850');">Add File...</a>
 							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/image_attachment','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>
@@ -115,7 +121,7 @@
 							<p class="description">If you wish to have a downloadable attachment differing from the previous two attachments, you can provide one here.</p>
 						</td>
 						<td class="tdalt">
-							File ID: <input type="text" name="download_attachment" style="width: 80px;" value="<?php if ($content['download_attachment'] > 0) echo $content['download_attachment']; ?>" />
+							File ID: <input type="text" name="download_attachment" style="width: 80px;" value="<?php if ($content['download_attachment'] > 0) echo $content['download_attachment']; ?>" /> &nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/files/add/popup/download_attachment','new_win','width=650,height=850');">Add File...</a>
 							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/download_attachment','new_win','width=650,height=850');">Browse Files...</a>
 					</tr>
 					<tr class="tralt">
@@ -124,7 +130,7 @@
 							<p class="description">If your site uses content thumbnails, you can provide one here.</p>
 						</td>
 						<td class="tdalt">
-							File ID: <input type="text" name="content_thumbnail" style="width: 80px;" value="<?php if ($content['content_thumbnail'] > 0) echo $content['content_thumbnail']; ?>" />
+							File ID: <input type="text" name="content_thumbnail" style="width: 80px;" value="<?php if ($content['content_thumbnail'] > 0) echo $content['content_thumbnail']; ?>" /> &nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/files/add/popup/content_thumbnail','new_win','width=650,height=850');">Add File...</a>
 							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/files/select/1/content_thumbnail','new_win','width=650,height=850');">Browse Files...</a>
 						</td>
 					</tr>	
@@ -143,16 +149,15 @@
 							<p class="description">Add authors to your content here, if you so choose. The "role" is their position on the project, e.g. Artist, Editor, Lead Animator, Programming, Host... etc.</p>
 						</td>
 						<td class="tdalt">
-							Author ID: <input type="text" name="author_id_1" style="width: 80px;" value="" />
-							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/1','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_1" style="width: 160px;" value="" /><br />
-							Author ID: <input type="text" name="author_id_2" style="width: 80px;" value="" />
-							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/2','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_2" style="width: 160px;" value="" /><br />
-							Author ID: <input type="text" name="author_id_3" style="width: 80px;" value="" />
-							&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/3','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_3" style="width: 160px;" value="" /><br />
-							Author ID: <input type="text" name="author_id_4" style="width: 80px;" value="" />
-								&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/4','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_4" style="width: 160px;" value="" /><br />
-							Author ID: <input type="text" name="author_id_5" style="width: 80px;" value="" />
-								&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/5','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_5" style="width: 160px;" value="" /><br />
+							<div id="authorsbox">
+								<?php $i = 0; foreach ($content['authors'] as $author) { ?>
+								<input type="hidden" name="author_dbid_<?=$i?>" style="width: 80px;" value="<?=$author['db_id']?>" />
+								Author ID: <input type="text" name="author_id_<?=$i?>" style="width: 80px;" value="<?=$author['user']['id']?>" />
+								&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/<?=$i?>','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_<?=$i?>" style="width: 160px;" value="<?=$author['role']?>" /><br />
+								<?php $i++; } ?>
+							</div><br />
+							<center><a href="javascript:void();" onclick="addAuthorFields();">Add Author...</a></center>
+							<input type="hidden" name="author_amt" id="author_amt" value="<?=($i)?>" />
 						</td>
 					</tr>				
 				</table>

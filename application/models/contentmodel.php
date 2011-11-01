@@ -6,11 +6,18 @@ class Contentmodel extends CI_Model {
 		$this->load->model('usermodel');
 	}
 	
-	function fetchNews($userfields, $limit = 5) {
+	function fetchNews($userfields, $limit = 5, $onlyPublished = true) {
 		$this->db->limit($limit);
 		$this->load->model('usermodel');
 		$this->db->order_by('date', 'desc'); 
-		$query = $this->db->get_where('news', array('published' => 1));
+		
+		if ($onlyPublished) {
+			$query = $this->db->get_where('news', array('published' => 1));
+		} else {
+			$query = $this->db->get('news');
+		}	
+		
+			
 		if ($query->num_rows() == 0) {
 			return false;
 		}
@@ -25,11 +32,17 @@ class Contentmodel extends CI_Model {
 		return $result;
 	}
 	
-	function fetchSingleNews($id,$userfields) {
+	function fetchSingleNews($id,$userfields,$onlyPublished = true) {
 		$this->db->limit(5);
 		$this->load->model('usermodel');
 		$this->db->order_by('date', 'desc'); 
-		$query = $this->db->get_where('news', array('id' => $id, 'published' => 1));
+		
+		if ($onlyPublished) {
+			$query = $this->db->get_where('news', array('id' => $id, 'published' => 1));
+		} else {
+			$query = $this->db->get_where('news', array('id' => $id));
+		}
+		
 		if ($query->num_rows() == 0) {
 			return false;
 		}
@@ -205,6 +218,7 @@ class Contentmodel extends CI_Model {
 			$userFields = $this->usermodel->fetchUserFields();
 			
 			foreach ($authors as $author) {
+				$a['db_id'] = $author['id'];
 				$a['role'] = $author['rolename'];
 				$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
 				$a['show_icon'] = $author['show_icon'];

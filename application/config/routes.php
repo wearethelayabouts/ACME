@@ -89,6 +89,7 @@ $route['toolbox/categories'] = "admincontroller/view_categories";
 $route['toolbox/categories/:any'] = "admincontroller/view_categories";
 
 $route['toolbox/files/upload'] = "admincontroller/upload_file";
+$route['toolbox/files/add/popup/:any'] = "admincontroller/edit_file";
 $route['toolbox/files/add'] = "admincontroller/edit_file";
 $route['toolbox/files/edit/:any'] = "admincontroller/edit_file";
 $route['toolbox/files'] = "admincontroller/view_files";
