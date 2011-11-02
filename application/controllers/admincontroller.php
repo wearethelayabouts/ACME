@@ -135,7 +135,7 @@ class Admincontroller extends CI_Controller {
 			$postdata['main_attachment'] = $this->input->post('main_attachment');
 			$postdata['image_attachment'] = $this->input->post('image_attachment');
 			$postdata['download_attachment'] = $this->input->post('download_attachment');
-			$postdata['content_thumbnail'] = $this->input->post('content_attachment');
+			$postdata['content_thumbnail'] = $this->input->post('content_thumbnail');
 			
 			$postdata['slug'] = $this->input->post('slug');
 			$slugmeta = quotemeta($postdata['slug']);
