@@ -71,29 +71,27 @@ class Usermodel extends CI_Model {
 		foreach ($fieldMap as $field) {
 		  if (isset($fields[$field['slug']])) {
 			  if ($fieldData == 1) {
-				   $data['fields'][$field['slug']] = Array(
+				   $data[$field['slug']] = Array(
 								  'data' => $fields[$field['slug']]['data'],
 								  'metadata' => $field
 							  );
 			  } else {
-				  $data['fields'][$field['slug']] = $fields[$field['slug']];
+				  $data[$field['slug']] = $fields[$field['slug']];
 			  }
 		  } else {
 			  if ($fieldData == 1) {
-				   $data['fields'][$field['slug']] = Array(
+				   $data[$field['slug']] = Array(
 								  'data' => "",
 								  'metadata' => $field
 							  );
 			  } else {
-				  $data['fields'][$field['slug']] = "";
+				  $data[$field['slug']] = "";
 			  }
 		  }
 		}
 		} else {
-		$data['fields'] = $fields;
+			$data = $fields;
 		}
-		
-		$data['id'] = $uid;
 		
 		return $data;
 	}
