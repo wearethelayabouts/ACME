@@ -128,7 +128,7 @@ class Admincontroller extends CI_Controller {
 			
 			$postdata['name'] = $this->input->post('name');
 			$postdata['category_id'] = $this->input->post('category_id');
-			$postdata['body'] = $this->input->post('body');
+			$postdata['body'] = $this->input->post('desc');
 			$postdata['rating'] = $this->input->post('rating');
 			$postdata['rating_description'] = $this->input->post('rating_description');
 			$postdata['custom_embed'] = $this->input->post('custom_embed');
@@ -181,9 +181,9 @@ class Admincontroller extends CI_Controller {
 			
 			for ($i = 1; $i!=($this->input->post('author_amt')+1); $i++) {
 				if ($this->input->post("author_id_".$i) == "")
-					$errors['authors'] = "You have an empty field!";
+					$errors[] = "You have an empty author id field!";
 				if ($this->input->post("author_role_".$i) == "")
-					$errors['authors'] = "You have an empty field!";
+					$errors[] = "You have an empty author role field!";
 			}
 			
 			$valid = (count($errors) <= 0);

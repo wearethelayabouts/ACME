@@ -150,11 +150,11 @@
 						</td>
 						<td class="tdalt">
 							<div id="authorsbox">
-								<?php $i = 0; foreach ($content['authors'] as $author) { ?>
+								<?php $i = 0; foreach ($content['authors'] as $author) { $i++; ?>
 								<input type="hidden" name="author_dbid_<?=$i?>" style="width: 80px;" value="<?=$author['db_id']?>" />
 								Author ID: <input type="text" name="author_id_<?=$i?>" style="width: 80px;" value="<?=$author['user']['id']?>" />
 								&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/<?=$i?>','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_<?=$i?>" style="width: 160px;" value="<?=$author['role']?>" /><br />
-								<?php $i++; } ?>
+								<?php } ?>
 							</div><br />
 							<center><a href="javascript:void();" onclick="addAuthorFields();">Add Author...</a></center>
 							<input type="hidden" name="author_amt" id="author_amt" value="<?=($i)?>" />
