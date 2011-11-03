@@ -22,7 +22,7 @@
 				$altrow = false;
 				}?>>
 					<td><strong><?php echo $piece['id']; ?></strong></td>
-					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/pages/edit/<?php echo $piece['id']; ?>"><?php echo $piece['slug']; ?></a></td>
+					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/pages/edit/<?php echo $piece['id']; ?>"><?php if (strlen($piece['slug']) > 0) echo $piece['slug']; else echo "(no name -- edit this page)";  ?></a></td>
 				</tr>
 				<?php } ?>
 			</table>

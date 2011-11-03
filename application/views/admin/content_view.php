@@ -37,7 +37,7 @@
 				$altrow = false;
 				}?>>
 					<td><strong><?php echo $piece['id']; ?></strong></td>
-					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/content/edit/<?php echo $piece['id']; ?>"><?php echo $piece['name']; ?></a></td>
+					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/content/edit/<?php echo $piece['id']; ?>"><?php if (strlen($piece['name']) > 0) echo $piece['name']; else echo "(no description -- edit this piece of content)"; ?></a></td>
 					<td class="smallish"><?php echo $piece['hub']['name']; ?><?php if ($categorynames[$piece['id']] != $piece['hub']['name']) echo " <em class=\"smallish\">(", $categorynames[$piece['id']], ")</em>"; ?> </td>
 					<td class="tdalt smallish"><?php echo date('D, M j, Y @ g:i A',$piece['date']); ?></td>
 					<td>&nbsp;</td>

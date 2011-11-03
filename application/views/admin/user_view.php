@@ -19,7 +19,7 @@
 				foreach ($users as $id => $piece) { ?>
 				<tr>
 					<td><strong><?php echo $id; ?></strong></td>
-					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/users/edit/<?php echo $id; ?>"><?php echo $piece['full_name']; ?></a></td>
+					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/users/edit/<?php echo $id; ?>"><?php if (strlen($piece['full_name']) > 0) echo $piece['full_name']; else echo "(no name -- edit this user)"; ?></a></td>
 				</tr>
 				<?php } ?>
 			</table>

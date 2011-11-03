@@ -28,7 +28,7 @@
 				$altrow = false;
 				}?>>
 					<td><strong><?php echo $piece['id']; ?></strong></td>
-					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/categories/edit/<?php echo $piece['id']; ?>"><?php echo $piece['name']; ?></a></td>
+					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/categories/edit/<?php echo $piece['id']; ?>"><?php if (strlen($piece['name']) > 0) echo $piece['name']; else echo "(no description -- edit this category)"; ?></a></td>
 					<td class="smallish"><?php if ($piece['parent_id'] != 0) echo $categories[$piece['parent_id']]['name'];
 					else echo "None"; ?> </td>
 					<td class="tdalt"><?php if ($piece['published'] != 0) echo "<span class=\"yes\">Yes</span>";

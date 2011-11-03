@@ -25,7 +25,7 @@
 				$altrow = false;
 				}?>>
 					<td><strong><?php echo $piece['id']; ?></strong></td>
-					<td><?php if ($piece['crucial'] == 0) { ?><a href="<?php echo $baseurl; ?>toolbox/user_fields/edit/<?php echo $piece['id']; ?>"><?php echo $piece['name']; ?></a><?php } else { echo $piece['name']; } ?></td>
+					<td><?php if ($piece['crucial'] == 0) { ?><a href="<?php echo $baseurl; ?>toolbox/user_fields/edit/<?php echo $piece['id']; ?>"><?php if (strlen($piece['name']) > 0) echo $piece['name']; else echo "(no description -- edit this userfield)"; ?></a><?php } else { if (strlen($piece['name']) > 0) echo $piece['name']; else echo "(no description)"; } ?></td>
 					<td><?php echo $piece['slug']; ?></td>
 					<td><?php echo $piece['description']; ?></td>
 					<td><?php if ($piece['crucial'] == 0) echo "<span class=\"no\">No</span>";

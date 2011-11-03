@@ -21,8 +21,8 @@
 				<?php foreach ($news as $piece) { ?>
 				<tr>
 					<td><strong><?php echo $piece['entry']['id']; ?></strong></td>
-					<td><? echo $piece['poster']['fields']['full_name']; ?></td>
-					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/news/edit/<?php echo $piece['entry']['id']; ?>"><?php echo $piece['entry']['title']; ?></a></td>
+					<td><? echo $piece['poster']['full_name']; ?></td>
+					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/news/edit/<?php echo $piece['entry']['id']; ?>"><?php if (strlen($piece['entry']['title']) > 0) echo $piece['entry']['title']; else echo "(no name -- edit this piece of news)";  ?></a></td>
 					<td class="smallish"><?php echo $piece['entry']['shortcontent']; ?> </td>
 					<td class="tdalt"><?php if ($piece['entry']['published'] != 0) echo "<span class=\"yes\">Yes</span>";
 					else echo "<span class=\"no\">No</span>";?></td>

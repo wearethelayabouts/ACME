@@ -915,7 +915,8 @@ class Admincontroller extends CI_Controller {
 		$data = Array(
 			'sitename' => $sitename,
 			'baseurl' => $baseurl,
-			'users' => $users
+			'users' => $users,
+			'paginationhtml' => ''
 		);
 		
 		$this->load->view('admin/user_view', $data);
