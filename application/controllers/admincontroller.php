@@ -128,7 +128,8 @@ class Admincontroller extends CI_Controller {
 			
 			$postdata['name'] = $this->input->post('name');
 			$postdata['category_id'] = $this->input->post('category_id');
-			$postdata['body'] = $this->input->post('desc');
+			$postdata['published'] = $this->input->post('published');
+			$postdata['rating'] = $this->input->post('rating');
 			$postdata['rating'] = $this->input->post('rating');
 			$postdata['rating_description'] = $this->input->post('rating_description');
 			$postdata['custom_embed'] = $this->input->post('custom_embed');
@@ -244,6 +245,7 @@ class Admincontroller extends CI_Controller {
 								'name' => '',
 								'category_id' => '',
 								'slug' => '',
+								'published' => 0,
 								'date' => 0,
 								'body' => '',
 								'rating' => '',

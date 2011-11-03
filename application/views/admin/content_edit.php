@@ -66,6 +66,18 @@
 					</tr>
 					<tr>
 						<td>
+							<p>Published (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Should this be displayed to the users</p>
+						</td>
+						<td class="td">
+							<select name="published">
+							<option value="1"<?php if($content['published'] == 1) echo ' selected="yes"';?>>Yes</option>
+							<option value="0"<?php if($content['published'] == 0) echo ' selected="yes"';?>>No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
 							<p>Date/Time</p>
 							<p class="description">Format: YYYY-MM-DD at hh:mm (24-hour time!)</p>
 							<p class="description">If left blank, will use current date/time. If set to a time later than now, content will remain unpublished until then.</p>
@@ -152,7 +164,7 @@
 							<div id="authorsbox">
 								<?php $i = 0; foreach ($content['authors'] as $author) { $i++; ?>
 								<input type="hidden" name="author_dbid_<?=$i?>" style="width: 80px;" value="<?=$author['db_id']?>" />
-								Author ID: <input type="text" name="author_id_<?=$i?>" style="width: 80px;" value="<?=$author['user']['id']?>" />
+								Author ID: <input type="text" name="author_id_<?=$i?>" style="width: 80px;" value="<?=$author['user']['uid']?>" />
 								&nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/<?=$i?>','new_win','width=350,height=650');">Browse Users...</a> &nbsp; &nbsp; &nbsp; Role: <input type="text" name="author_role_<?=$i?>" style="width: 160px;" value="<?=$author['role']?>" /><br />
 								<?php } ?>
 							</div><br />

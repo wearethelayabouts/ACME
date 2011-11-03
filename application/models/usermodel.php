@@ -93,6 +93,8 @@ class Usermodel extends CI_Model {
 			$data = $fields;
 		}
 		
+		$data['uid'] = $uid;
+		
 		return $data;
 	}
 }
