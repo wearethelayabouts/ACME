@@ -73,7 +73,7 @@
 							<p class="description">User ID of the person that the post should be attributed to</p>
 						</td>
 						<td class="td">
-							<input type="text" name="author_id_1" id="author_id_1" style="width: 120px;" value="<?php echo $news['poster']['uid']; ?>" /> &nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/1','new_win','width=350,height=650');">Browse Users...</a>
+							<input type="text" name="author_id_1" id="author_id_1" style="width: 120px;" value="<?php echo $news['poster']['id']; ?>" /> &nbsp; &nbsp; &nbsp; <a href="javascript:void();" onclick="window.open('/toolbox/popup/users/select/1','new_win','width=350,height=650');">Browse Users...</a>
 						</td>
 					</tr>
 				</table>
