@@ -128,6 +128,7 @@ class Admincontroller extends CI_Controller {
 			
 			$postdata['name'] = $this->input->post('name');
 			$postdata['category_id'] = $this->input->post('category_id');
+			$postdata['body'] = $this->input->post('desc');
 			$postdata['published'] = $this->input->post('published');
 			$postdata['rating'] = $this->input->post('rating');
 			$postdata['rating'] = $this->input->post('rating');
