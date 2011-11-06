@@ -534,7 +534,7 @@ class Admincontroller extends CI_Controller {
 			// validate content!
 			
 			$postdata['internal_description'] = $this->input->post('internal_description');
-			$postdata['type'] = $this->input->post('type');
+			$postdata['type'] = strtolower($this->input->post('type'));
 			$postdata['name'] = $this->input->post('name');
 			$postdata['is_downloadable'] = $this->input->post('is_downloadable');
 			$postdata['upload'] = $this->input->post('upload');
@@ -543,6 +543,8 @@ class Admincontroller extends CI_Controller {
 			
 			$namemeta = quotemeta($postdata['name']);
 			if ((strstr($postdata['name'], "/")) || ($namemeta != $postdata['name'])) $errors['name'] = "Filenames may not contain any of the following chracters: / \\ + * ? [ ^ ] ( $ )";
+			
+			if ((strstr($postdata['type'], "/")) || (quotemeta($postdata['type']) != $postdata['type'])) $errors['type'] = "File types may not contain any of the following chracters: / \\ + * ? [ ^ ] ( $ )";
 			
 			$valid = (count($errors) <= 0);
 			if ($valid) {
@@ -569,8 +571,8 @@ class Admincontroller extends CI_Controller {
 				
 				$uploadconfig['upload_path'] = './files/';
 				$uploadconfig['allowed_types'] = '*';
-				if ($editexisting) $uploadconfig['file_name']  = $postdata['id'].".".$file['type'];
-				else $uploadconfig['file_name']  = $insertid.".".$file['type'];
+				if ($editexisting) $uploadconfig['file_name']  = $postdata['id'].".".$postdata['type'];
+				else $uploadconfig['file_name']  = $insertid.".".$postdata['type'];
 				$uploadconfig['remove_spaces']  = '0';
 				$uploadconfig['overwrite']  = 'TRUE';
 
