@@ -193,6 +193,9 @@ class Admincontroller extends CI_Controller {
 				if ($editexisting) $committype = 'editcontent';
 				else $committype = 'addcontent';
 				
+				$hub = $this->categorymodel->fetchCategoryHub($postdata['category_id']);
+				$postdata['hub_slug'] = $hub['slug'];
+				
 				$content = Array(
 					'date' => strtotime($postdata['year']."-".$postdata['month']."-".$postdata['day']." ".$postdata['hour'].":".$postdata['minute'].":00")
 				);
@@ -333,6 +336,7 @@ class Admincontroller extends CI_Controller {
 		$postdata = Array();
 		
 		$id = $this->uri->segment(4);
+		$category = $this->categorymodel->fetchCategory($this->uri->segment(4));
 		$editexisting = ($id != 0);
 		
 		if ($commit) {
@@ -376,14 +380,21 @@ class Admincontroller extends CI_Controller {
 					$this->db->update('categories', $data); 
 				}
 				
+				if ($data['slug'] != $category['slug'] && $category['is_hub']) {
+					$slugChange = array(
+					               'hub_slug' => $data['slug']
+					            );
+					
+					$this->db->where('hub_slug', $category['slug']);
+					$this->db->update('content', $slugChange); 
+				}
+				
 				header('Location: /toolbox/categories/');
 				die();
 			}
 		}
 		
 		if (!$commit||!$valid) {
-			$category = $this->categorymodel->fetchCategory($this->uri->segment(4));
-			
 			$uri_string = $this->uri->uri_string();
 			if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
 	
