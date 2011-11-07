@@ -74,7 +74,7 @@ class Admincontroller extends CI_Controller {
 			else $urlappend = "/" . $this->uri->segment(4);
 		} else $urlappend = "";
 		
-		$paginationhtml = $this->systemmodel->paginate($page,$pagesamount,"/toolbox/content/",$urlappend);
+		$paginationhtml = $this->systemmodel->paginate($page,$pagesamount,$baseurl."/toolbox/content/",$urlappend);
 		
 		$messagecode = $this->input->get('m');
 		if ($messagecode == 'editsuccess') {
@@ -235,7 +235,7 @@ class Admincontroller extends CI_Controller {
 				} else {
 					$this->db->insert('content', $data['object']); 
 				}
-				header('Location: /toolbox/content/');
+				header('Location: '.$baseurl.'/toolbox/content/');
 			}
 		}
 		
@@ -389,7 +389,7 @@ class Admincontroller extends CI_Controller {
 					$this->db->update('content', $slugChange); 
 				}
 				
-				header('Location: /toolbox/categories/');
+				header('Location: '.$baseurl.'/toolbox/categories/');
 				die();
 			}
 		}
@@ -493,7 +493,7 @@ class Admincontroller extends CI_Controller {
 			else $urlappend = "/" . $this->uri->segment(4);
 		} else $urlappend = "";
 		
-		$paginationhtml = $this->systemmodel->paginate($page,$pagesamount,"/toolbox/files/",$urlappend);
+		$paginationhtml = $this->systemmodel->paginate($page,$pagesamount,$baseurl."/toolbox/files/",$urlappend);
 		
 		$messagecode = $this->input->get('m');
 		if ($messagecode == 'editsuccess') {
@@ -605,7 +605,7 @@ class Admincontroller extends CI_Controller {
 					$data['object']['upload_data'] = $this->upload->data();
 					
 					if ($this->uri->segment(4) !== "popup") {
-						header('Location: /toolbox/files/');
+						header('Location: '.$baseurl.'/toolbox/files/');
 					} else {
 						echo "<script type='text/javascript'>window.opener.document.forms['form'].".$this->uri->segment(5).".value = '".$insertid."'; window.close();</script> Saved file…";
 					}
@@ -771,7 +771,7 @@ class Admincontroller extends CI_Controller {
 				} else {
 					$this->db->insert('news', $data['object']); 
 				}
-				header('Location: /toolbox/news/');
+				header('Location: '.$baseurl.'/toolbox/news/');
 			}
 		}
 		if (!$commit||!$valid) {
@@ -888,7 +888,7 @@ class Admincontroller extends CI_Controller {
 				} else {
 					$this->db->insert('pages', $data['object']); 
 				}
-				header('Location: /toolbox/pages/');
+				header('Location: '.$baseurl.'/toolbox/pages/');
 			}		
 		}
 		
@@ -1068,49 +1068,150 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function popup_file_select() {
-				if (!$this->tank_auth->is_logged_in()) {
-					redirect('/auth/login/');
-				}
-				
-				$config = $this->systemmodel->fetchConfig();
-				
-				$sitename = $this->config->item('site_name');
-				$baseurl = $this->config->item('base_url');
-				
-				if ($this->uri->segment(5) >= 1) $page = $this->uri->segment(5);
-				else $page = 1;
-				
-				$this->db->order_by('id', 'desc');
-				
-				$query = $this->db->get('files');
-				$filecount = $query->num_rows();
-				$pagesamount = ceil($filecount/25);
-				
-				if ($query->num_rows() == 0) {
-					$files = Array();
-				} else {
-					$query = $query->result_array();
-					$i = ($page-1)*25;
-					while ($i < ($page)*25) {
-						$file = $query[$i];
-						$files[] = $file;
-						$i++;
-					}
-				}
-				
-				$paginationhtml = $this->systemmodel->paginate($page,$pagesamount,"/toolbox/popup/files/select/","/".$this->uri->segment(6));
-				
-				$data = Array(
-					'files' => $files,
-					'sitename' => $sitename,
-					'baseurl' => $baseurl,
-					'page' => $page,
-					'pagesamount' => $pagesamount,
-					'paginationhtml' => $paginationhtml,
-					'formid' => $this->uri->segment(6)
-				);
-				
-				$this->load->view('admin/popup_file_select', $data);
-					
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		}
+		
+		$config = $this->systemmodel->fetchConfig();
+		
+		$sitename = $this->config->item('site_name');
+		$baseurl = $this->config->item('base_url');
+		
+		if ($this->uri->segment(5) >= 1) $page = $this->uri->segment(5);
+		else $page = 1;
+		
+		$this->db->order_by('id', 'desc');
+		
+		$query = $this->db->get('files');
+		$filecount = $query->num_rows();
+		$pagesamount = ceil($filecount/25);
+		
+		if ($query->num_rows() == 0) {
+			$files = Array();
+		} else {
+			$query = $query->result_array();
+			$i = ($page-1)*25;
+			while ($i < ($page)*25) {
+				$file = $query[$i];
+				$files[] = $file;
+				$i++;
+			}
+		}
+		
+		$paginationhtml = $this->systemmodel->paginate($page,$pagesamount,$baseurl."/toolbox/popup/files/select/","/".$this->uri->segment(6));
+		
+		$data = Array(
+			'files' => $files,
+			'sitename' => $sitename,
+			'baseurl' => $baseurl,
+			'page' => $page,
+			'pagesamount' => $pagesamount,
+			'paginationhtml' => $paginationhtml,
+			'formid' => $this->uri->segment(6)
+		);
+		
+		$this->load->view('admin/popup_file_select', $data);			
+	}
+	
+	// DELETIONS //
+	function confirm_delete() {
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		}
+		
+		$config = $this->systemmodel->fetchConfig();
+		
+		$sitename = $this->config->item('site_name');
+		$baseurl = $this->config->item('base_url');
+		
+		$uri_string = $this->uri->uri_string();
+		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+
+		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+		else $thispageurl = $baseurl.$uri_string;
+		
+		switch($this->uri->segment(3)) {
+			case 'content':
+				$content = $this->contentmodel->fetchContentByID($this->uri->segment(4));
+				$name = $content['name'];
+				$what = "a piece of content";
+				break;
+			case 'category':
+				$category = $this->categorymodel->fetchCategory($this->uri->segment(4));
+				$name = $category['name'];
+				$what = "a category";
+				break;
+			case 'files':
+				$file = $this->db->get_where('files', array('id' => $this->uri->segment(4)));
+				$file = $file->row_array();
+				$name = $file['name'];
+				$what = "a file";
+				break;
+			case 'news':
+				$userFields = $this->usermodel->fetchUserFields();
+				$news = $this->contentmodel->fetchSingleNews($this->uri->segment(4), $userFields, false);
+				$name = $news['entry']['title'];
+				$what = "a news entry";
+				break;
+			case 'pages':
+				$page = $this->systemmodel->fetchPage(null, $this->uri->segment(4));
+				$name = $page['title'];
+				$what = "a page";
+				break;
+			default:
+				show_404($thispageurl);
+		}
+		
+		$data = Array(
+			'name' => $name,
+			'what' => $what,
+			'sitename' => $sitename,
+			'baseurl' => $baseurl,
+			'next' => $baseurl.'/toolbox/delete/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/drop'
+		);
+		
+		$this->load->view('admin/delete_confirm', $data);	
+	}
+	
+	function drop_delete() {
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		}
+		
+		$config = $this->systemmodel->fetchConfig();
+		
+		$sitename = $this->config->item('site_name');
+		$baseurl = $this->config->item('base_url');
+		
+		$uri_string = $this->uri->uri_string();
+		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
+
+		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+		else $thispageurl = $baseurl.$uri_string;
+		
+		switch($this->uri->segment(3)) {
+			case 'content':
+				$this->db->delete('content', array('id' => $this->uri->segment(4))); 
+				header('Location: '.$baseurl.'/toolbox/content/');
+				break;
+			case 'category':
+				$this->db->delete('category', array('id' => $this->uri->segment(4))); 
+				header('Location: '.$baseurl.'/toolbox/category/');
+				break;
+			case 'files':
+				$this->db->delete('files', array('id' => $this->uri->segment(4))); 
+				header('Location: '.$baseurl.'/toolbox/files/');
+				break;
+			case 'news':
+				$this->db->delete('news', array('id' => $this->uri->segment(4))); 
+				header('Location: '.$baseurl.'/toolbox/news/');
+				break;
+			case 'pages':
+				$this->db->delete('pages', array('id' => $this->uri->segment(4))); 
+				header('Location: '.$baseurl.'/toolbox/pages/');
+				break;
+			default:
+				show_404($thispageurl);
+		}
 	}
 }

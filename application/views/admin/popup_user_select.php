@@ -17,7 +17,7 @@
 				foreach ($users as $id => $piece) { ?>
 				<tr>
 					<td><strong><?php echo $id; ?></strong></td>
-					<td class="tdalt"><a href="javascript:void();" onclick="window.opener.document.forms['form'].author_id_<?php echo $fieldnum; ?>.value = '<?php echo $id; ?>'; window.close();"><?php if (strlen($piece['full_name'];) > 0) echo $piece['full_name']; else echo "(no name)"; ?></a></td>
+					<td class="tdalt"><a href="javascript:void();" onclick="window.opener.document.forms['form'].author_id_<?php echo $fieldnum; ?>.value = '<?php echo $id; ?>'; window.close();"><?php if (strlen($piece['full_name']) > 0) echo $piece['full_name']; else echo "(no name)"; ?></a></td>
 				</tr>
 				<?php } ?>
 			</table>

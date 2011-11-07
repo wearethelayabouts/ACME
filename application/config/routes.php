@@ -120,6 +120,9 @@ $route['toolbox/popup/users/select/:num'] = "admincontroller/popup_user_select";
 $route['toolbox/popup/files/select'] = "admincontroller/popup_file_select";
 $route['toolbox/popup/files/select/:any'] = "admincontroller/popup_file_select";
 
+$route['toolbox/delete/:any/:num/confirm'] = "admincontroller/confirm_delete";
+$route['toolbox/delete/:any/:num/drop'] = "admincontroller/drop_delete";
+
 $route['toolbox/:any'] = "admincontroller/view";
 $route['toolbox'] = "admincontroller/view";
 

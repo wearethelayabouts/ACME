@@ -12,7 +12,11 @@
 			<?php foreach ($errors as $error) { ?>
 			<p class="message-error"><strong>ERROR:</strong> <?php echo $error?></p>
 			<?php } ?>
-			<p>Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.</p>
+			<p>
+				<a href="<?php echo $baseurl; ?>toolbox/delete/pages/<?php echo $page['id']; ?>/confirm">- Delete...</a>
+				<br /><br />
+				Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.
+			</p>
 			<form action="<?php echo $thispageurl; ?>" method="post">
 				<input type="hidden" name="<?php echo $this->security->get_csrf_token_name()?>" value="<?php echo $this->security->get_csrf_hash()?>" />
 				<input type="hidden" name="commit" value="true" />
