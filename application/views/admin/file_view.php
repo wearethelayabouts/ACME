@@ -1,7 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "gttp://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <?php
 	$sortdesc = !$sortasc;
-	if ($sortdesc) $changetoasc = $sortby;
+	if ($sortdesc)
+		$changetoasc = $sortby;
+	else
+		$changetoasc = "n/a";
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
@@ -16,13 +19,13 @@
 			<p style="text-align: center;"><a href="<?php echo $baseurl; ?>toolbox/files/add">+ Add New File...</a></p>
 			<table class="maintable">
 				<tr class="tralt">
-					<td><?php if ($sortby == 'id') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/files/1/id/<?php if ($changetoasc == 'id') echo 'a'; else echo 'd'; ?>">ID<?php if ($sortby == 'id') if ($sortdesc) echo "&#9660;</strong>"; else echo "&#9650;</strong>"; ?></td>
+					<td><a href="<?php echo $baseurl; ?>toolbox/files/1/id/<?php if ($changetoasc == 'id') echo 'a'; else echo 'd'; ?>"><?php if ($sortby == 'id') echo "<strong>"; ?>ID<?php if ($sortby == 'id') if ($sortdesc) echo "&#9660;</a></strong>"; else echo "&#9650;</a></strong>"; ?></td>
 					
-					<td class="tdalt"><?php if ($sortby == 'dscr') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/files/1/dscr/<?php if ($changetoasc == 'dscr') echo 'a'; else echo 'd'; ?>">Internal Description<?php if ($sortby == 'dscr') if ($sortdesc) echo "&#9660;</strong>"; else echo "&#9650;</strong>"; ?></td>
+					<td><a href="<?php echo $baseurl; ?>toolbox/files/1/dscr/<?php if ($changetoasc == 'dscr') echo 'a'; else echo 'd'; ?>"><?php if ($sortby == 'dscr') echo "<strong>"; ?>Internal Description<?php if ($sortby == 'dscr') if ($sortdesc) echo "&#9660;</a></strong>"; else echo "&#9650;</a></strong>"; ?></td>
 					
-					<td><?php if ($sortby == 'type') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/files/1/type/<?php if ($changetoasc == 'type') echo 'a'; else echo 'd'; ?>">File Type<?php if ($sortby == 'type') { if ($sortdesc) echo "</strong> &#9660;"; else echo "</strong> &#9650;"; } else echo ""; ?></td>
+					<td><a href="<?php echo $baseurl; ?>toolbox/files/1/type/<?php if ($changetoasc == 'type') echo 'a'; else echo 'd'; ?>"><?php if ($sortby == 'type') echo "<strong>"; ?>File Type<?php if ($sortby == 'type') { if ($sortdesc) echo "&#9660;</a></strong>"; else echo "&#9650;</a></strong>"; } else echo ""; ?></td>
 					
-					<td class="tdalt"><?php if ($sortby == 'fname') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/files/1/fname/<?php if ($changetoasc == 'fname') echo 'a'; else echo 'd'; ?>">Filename<?php if ($sortby == 'fname') if ($sortdesc) echo "&#9660;</strong>"; else echo "&#9650;</strong>"; ?></td>
+					<td><a href="<?php echo $baseurl; ?>toolbox/files/1/fname/<?php if ($changetoasc == 'fname') echo 'a'; else echo 'd'; ?>"><?php if ($sortby == 'fname') echo "<strong>"; ?>Filename<?php if ($sortby == 'fname') if ($sortdesc) echo "&#9660;</a></strong>"; else echo "&#9650;</a></strong>"; ?></td>
 					
 					<td>Is Downloadable</td>
 				</tr>

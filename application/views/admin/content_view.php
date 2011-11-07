@@ -1,7 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "gttp://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <?php
 	$sortdesc = !$sortasc;
-	if ($sortdesc) $changetoasc = $sortby;
+	if ($sortdesc)
+		$changetoasc = $sortby;
+	else
+		$changetoasc = "n/a";
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
@@ -16,14 +19,13 @@
 			<p style="text-align: center;"><a href="<?php echo $baseurl; ?>toolbox/content/add">+ Add New Content...</a></p>
 			<table class="maintable">
 				<tr class="tralt">
-					<td><?php if ($sortby == 'id') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/content/1/id/<?php if ($changetoasc == 'id') echo 'a'; else echo 'd'; ?>">ID<?php if ($sortby == 'id') if ($sortdesc) echo "&#9660;</strong>"; else echo "&#9650;</strong>"; ?></td>
-					<td class="tdalt"><?php if ($sortby == 'name') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/content/1/name/<?php if ($changetoasc == 'name') echo 'a'; else echo 'd'; ?>">Name<?php if ($sortby == 'name') if ($sortdesc) echo "&#9660;</strong>"; else echo "&#9650;</strong>"; ?></td>
+					<td><a href="<?php echo $baseurl; ?>toolbox/content/1/id/<?php if ($changetoasc == 'id') echo 'a'; else echo 'd'; ?>"><?php if ($sortby == 'id') echo "<strong>"; ?>ID<?php if ($sortby == 'id') if ($sortdesc) echo "&#9660;</a></strong>"; else echo "&#9650;</a></strong>"; ?></td>
 					
-					<td><?php if ($sortby == 'cat') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/content/1/cat/<?php if ($changetoasc == 'cat') echo 'a'; else echo 'd'; ?>">Hub<?php if ($sortby == 'cat') { if ($sortdesc) echo "</strong> <em>(Subcategory)</em> &#9660;"; else echo "</strong> <em>(Subcategory)</em> &#9650;"; } else echo " <em>(Subcategory)</em>"; ?></td>
+					<td><a href="<?php echo $baseurl; ?>toolbox/content/1/name/<?php if ($changetoasc == 'name') echo 'a'; else echo 'd'; ?>"><?php if ($sortby == 'name') echo "<strong>"; ?>Name<?php if ($sortby == 'name') if ($sortdesc) echo "&#9660;</a></strong>"; else echo "&#9650;</a></strong>"; ?></td>
 					
-					<td class="tdalt"><?php if ($sortby == 'date') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/content/1/date/<?php if ($changetoasc == 'date') echo 'a'; else echo 'd'; ?>">Date<?php if ($sortby == 'date') if ($sortdesc) echo "&#9660;</strong>"; else echo "&#9650;</strong>"; ?></td>
+					<td><a href="<?php echo $baseurl; ?>toolbox/content/1/cat/<?php if ($changetoasc == 'cat') echo 'a'; else echo 'd'; ?>"><?php if ($sortby == 'cat') echo "<strong>"; ?>Hub<?php if ($sortby == 'cat') { if ($sortdesc) echo "</strong> <em>(Subcategory)</em> &#9660;"; else echo "</strong> <em>(Subcategory)</em> &#9650;"; } else echo " <em>(Subcategory)</em>"; ?></a></td>
 					
-					<!--<td><?php // if ($sortby == 'rating') echo "<strong>"; ?><a href="<?php echo $baseurl; ?>toolbox/content/1/rating/<?php // if ($changetoasc == 'rating') echo 'a'; else echo 'd'; ?>">User Rating<?php // if ($sortby == 'rating') if ($sortdesc) echo "&#9660;</strong>"; else echo "&#9650;</strong>"; ?></td>-->
+					<td><a href="<?php echo $baseurl; ?>toolbox/content/1/date/<?php if ($changetoasc == 'date') echo 'a'; else echo 'd'; ?>"><?php if ($sortby == 'date') echo "<strong>"; ?>Date<?php if ($sortby == 'date') if ($sortdesc) echo "&#9660;</a></strong>"; else echo "&#9650;</a></strong>"; ?></td>
 					
 					<td>User Rating</td>
 					

@@ -465,7 +465,7 @@ class Admincontroller extends CI_Controller {
 			else $sortorder = 'asc';
 		}
 		
-		if ($sortby == 'dscr') $this->db->order_by('internalDescription', $sortorder);
+		if ($sortby == 'dscr') $this->db->order_by('internal_description', $sortorder);
 		else if ($sortby == 'type') $this->db->order_by('type', $sortorder);
 		else if ($sortby == 'fname') $this->db->order_by('name', $sortorder);
 		else if ($sortby == 'id') $this->db->order_by('id', $sortorder);
