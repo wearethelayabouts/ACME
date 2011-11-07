@@ -13,6 +13,7 @@
 			<p class="message-error"><strong>ERROR:</strong> <?php echo $error?></p>
 			<?php } ?>
 			<p>
+				<a href="<?php echo $baseurl; ?>toolbox/archives/wizard/<?php echo $category['id'] ?>">+ Generate Archive...</a>
 				<a href="<?php echo $baseurl; ?>toolbox/delete/category/<?php echo $category['id']; ?>/confirm">- Delete...</a>
 				<br /><br />
 				Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.

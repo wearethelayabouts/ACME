@@ -295,32 +295,12 @@ class Api extends CI_Controller {
 	function content_downloadZip() {
 		$category = $this->uri->segment(4);
 		$category = $this->categorymodel->fetchCategorySlug($category);
-		$categorycontent = $this->contentmodel->fetchContentByCategory($category['id']);
 		
-		if (!is_array($categorycontent)) {
-			die();
-		}
+		if (file_exists('./files/archives/zip/'.$category['id'].'.zip'))
+			header('Location: /files/archives/zip/'.$category['id'].'.zip');
+		else
+			show_404('/api/1/content/xx/download.zip');
 		
-		$temporaryfile = sys_get_temp_dir().'/acmezip'.(time()+rand(11111,99999)).'.zip';
-		$zip = new ZipArchive;
-		$res = $zip->open($temporaryfile, ZipArchive::CREATE);
-		
-		foreach ($categorycontent as $content) {
-			$f = $this->db->get_where('files', array('id' => $content['main_attachment']));
-			$f = $f->row_array();
-			if ($f['is_downloadable'] == 1) {
-				$zip->addFile('./files/'.$f['id'], $f['name']);
-			}
-			$f = Array();
-		}
-		
-		$zip->close();
-		
-		header('Content-Type: application/zip');
-		header('Content-Length: '.filesize($temporaryfile));
-		header('Content-Disposition: attachment; filename="'.$category['name'].'.zip"');
-		readfile($temporaryfile);
-		
-		unlink($temporaryfile);
+		echo "aa";
 	}
 }

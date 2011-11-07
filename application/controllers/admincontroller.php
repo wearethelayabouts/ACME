@@ -235,7 +235,7 @@ class Admincontroller extends CI_Controller {
 				} else {
 					$this->db->insert('content', $data['object']); 
 				}
-				header('Location: '.$baseurl.'/toolbox/content/');
+				header('Location: '.$baseurl.'toolbox/content/');
 			}
 		}
 		
@@ -389,7 +389,7 @@ class Admincontroller extends CI_Controller {
 					$this->db->update('content', $slugChange); 
 				}
 				
-				header('Location: '.$baseurl.'/toolbox/categories/');
+				header('Location: '.$baseurl.'toolbox/categories/');
 				die();
 			}
 		}
@@ -605,7 +605,7 @@ class Admincontroller extends CI_Controller {
 					$data['object']['upload_data'] = $this->upload->data();
 					
 					if ($this->uri->segment(4) !== "popup") {
-						header('Location: '.$baseurl.'/toolbox/files/');
+						header('Location: '.$baseurl.'toolbox/files/');
 					} else {
 						echo "<script type='text/javascript'>window.opener.document.forms['form'].".$this->uri->segment(5).".value = '".$insertid."'; window.close();</script> Saved file…";
 					}
@@ -771,7 +771,7 @@ class Admincontroller extends CI_Controller {
 				} else {
 					$this->db->insert('news', $data['object']); 
 				}
-				header('Location: '.$baseurl.'/toolbox/news/');
+				header('Location: '.$baseurl.'toolbox/news/');
 			}
 		}
 		if (!$commit||!$valid) {
@@ -888,7 +888,7 @@ class Admincontroller extends CI_Controller {
 				} else {
 					$this->db->insert('pages', $data['object']); 
 				}
-				header('Location: '.$baseurl.'/toolbox/pages/');
+				header('Location: '.$baseurl.'toolbox/pages/');
 			}		
 		}
 		
@@ -1126,7 +1126,6 @@ class Admincontroller extends CI_Controller {
 		
 		$uri_string = $this->uri->uri_string();
 		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
-
 		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
 		else $thispageurl = $baseurl.$uri_string;
 		
@@ -1167,7 +1166,7 @@ class Admincontroller extends CI_Controller {
 			'what' => $what,
 			'sitename' => $sitename,
 			'baseurl' => $baseurl,
-			'next' => $baseurl.'/toolbox/delete/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/drop'
+			'next' => $baseurl.'toolbox/delete/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/drop'
 		);
 		
 		$this->load->view('admin/delete_confirm', $data);	
@@ -1185,33 +1184,132 @@ class Admincontroller extends CI_Controller {
 		
 		$uri_string = $this->uri->uri_string();
 		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
-
+		
 		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
 		else $thispageurl = $baseurl.$uri_string;
 		
 		switch($this->uri->segment(3)) {
 			case 'content':
 				$this->db->delete('content', array('id' => $this->uri->segment(4))); 
-				header('Location: '.$baseurl.'/toolbox/content/');
+				header('Location: '.$baseurl.'toolbox/content/');
 				break;
 			case 'category':
 				$this->db->delete('category', array('id' => $this->uri->segment(4))); 
-				header('Location: '.$baseurl.'/toolbox/category/');
+				header('Location: '.$baseurl.'toolbox/category/');
 				break;
 			case 'files':
 				$this->db->delete('files', array('id' => $this->uri->segment(4))); 
-				header('Location: '.$baseurl.'/toolbox/files/');
+				header('Location: '.$baseurl.'toolbox/files/');
 				break;
 			case 'news':
 				$this->db->delete('news', array('id' => $this->uri->segment(4))); 
-				header('Location: '.$baseurl.'/toolbox/news/');
+				header('Location: '.$baseurl.'toolbox/news/');
 				break;
 			case 'pages':
 				$this->db->delete('pages', array('id' => $this->uri->segment(4))); 
-				header('Location: '.$baseurl.'/toolbox/pages/');
+				header('Location: '.$baseurl.'toolbox/pages/');
 				break;
 			default:
 				show_404($thispageurl);
+		}
+	}
+	
+	// ARCHIVES //
+	function wizard_archives() {
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		}
+		
+		$config = $this->systemmodel->fetchConfig();
+		
+		$sitename = $this->config->item('site_name');
+		$baseurl = $this->config->item('base_url');
+
+		$id = $this->uri->segment(4);
+		$category = $this->categorymodel->fetchCategory($this->uri->segment(4));
+		
+		$errors = Array();
+		
+		$uri_string = $this->uri->uri_string();
+		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;	
+		
+		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+		else $thispageurl = $baseurl.$uri_string;
+		
+		$formats = Array();
+		
+		if (class_exists('ZipArchive'))
+			$formats['zip'] = "ZIP";
+		
+		if (count($formats) == 0)
+			show_error("No PHP extensions for archives are installed on the server!", 500);
+		
+		$data = Array(
+			'sitename' => $sitename,
+			'baseurl' => $baseurl,
+			'category' => $category,
+			'thispageurl' => $thispageurl,
+			'formats' => $formats,
+			'errors' => $errors
+		);
+		$this->load->view('admin/archives_wizard', $data);
+	}
+	
+	function run_archives() {
+		if (!$this->tank_auth->is_logged_in()) {
+			redirect('/auth/login/');
+		}
+		
+		$config = $this->systemmodel->fetchConfig();
+		
+		$sitename = $this->config->item('site_name');
+		$baseurl = $this->config->item('base_url');
+		
+		$errors = Array();
+		
+		$uri_string = $this->uri->uri_string();
+		if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;	
+		
+		if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
+		else $thispageurl = $baseurl.$uri_string;
+		
+		$category = $this->uri->segment(4);
+		$category = $this->categorymodel->fetchCategory($this->uri->segment(4));
+		$categorycontent = $this->contentmodel->fetchContentByCategory($category['id']);
+		
+		switch ($this->input->post('type')) {
+			case 'zip':
+				if (class_exists('ZipArchive')) {
+					if (!is_array($categorycontent)) {
+						show_error("An error occured while fetching the content", 500);
+					}
+					if (file_exists('./files/archives/zip/'.$category['id'].'.zip'))
+						unlink('./files/archives/zip/'.$category['id'].'.zip');
+					
+					set_time_limit(0);
+					
+					$zip = new ZipArchive;
+					$res = $zip->open('./files/archives/zip/'.$category['id'].'.zip', ZipArchive::CREATE);
+					
+					foreach ($categorycontent as $content) {
+						$f = $this->db->get_where('files', array('id' => $content['main_attachment']));
+						$f = $f->row_array();
+						if ($f['is_downloadable'] == 1) {
+							$zip->addFile('./files/'.$f['id'].'.'.$f['type'], $f['name']);
+						}
+						$f = Array();
+					}
+					
+					$zip->close();
+					
+					header('Location: '.$baseurl.'toolbox/category/');
+				} else {
+					show_error("Bad format provided!", 500);
+				}
+				break;
+			default:
+				show_error("Bad format provided!", 500);
+				break;
 		}
 	}
 }

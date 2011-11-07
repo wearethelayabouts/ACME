@@ -63,7 +63,6 @@ $route['user/forum'] = "usercontroller/forumprofile";
 
 $route['content/:any/sortasc'] = "categorycontroller/view";
 $route['content/:any/sortdesc'] = "categorycontroller/view";
-$route['content/:any/download.zip'] = "contentcontroller/downloadzip";
 $route['content/:any/playall'] = "contentcontroller/playall";
 $route['content/:any/page/:num'] = "categorycontroller/view";
 $route['content/:any/sortasc/:num'] = "categorycontroller/view";
@@ -122,6 +121,9 @@ $route['toolbox/popup/files/select/:any'] = "admincontroller/popup_file_select";
 
 $route['toolbox/delete/:any/:num/confirm'] = "admincontroller/confirm_delete";
 $route['toolbox/delete/:any/:num/drop'] = "admincontroller/drop_delete";
+
+$route['toolbox/archives/wizard/:num'] = "admincontroller/wizard_archives";
+$route['toolbox/archives/run/:num'] = "admincontroller/run_archives";
 
 $route['toolbox/:any'] = "admincontroller/view";
 $route['toolbox'] = "admincontroller/view";

@@ -25,6 +25,8 @@ class Contentcontroller extends CI_Controller {
 			
 			$near = $this->contentmodel->fetchContentNear($content);
 			
+			$links = $this->systemmodel->fetchLinks();
+			
 			$acmeconfig = $this->systemmodel->fetchConfig();
 			if (isset($acmeconfig['sitemessage'])) {
 				if ($acmeconfig['sitemessage'] != "") $sitemessage = $acmeconfig['sitemessage'];
@@ -32,6 +34,7 @@ class Contentcontroller extends CI_Controller {
 			} else $sitemessage = false;
 			
 			$data = Array(
+						'links' => $links,
 						'content' => $content,
 						'near' => $near,
 						'sitemessage' => $sitemessage
@@ -50,23 +53,11 @@ class Contentcontroller extends CI_Controller {
 			die();
 		}
 	}
-	function downloadzip() {
-		$this->output->cache(10);
-		
-		$category = $this->uri->segment(2);
-		$config = $this->systemmodel->fetchConfig();
-		$links = $this->systemmodel->fetchLinks();
-		
-		$data = Array(
-					'links' => $links,
-					'category' => $category
-				);
-		$this->load->view($config['templategroup'].'_downloadzip', $data);
-	}
 	function playall() {
 		$this->output->cache(10);
 		
-		$category = $this->categorymodel->fetchCategorySlug($this->uri->segment(2));
+		$cachelength = $this->config->item('cache_length');
+		if (($cachelength >= 1) && ($addondomain == false)) $this->output->cache($cachelength);
 		
 		if (!$category) {
 			show_404('');

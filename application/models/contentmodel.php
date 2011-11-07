@@ -246,8 +246,8 @@ class Contentmodel extends CI_Model {
 		if ($showonly == -2) $showonly = $this->categorymodel->fetchCategoryShowType($cid);
 		
 		if ($showonly == 0) {
-			if ($limit != 0) $this->db->limit($limit[1], $limit[0]);
-		} else $this->db->limit(1);
+			if ($limit !== 0) $this->db->limit($limit[1], $limit[0]);
+		}
 		
 		if ($showonly == 1) $this->db->order_by('date', 'asc'); 
 		else $this->db->order_by('date', 'desc');
