@@ -200,7 +200,6 @@ class Contentmodel extends CI_Model {
 		$query = $queryr;
 		$query['hub'] = $this->categorymodel->fetchCategoryHub($query['category_id']);
 		if (!$fetchBareMinimum) $query['tree'] = $this->categorymodel->fetchTree($query['category_id']);
-		$query['body'] = nl2br($query['body']);
 		
 		if ($query['rating'] == "" && !$fetchBareMinimum) {
 			$query['rating'] = $query['hub']['rating'];
