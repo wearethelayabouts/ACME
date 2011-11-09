@@ -162,7 +162,7 @@
 					<tr class="tralt">
 						<td>
 							<p>Authors</p>
-							<p class="description">Add authors to your content here, if you so choose. The "role" is their position on the project, e.g. Artist, Editor, Lead Animator, Programming, Host... etc.</p>
+							<p class="description">Add authors to your content here, if you so choose. The "role" is their position on the project, e.g. Artist, Editor, Lead Animator, Programming, Host... etc. If both fields are empty, the author will be removed.</p>
 						</td>
 						<td class="tdalt">
 							<div id="authorsbox">

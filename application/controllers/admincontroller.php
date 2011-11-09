@@ -182,9 +182,9 @@ class Admincontroller extends CI_Controller {
 			} else $postdata['minute'] = date("i");
 			
 			for ($i = 1; $i!=($this->input->post('author_amt')+1); $i++) {
-				if ($this->input->post("author_id_".$i) == "")
+				if ($this->input->post("author_id_".$i) == "" && $this->input->post("author_role_".$i) !== "")
 					$errors[] = "You have an empty author id field!";
-				if ($this->input->post("author_role_".$i) == "")
+				if ($this->input->post("author_role_".$i) == "" && $this->input->post("author_id_".$i) !== "")
 					$errors[] = "You have an empty author role field!";
 			}
 			
@@ -209,32 +209,43 @@ class Admincontroller extends CI_Controller {
 					'object' => $content
 				);
 				
-				for ($i = 1; $i!=($this->input->post('author_amt')+1); $i++) {
-					if ($this->input->post('author_dbid_'.$i) == "nopechucktesta") {
-						$dbdata = Array(
-									'contentid' => $this->input->post('id'),
-									'user' => $this->input->post('author_id_'.$i),
-									'rolename' => $this->input->post('author_role_'.$i),
-									'show_icon' => 1
-									);
-						$this->db->insert('contentauthors', $dbdata);
-					} else {
-						$dbdata = Array(
-									'user' => $this->input->post('author_id_'.$i),
-									'rolename' => $this->input->post('author_role_'.$i),
-									'show_icon' => 1
-									);
-						$this->db->where('id', $this->input->post('author_dbid_'.$i));
-						$this->db->update('contentauthors', $dbdata);
-					}
-				}
-				
 				if ($data['type'] == "editcontent") {
 					$this->db->where('id', $this->input->post('id'));
 					$this->db->update('content', $data['object']); 
 				} else {
 					$this->db->insert('content', $data['object']); 
 				}
+				
+				for ($i = 1; $i!=($this->input->post('author_amt')+1); $i++) {
+					if ($this->input->post('author_dbid_'.$i) == "nopechucktesta") {
+						if ($this->input->post('author_id_'.$i) !== "" && $this->input->post('author_role_'.$i) !== "") {
+							if ($data['type'] == "editcontent")
+								$contentid = $this->input->post('id');
+							else
+								$contentid = $this->db->insert_id();
+							$dbdata = Array(
+										'contentid' => $contentid,
+										'user' => $this->input->post('author_id_'.$i),
+										'rolename' => $this->input->post('author_role_'.$i),
+										'show_icon' => 1
+										);
+							$this->db->insert('contentauthors', $dbdata);
+						}
+					} else {
+						if ($this->input->post('author_id_'.$i) !== "" && $this->input->post('author_role_'.$i) !== "") {
+							$dbdata = Array(
+										'user' => $this->input->post('author_id_'.$i),
+										'rolename' => $this->input->post('author_role_'.$i),
+										'show_icon' => 1
+										);
+							$this->db->where('id', $this->input->post('author_dbid_'.$i));
+							$this->db->update('contentauthors', $dbdata);
+						} else {
+							$this->db->delete('contentauthors', array('id' => $this->input->post('author_dbid_'.$i))); 
+						}
+					}
+				}
+				
 				header('Location: '.$baseurl.'toolbox/content/');
 			}
 		}
