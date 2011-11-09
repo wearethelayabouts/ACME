@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "gttp://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<title><?php echo $sitename; ?> &bull; View All Content (Admin)</title>
@@ -22,12 +22,12 @@
 				<input type="hidden" name="commit" value="true" />
 				<input type="hidden" name="id" value="<?php echo $file['id']; ?>" />
 				<table class="maintable" style="text-align: left;">
-					<tr class="tralt">
+					<tr>
 						<td>
 							<p>Internal Description</p>
 							<p class="description">Description of the file, for your own reference. Not required, but recommended.</p>
 						</td>
-						<td class="tdalt">
+						<td>
 							<textarea name="internal_description" rows="8" cols="60"><?php echo $file['internal_description']; ?></textarea>
 						</td>
 					</tr>
@@ -36,16 +36,16 @@
 							<p>File Type (<span style="color: #f00;">*</span>)</p>
 							<p class="description">File extension of the file (e.g. png, jpg, mp3...).</p>
 						</td>
-						<td class="tdalt">
+						<td>
 							<input type="text" name="type" style="width: 300px;" value="<?php echo $file['type']; ?>" />
 						</td>
 					</tr>
-					<tr class="tralt">
+					<tr>
 						<td style="width: 150px;">
 							<p>Filename</p>
 							<p class="description">Self-explanatory. Only required if the file is Downloadable (see below).</p>
 						</td>
-						<td class="tdalt">
+						<td>
 							<input type="text" name="name" style="width: 300px;" value="<?php echo $file['name']; ?>" />
 						</td>
 					</tr>
@@ -54,16 +54,16 @@
 							<p>Is Downloadable? (<span style="color: #f00;">*</span>)</p>
 							<p class="description">If unchecked, a Download link cannot appear on content pages (for things like images).</p>
 						</td>
-						<td class="tdalt">
+						<td>
 							<input type="checkbox" name="is_downloadable"<?php if ($file['is_downloadable']) echo "checked=\"checked\""; ?>" />
 						</td>
 					</tr>	
-					<tr class="tralt">
+					<tr>
 						<td style="width: 150px;">
 							<p>File (<span style="color: #f00;">*</span>)</p>
 							<p class="description"><?php if ($editexisting) { ?>This will OVERWRITE the file you're editing! Be careful!!<?php } else { ?>Self-explanatory.<?php } ?></p>
 						</td>
-						<td class="tdalt">
+						<td>
 							<input type="file" name="userfile" enctype="multipart/form-data" style="width: 300px;" />
 						</td>
 					</tr>			

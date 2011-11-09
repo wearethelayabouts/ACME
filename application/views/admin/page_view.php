@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "gttp://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<title><?php echo $sitename; ?> &bull; View All Pages (Admin)</title>
@@ -11,18 +11,14 @@
 		<div class="mainbox">
 			<p style="text-align: center;"><a href="<?php echo $baseurl; ?>toolbox/pages/add">+ Add New Page...</a></p>
 			<table class="maintable">
-				<tr class="tralt">
+				<tr>
 					<td>ID</td>
 					<td>Name</td>
 				</tr>
-				<?php $altrow = false;				
-				foreach ($pages as $piece) { ?>
-				<tr<?php if (!$altrow) $altrow = true;
-				else { echo " class=\"tralt\"";
-				$altrow = false;
-				}?>>
+				<?php foreach ($pages as $piece) { ?>
+				<tr>
 					<td><strong><?php echo $piece['id']; ?></strong></td>
-					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/pages/edit/<?php echo $piece['id']; ?>"><?php if (strlen($piece['slug']) > 0) echo $piece['slug']; else echo "(no name -- edit this page)";  ?></a></td>
+					<td><a href="<?php echo $baseurl; ?>toolbox/pages/edit/<?php echo $piece['id']; ?>"><?php if (strlen($piece['slug']) > 0) echo $piece['slug']; else echo "(no name -- edit this page)";  ?></a></td>
 				</tr>
 				<?php } ?>
 			</table>

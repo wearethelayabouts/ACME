@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "gttp://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<title><?php echo $sitename; ?> &bull; <?php if ($editexisting) echo "Edit"; else echo "Add New"; ?> User (Admin)</title>
@@ -20,7 +20,7 @@
 							<p><?php echo $field['metadata']['name']; ?> <?php if ($field['metadata']['crucial'] == 1) { ?>(<span style="color: #f00;">*</span>)<?php } ?></p>
 							<p class="description"><?php echo $field['metadata']['description']; ?></p>
 						</td>
-						<td class="tdalt">
+						<td>
 							<input type="text" name="<?php echo $field['metadata']['slug']; ?>" style="width: 120px;" value="<?php echo $field['data']; ?>" />
 							<?php if (isset($errors['name'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']; ?></p><?php } ?>
 						</td>

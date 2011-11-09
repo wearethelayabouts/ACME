@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "gttp://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<title>Select File</title>
@@ -8,7 +8,7 @@
 		<h2>Select File</h1>
 		<div class="mainbox">
 			<table class="maintable">
-				<tr class="tralt">
+				<tr>
 					<td>ID</td>
 					
 					<td>Internal Description</td>

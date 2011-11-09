@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "gttp://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<title><?php echo $sitename; ?> &bull; View All News Posts (Admin)</title>
@@ -11,7 +11,7 @@
 		<div class="mainbox">
 			<p style="text-align: center;"><a href="<?php echo $baseurl; ?>toolbox/news/add">+ Add New News Item...</a></p>
 			<table class="maintable">
-				<tr class="tralt">
+				<tr>
 					<td>ID</td>
 					<td>Poster</td>
 					<td>Name</td>
@@ -22,9 +22,9 @@
 				<tr>
 					<td><strong><?php echo $piece['entry']['id']; ?></strong></td>
 					<td><? echo $piece['poster']['full_name']; ?></td>
-					<td class="tdalt"><a href="<?php echo $baseurl; ?>toolbox/news/edit/<?php echo $piece['entry']['id']; ?>"><?php if (strlen($piece['entry']['title']) > 0) echo $piece['entry']['title']; else echo "(no name -- edit this piece of news)";  ?></a></td>
+					<td><a href="<?php echo $baseurl; ?>toolbox/news/edit/<?php echo $piece['entry']['id']; ?>"><?php if (strlen($piece['entry']['title']) > 0) echo $piece['entry']['title']; else echo "(no name -- edit this piece of news)";  ?></a></td>
 					<td class="smallish"><?php echo $piece['entry']['shortcontent']; ?> </td>
-					<td class="tdalt"><?php if ($piece['entry']['published'] != 0) echo "<span class=\"yes\">Yes</span>";
+					<td><?php if ($piece['entry']['published'] != 0) echo "<span class=\"yes\">Yes</span>";
 					else echo "<span class=\"no\">No</span>";?></td>
 				</tr>
 				<?php } ?>

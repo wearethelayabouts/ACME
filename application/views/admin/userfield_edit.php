@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "gttp://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<title><?php echo $sitename; ?> &bull; Edit Page (Admin)</title>
@@ -15,32 +15,32 @@
 				<input type="hidden" name="commit" value="true" />
 				<input type="hidden" name="id" value="<?php echo $field['id']; ?>" />
 				<table class="maintable" style="text-align: left;">
-					<tr class="tralt">
+					<tr>
 						<td>
 							<p>Name (<span style="color: #f00;">*</span>)</p>
 							<p class="description">Short human readable name for the field</p>
 						</td>
-						<td class="tdalt">
+						<td>
 							<input type="text" name="name" style="width: 120px;" value="<?php echo $field['name']; ?>" />
 							<?php if (isset($errors['name'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']; ?></p><?php } ?>
 						</td>
 					</tr>
-					<tr class="tralt">
+					<tr>
 						<td>
 							<p>Slug (<span style="color: #f00;">*</span>)</p>
 							<p class="description">Short machine readable name for the field</p>
 						</td>
-						<td class="tdalt">
+						<td>
 							<input type="text" name="slug" style="width: 120px;" value="<?php echo $field['slug']; ?>" />
 							<?php if (isset($errors['slug'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['name']; ?></p><?php } ?>
 						</td>
 					</tr>
-					<tr class="tralt">
+					<tr>
 						<td>
 							<p>Description (<span style="color: #f00;">*</span>)</p>
 							<p class="description">Human readable description for the field</p>
 						</td>
-						<td class="tdalt">
+						<td>
 							<input type="text" name="desc" style="width: 120px;" value="<?php echo $field['description']; ?>" />
 							<?php if (isset($errors['description'])) { ?><p class="message-error"><strong>ERROR:</strong> <?php echo $errors['description']; ?></p><?php } ?>
 						</td>
