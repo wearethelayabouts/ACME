@@ -292,6 +292,20 @@
 							</select>
 						</td>
 					</tr>
+					<tr>
+						<td>
+							<p>Only show (<span style="color: #f00;">*</span>)</p>
+							<p class="description">How should the content in this category be displayed on the front page.</p>
+						</td>
+						<td>
+							<select name="only_show">
+							<option value="-1"<?php if($category['only_show'] == -1) echo ' selected="yes"';?>>Show none</option>
+							<option value="0"<?php if($category['only_show'] == 0) echo ' selected="yes"';?>>Show all</option>
+							<option value="1"<?php if($category['only_show'] == 1) echo ' selected="yes"';?>>Show first</option>
+							<option value="2"<?php if($category['only_show'] == 2) echo ' selected="yes"';?>>Show latest</option>
+							</select>
+						</td>
+					</tr>
 				</table>
 				<input type="submit" />
 			</form>

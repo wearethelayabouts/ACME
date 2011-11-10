@@ -394,7 +394,8 @@ class Admincontroller extends CI_Controller {
 				               'list_priority' => $this->input->post('list_priority'),
 				               'subcategory_name' => $this->input->post('subcategory_name'),
 				               'no_subcontent_prefixes' => $this->input->post('no_subcontent_prefixes'),
-				               'no_content_prefixes' => $this->input->post('no_content_prefixes')
+				               'no_content_prefixes' => $this->input->post('no_content_prefixes'),
+				               'only_show' => $this->input->post('only_show')
 				            );
 				if ($add) {
 					$this->db->insert('categories', $data); 
