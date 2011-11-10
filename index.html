@@ -1,40 +1,143 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
- 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"> 
-	<head> 
-		<title>ACME: Awesome Creative Media Engine</title> 
-		<meta http-equiv="content-type" content="text/html; charset=utf-8"/> 
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>ACME: Awesome Creative Media Engine</title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<!-- HTML5 shim -->
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		
+		<!-- Bootstrap -->
+		<link rel="stylesheet" type="text/css" href="bootstrap.css">
 		<style type="text/css">
+			html, body {
+				background-color: #eee;
+			}
 			body {
-				font-family: Futura, Verdana, Tahoma, Arial, Helvetica, sans-serif;
+				padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+			}
+			.container > footer p {
+				text-align: center; /* center align it with the container */
+			}
+			.container {
+				width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+			}
+
+			/* The white background content wrapper */
+			.content {
 				background-color: #fff;
-				color: #000;
+				padding: 20px;
+				margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+				-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+				-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+				box-shadow: 0 1px 2px rgba(0,0,0,.15);
 			}
-			p {
-				text-align: center;
-				max-width: 920px;
-				padding: 0 20px;
-				margin: 1em auto;
+			.page-header {
+				background-color: #f5f5f5;
+				padding: 20px 20px 10px;
+				margin: -20px -20px 20px;
 			}
-			
-			.head {
-				font-weight: bold;
-				font-size: 1.4em;
-			}
-			
-			a { font-weight: bold; }
-			a:link, a:visited { color: #e50; }
-			a:hover, a:active { color: #fa0; }
 		</style>
-	</head> 
- 
-	<body>
-		<a href="http://github.com/wearethelayabouts/ACME"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-		<p class="head"><img src="acme_wbg.png" alt="ACME: Awesome Creative Media Engine" /></p>
-		<p>The Awesome Creative Media Engine is a CMS designed to help artists, designers, and producers create a cohesive and streamlined experience for both the end user and the creator, with a media-driven organization system, flexible APIs, support for news, static pages, scores, comments, and content advisory ratings. And with CodeIgniter's separation of the logic from the presentation, PHP templates can be easily written without mucking about with function calls. ACME is ideal for creative studio showcases, artist collections, webcomics, portfolios, and more, with support for written word, video, audio, still images (including a special comic mode), interactive media, or any combination you desire.</p>
-		<p style="margin-bottom: 3em;">Coming to the web faster than a falling anvil!</p>
-		<p class="head">Hold on!</p>
-		<p>We don't have an actual page for ACME yet. Sorry! In the mean time, you can visit the <a href="http://github.com/wearethelayabouts/ACME/">GitHub repository</a> with source code, progress updates, and information. Or, you can visit the creators' site, <a href="http://www.wearethelayabouts.com/">The Layabouts</a>.</p>
-	</body> 
-	
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+		<script src="bootstrap-scrollspy.js"></script>
+		<script>
+			$('.topbar').scrollSpy();
+		</script>
+	</head>
+
+	<body>	
+
+		<div class="topbar" data-scrollspy="scrollspy">
+			<div class="fill">
+				<div class="container">
+					<a class="brand" href="#"><img src="acme_logo.png" alt="" height="20px" /></a>
+					<ul class="nav">
+						<li class="active"><a href="#about">About</a></li>
+						<li><a href="#download">Download</a></li>
+						<li><a href="#start">Getting Started</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<section id="about">
+				<div class="content">
+					<div class="page-header">
+						<h1>What is ACME?</h1>
+					</div>
+					<div class="row">
+						<div class="span14">
+							The Awesome Creative Media Engine is a CMS designed to help artists, designers, and producers create a cohesive and streamlined experience for both the end user and the creator, with a media-driven organization system, flexible APIs, support for news, static pages, scores, comments, and content advisory ratings. And with CodeIgniter's separation of the logic from the presentation, PHP templates can be easily written without mucking about with function calls. ACME is ideal for creative studio showcases, artist collections, webcomics, portfolios, and more, with support for written word, video, audio, still images (including comics), interactive media, or any combination you desire.
+						</div>
+					</div>
+				</div>
+			</section>
+			
+			<section id="download">
+				<div class="content">
+					<div class="page-header">
+						<h1>Download</h1>
+					</div>
+					<div class="row">
+						<div class="span14">
+							<h2>Archives</h2>
+							<center>
+								<a href="https://github.com/wearethelayabouts/ACME/zipball/master"><img src="zip.png" alt="ZIP" /></a>
+								&nbsp;&nbsp;&nbsp;
+								<a href="https://github.com/wearethelayabouts/ACME/tarball/master"><img src="tar.png" alt="TAR" /></a><br />
+								(generated straight from master)
+							</center>
+							<h2>git</h2>
+							Clone the code with <code>git clone https://github.com/wearethelayabouts/ACME.git</code> or take a look at the <a href="https://github.com/wearethelayabouts/ACME">github repository</a>.
+						</div>
+					</div>
+				</div>
+			</section>
+			
+			<section id="start">
+				<div class="content">
+					<div class="page-header">
+						<h1>Getting started</h1>
+					</div>
+					<div class="row">
+						<div class="span14">
+							<h2>Set up the database</h2>
+							Go to <code>/application/migrations/</code> and find the migrations for your version of ACME. Run these in order (from 001 onword) in your favorite MySQL editor.
+							<h2>Configuration</h2>
+							<h3>Prepare configuration files</h3>
+							Rename <code>config.sample.php</code>, <code>database.sample.php</code>, and <code>tank_auth.sample.php</code> to <code>config.php</code>, <code>database.php</code>, and <code>tank_auth.php</code> respectively. To do this you can either use a file manager or type the below into your terminal:<br /><br />
+							<code>cd # Insert the location of where you dropped ACME here<br />
+							mv /application/config/config.sample.php /application/config/config.php<br />
+							mv /application/config/database.sample.php /application/config/database.php<br />
+							mv /application/config/tank_auth.sample.php /application/config/tank_auth.php</code>
+							<h3>Edit the configuration files</h3>
+							Go to <code>/application/config/</code> and adjust <code>config.php</code> and <code>database.php</code> to match your environment.
+							<h2>Set up an administrator</h2>
+							<h3>Enable public registration</h3>
+							Open <code>tank_auth.php</code> and find the line that says <code>$config['allow_registration'] = FALSE;</code>. Temporarily change this to <code>TRUE</code>. This will allow anyone to register on your ACME install, so don't leave this open for long.
+							<h3>Create an account</h3>
+							Open your web browser and go to the directory you dropped ACME in plus <code>/auth/register</code>. Create an account and click the verification link in your inbox.
+							<h3>Close registration</h3>
+							 Open <code>tank_auth.php</code> and find the line that says <code>$config['allow_registration'] = TRUE;</code> and change this back to <code>FALSE</code>. This will disable public registration.
+							 <h2>Hit the admin panel</h2>
+							 Open your web browser and go to the directory you dropped ACME in plus <code>/toolbox</code> and login using the credentials you previously created.
+						</div>
+					</div>
+				</div>
+			</section>
+			
+			<footer>
+				<p>
+					A <a href="http://wearethelayabouts.com/">The Layabouts</a> project.<br />
+					Page built with <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>.
+				</p>
+			</footer>
+		</div> <!-- /container -->
+	</body>
 </html>
