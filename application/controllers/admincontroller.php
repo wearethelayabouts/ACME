@@ -382,7 +382,19 @@ class Admincontroller extends CI_Controller {
 				               'comicnav_back' => $this->input->post('comicnav_back'),
 				               'comicnav_next' => $this->input->post('comicnav_next'),
 				               'comicnav_last' => $this->input->post('comicnav_last'),
-				               'addon_domain' => $this->input->post('addon_domain')
+				               'addon_domain' => $this->input->post('addon_domain'),
+				               'published' => $this->input->post('published'),
+				               'category_template' => $this->input->post('category_template'),
+				               'content_template' => $this->input->post('content_template'),
+				               'is_hub' => $this->input->post('is_hub'),
+				               'return_all_content' => $this->input->post('return_all_content'),
+				               'allow_zip' => $this->input->post('allow_zip'),
+				               'oldest_first' => $this->input->post('oldest_first'),
+				               'allow_play_all' => $this->input->post('allow_play_all'),
+				               'list_priority' => $this->input->post('list_priority'),
+				               'subcategory_name' => $this->input->post('subcategory_name'),
+				               'no_subcontent_prefixes' => $this->input->post('no_subcontent_prefixes'),
+				               'no_content_prefixes' => $this->input->post('no_content_prefixes')
 				            );
 				if ($add) {
 					$this->db->insert('categories', $data); 

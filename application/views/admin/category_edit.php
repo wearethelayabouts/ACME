@@ -13,9 +13,9 @@
 			<p class="message-error"><strong>ERROR:</strong> <?php echo $error?></p>
 			<?php } ?>
 			<p>
-				<a href="<?php echo $baseurl; ?>toolbox/archives/wizard/<?php echo $category['id'] ?>">+ Generate Archive...</a>
+				<?php if ($editexisting) { ?><?php if ($category['allow_zip']) { ?><a href="<?php echo $baseurl; ?>toolbox/archives/wizard/<?php echo $category['id'] ?>">+ Generate Archive...</a><?php } ?>
 				<a href="<?php echo $baseurl; ?>toolbox/delete/category/<?php echo $category['id']; ?>/confirm">- Delete...</a>
-				<br /><br />
+				<br /><br /><?php } ?>
 				Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.
 			</p>
 			<form action="<?php echo $thispageurl; ?>" method="post" name="form" id="form">
@@ -78,7 +78,106 @@
 							<input type="text" name="slug" style="width: 120px;" value="<?php echo $category['slug']; ?>" />
 						</td>
 					</tr>
-					
+					<tr>
+						<td>
+							<p>Published (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Should this be displayed to the users</p>
+						</td>
+						<td>
+							<select name="published">
+							<option value="1"<?php if($category['published'] == 1) echo ' selected="yes"';?>>Yes</option>
+							<option value="0"<?php if($category['published'] == 0) echo ' selected="yes"';?>>No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Hub? (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Indicates if the category is a hub or not. The slug of this category is used when calculating the content's URL.</p>
+						</td>
+						<td>
+							<select name="is_hub">
+							<option value="1"<?php if($category['is_hub'] == 1) echo ' selected="yes"';?>>Yes</option>
+							<option value="0"<?php if($category['is_hub'] == 0) echo ' selected="yes"';?>>No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Return All Content? (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Indicates if when viewing the category, content under this category's subcategories should be included as well.</p>
+						</td>
+						<td>
+							<select name="return_all_content">
+							<option value="1"<?php if($category['return_all_content'] == 1) echo ' selected="yes"';?>>Yes</option>
+							<option value="0"<?php if($category['return_all_content'] == 0) echo ' selected="yes"';?>>No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Allow archive downloads? (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Indicates if a option should be displayed to the user for downloading an archive file of the category's contents.</p>
+							<p class="description"><b>Note:</b> After enabling this you must return to this page and generate an archive file.</p>
+						</td>
+						<td>
+							<select name="allow_zip">
+							<option value="1"<?php if($category['allow_zip'] == 1) echo ' selected="yes"';?>>Yes</option>
+							<option value="0"<?php if($category['allow_zip'] == 0) echo ' selected="yes"';?>>No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Sorting Order (<span style="color: #f00;">*</span>)</p>
+							<p class="description">How should ACME sort the category's content.</p>
+						</td>
+						<td>
+							<select name="oldest_first">
+							<option value="0"<?php if($category['oldest_first'] == 0) echo ' selected="yes"';?>>Newest first</option>
+							<option value="1"<?php if($category['oldest_first'] == 1) echo ' selected="yes"';?>>Oldest first</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Allow play all? (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Indicates if a option should be displayed to the user for playing all of the songs inside of the category.</p>
+						</td>
+						<td>
+							<select name="allow_play_all">
+							<option value="1"<?php if($category['allow_play_all'] == 1) echo ' selected="yes"';?>>Yes</option>
+							<option value="0"<?php if($category['allow_play_all'] == 0) echo ' selected="yes"';?>>No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 150px;">
+							<p>List Priority (<span style="color: #f00;">*</span>)</p>
+							<p class="description">In what order should this category appear when viewed in it's parent category? Higher numbers come first.</p>
+						</td>
+						<td>
+							<input type="text" name="list_priority" style="width: 300px;" value="<?php echo $category['list_priority']; ?>" />
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 150px;">
+							<p>Category Template</p>
+							<p class="description">Template used to display the category. Falls back to site default if blank.</p>
+						</td>
+						<td>
+							<input type="text" name="category_template" style="width: 300px;" value="<?php echo $category['category_template']; ?>" />
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 150px;">
+							<p>Content Template</p>
+							<p class="description">Template used to display content inside the category. Falls back to site default if blank.</p>
+						</td>
+						<td>
+							<input type="text" name="content_template" style="width: 300px;" value="<?php echo $category['content_template']; ?>" />
+						</td>
+					</tr>
 					<tr>
 						<td>
 							<p>Rating</p>
@@ -158,6 +257,39 @@
 						</td>
 						<td>
 							<input type="text" name="addon_domain" style="width: 120px;" value="<?php echo $category['addon_domain']; ?>" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Subcategory name</p>
+							<p class="description">What should this category's subcategories be labeled as?</p>
+						</td>
+						<td>
+							<input type="text" name="subcategory_name" style="width: 120px;" value="<?php echo $category['subcategory_name']; ?>" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Show subcontent prefixes? (<span style="color: #f00;">*</span>)</p>
+							<p class="description">If disabled, users browsing this category will not see the hub name listed before content pieces with a hub deeper than this category.</p>
+						</td>
+						<td>
+							<select name="no_subcontent_prefixes">
+							<option value="0"<?php if($category['no_subcontent_prefixes'] == 0) echo ' selected="yes"';?>>Yes</option>
+							<option value="1"<?php if($category['no_subcontent_prefixes'] == 1) echo ' selected="yes"';?>>No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Show content prefixes? (<span style="color: #f00;">*</span>)</p>
+							<p class="description">If disabled, users seeing a piece of content in this hub in a higher category will not see the hub name listed before the content piece.</p>
+						</td>
+						<td>
+							<select name="no_content_prefixes">
+							<option value="0"<?php if($category['no_content_prefixes'] == 0) echo ' selected="yes"';?>>Yes</option>
+							<option value="1"<?php if($category['no_content_prefixes'] == 1) echo ' selected="yes"';?>>No</option>
+							</select>
 						</td>
 					</tr>
 				</table>
