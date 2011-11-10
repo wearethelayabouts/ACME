@@ -23,8 +23,8 @@
 			<p class="message-error"><strong>ERROR:</strong> <?php echo $error?></p>
 			<?php } ?>
 			<p>
-				<a href="<?php echo $baseurl; ?>toolbox/delete/content/<?php echo $content['id']; ?>/confirm">- Delete...</a>
-				<br /><br />
+				<?php if ($editexisting) { ?><a href="<?php echo $baseurl; ?>toolbox/delete/content/<?php echo $content['id']; ?>/confirm">- Delete...</a>
+				<br /><br /><?php } ?>
 				Fields marked with a (<span style="color: #f00;">*</span>) are <em>required</em>.
 			</p>
 			<form action="<?php echo $thispageurl; ?>" method="post" id="form" name="form">

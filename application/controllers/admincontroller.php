@@ -441,7 +441,7 @@ class Admincontroller extends CI_Controller {
 				'thingid' => $thingid,
 				'allcategories' => $allcategories,
 				'errors' => $errors,
-				'editexisting' => true
+				'editexisting' => $editexisting
 			);
 			
 			$this->load->view('admin/category_edit', $data);
@@ -663,8 +663,7 @@ class Admincontroller extends CI_Controller {
 				'editexisting' => $editexisting,
 				'file' => $file,
 				'thispageurl' => $thispageurl,
-				'errors' => $errors,
-				'editexisting' => $editexisting
+				'errors' => $errors
 			);
 			
 			$this->load->view('admin/file_edit', $data);
@@ -813,7 +812,7 @@ class Admincontroller extends CI_Controller {
 				'news' => $news,
 				'thispageurl' => $thispageurl,
 				'errors' => $errors,
-				'editexisting' => true
+				'editexisting' => $editexisting
 			);
 			
 			$this->load->view('admin/news_edit', $data);
@@ -930,7 +929,7 @@ class Admincontroller extends CI_Controller {
 				'page' => $page,
 				'thispageurl' => $thispageurl,
 				'errors' => $errors,
-				'editexisting' => true
+				'editexisting' => $editexisting
 			);
 			$this->load->view('admin/page_edit', $data);
 		}
@@ -986,7 +985,7 @@ class Admincontroller extends CI_Controller {
 			'thispageurl' => $thispageurl,
 			'user' => $user,
 			'errors' => Array(),
-			'editexisting' => true
+			'editexisting' => $editexisting
 		);
 		
 		$this->load->view('admin/user_edit', $data);*/
@@ -1041,7 +1040,7 @@ class Admincontroller extends CI_Controller {
 			'thispageurl' => $thispageurl,
 			'field' => $userField,
 			'errors' => Array(),
-			'editexisting' => true
+			'editexisting' => $editexisting
 		);
 		
 		$this->load->view('admin/userfield_edit', $data);*/
