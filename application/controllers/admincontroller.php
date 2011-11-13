@@ -214,6 +214,7 @@ class Admincontroller extends CI_Controller {
 					$this->db->update('content', $data['object']); 
 				} else {
 					$this->db->insert('content', $data['object']); 
+					$newcid = $this->db->insert_id();;
 				}
 				
 				for ($i = 1; $i!=($this->input->post('author_amt')+1); $i++) {
@@ -222,7 +223,7 @@ class Admincontroller extends CI_Controller {
 							if ($data['type'] == "editcontent")
 								$contentid = $this->input->post('id');
 							else
-								$contentid = $this->db->insert_id();
+								$contentid = $newcid;
 							$dbdata = Array(
 										'contentid' => $contentid,
 										'user' => $this->input->post('author_id_'.$i),
