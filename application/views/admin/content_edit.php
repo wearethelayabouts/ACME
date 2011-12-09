@@ -4,6 +4,14 @@
 		<title><?php echo $sitename; ?> &bull; Edit Content (Admin)</title>
 		<link href="<?php echo $baseurl; ?>includes/acme/admin.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+		<script type="text/javascript" src="/includes/ext/tiny_mce/tiny_mce.js"></script>
+		<script type="text/javascript" >
+		tinyMCE.init({
+		        mode : "exact",
+		        theme : "simple",
+		        elements : "desc, custom_embed"
+		});
+		</script>
 		<script type="text/javascript">
 			function addAuthorFields() {
 				nextauthor = parseInt($("#author_amt").attr("value")) + 1;
@@ -96,7 +104,7 @@
 							<p class="description">Descriptive text to be displayed alongside the content.</p>
 						</td>
 						<td>
-							<textarea name="desc" rows="8" cols="60"><?php echo $content['body']; ?></textarea>
+							<textarea id="desc" name="desc" rows="8" cols="60"><?php echo $content['body']; ?></textarea>
 						</td>
 					</tr>
 					<tr>
@@ -156,7 +164,7 @@
 							<p class="description">Any HTML in this field will be inserted into the page in the content area. This is useful for, say, embedding an external player like one from YouTube or SoundCloud, or a Flash movie.</p>
 						</td>
 						<td>
-							<textarea name="custom_embed" rows="8" cols="60"><?php echo $content['custom_embed']; ?></textarea>
+							<textarea id="custom_embed" name="custom_embed" rows="8" cols="60"><?php echo $content['custom_embed']; ?></textarea>
 						</td>
 					</tr>
 					<tr>

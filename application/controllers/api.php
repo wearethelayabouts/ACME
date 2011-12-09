@@ -77,6 +77,44 @@ class Api extends CI_Controller {
 		}
 	}
 	
+	function category_subcategories() {
+		$variables = explode('.', $this->uri->segment(5));
+		$format = $variables[1];
+		$object = $this->uri->segment(4);
+		
+		$category = $this->categorymodel->fetchCategorySlug($object);
+		
+		if (!$category) {
+			show_404('');
+		}
+		
+		$children = $this->categorymodel->fetchChildrenCategories($category['id']);
+		
+		if (!$children) {
+			$children = Array();
+		}
+		
+		$data = Array('children' => $children);
+		
+		switch ($format) {
+			case 'json':
+				header('Content-type: application/json');
+				echo json_encode($data);
+				break;
+			case 'sphp':
+				header('Content-type: text/plain');
+				echo serialize($data);
+				break;
+			case 'xml':
+				header('Content-type: text/xml');
+				echo $this->acmedata->toXML($data);
+				break;
+			default:
+				show_404('');
+				break;
+		}
+	}
+	
 	function category_content() {
 		$variables = explode('.', $this->uri->segment(5));
 		$format = $variables[1];

@@ -47,6 +47,7 @@ $route['scaffolding_trigger'] = "";
 $route['api/1/user/:num/info.:any'] = "api/user_info";
 
 $route['api/1/category/:any/info.:any'] = "api/category_info";
+$route['api/1/category/:any/subcategories.:any'] = "api/category_subcategories";
 $route['api/1/category/:any/content.:any'] = "api/category_content";
 
 $route['api/1/content/all.:any'] = "api/all_content";
