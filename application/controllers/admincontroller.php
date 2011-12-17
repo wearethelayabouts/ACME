@@ -366,38 +366,38 @@ class Admincontroller extends CI_Controller {
 			if ($this->input->post('slug') == "")
 				$errors['slug'] = "Slug must be set!";
 			
+			$data = array(
+			   'name' => $this->input->post('name'),
+			   'desc' => $this->input->post('body'),
+			   'desc_bg' => $this->input->post('desc_bg'),
+			   'parent_id' => $this->input->post('parent_id'),
+			   'slug' => $this->input->post('slug'),
+			   'rating' => $this->input->post('rating'),
+			   'rating_description' => $this->input->post('rating_description'),
+			   'category_thumbnail' => $this->input->post('category_thumbnail'),
+			   'default_content_thumbnail' => $this->input->post('default_content_thumbnail'),
+			   'comicnav_first' => $this->input->post('comicnav_first'),
+			   'comicnav_back' => $this->input->post('comicnav_back'),
+			   'comicnav_next' => $this->input->post('comicnav_next'),
+			   'comicnav_last' => $this->input->post('comicnav_last'),
+			   'addon_domain' => $this->input->post('addon_domain'),
+			   'published' => $this->input->post('published'),
+			   'category_template' => $this->input->post('category_template'),
+			   'content_template' => $this->input->post('content_template'),
+			   'is_hub' => $this->input->post('is_hub'),
+			   'return_all_content' => $this->input->post('return_all_content'),
+			   'allow_zip' => $this->input->post('allow_zip'),
+			   'oldest_first' => $this->input->post('oldest_first'),
+			   'allow_play_all' => $this->input->post('allow_play_all'),
+			   'list_priority' => $this->input->post('list_priority'),
+			   'subcategory_name' => $this->input->post('subcategory_name'),
+			   'no_subcontent_prefixes' => $this->input->post('no_subcontent_prefixes'),
+			   'no_content_prefixes' => $this->input->post('no_content_prefixes'),
+			   'only_show' => $this->input->post('only_show')
+			);
 			
 			$valid = (count($errors) <= 0);
 			if ($valid) {
-				$data = array(
-				               'name' => $this->input->post('name'),
-				               'desc' => $this->input->post('body'),
-				               'desc_bg' => $this->input->post('desc_bg'),
-				               'parent_id' => $this->input->post('parent_id'),
-				               'slug' => $this->input->post('slug'),
-				               'rating' => $this->input->post('rating'),
-				               'rating_description' => $this->input->post('rating_description'),
-				               'category_thumbnail' => $this->input->post('category_thumbnail'),
-				               'default_content_thumbnail' => $this->input->post('default_content_thumbnail'),
-				               'comicnav_first' => $this->input->post('comicnav_first'),
-				               'comicnav_back' => $this->input->post('comicnav_back'),
-				               'comicnav_next' => $this->input->post('comicnav_next'),
-				               'comicnav_last' => $this->input->post('comicnav_last'),
-				               'addon_domain' => $this->input->post('addon_domain'),
-				               'published' => $this->input->post('published'),
-				               'category_template' => $this->input->post('category_template'),
-				               'content_template' => $this->input->post('content_template'),
-				               'is_hub' => $this->input->post('is_hub'),
-				               'return_all_content' => $this->input->post('return_all_content'),
-				               'allow_zip' => $this->input->post('allow_zip'),
-				               'oldest_first' => $this->input->post('oldest_first'),
-				               'allow_play_all' => $this->input->post('allow_play_all'),
-				               'list_priority' => $this->input->post('list_priority'),
-				               'subcategory_name' => $this->input->post('subcategory_name'),
-				               'no_subcontent_prefixes' => $this->input->post('no_subcontent_prefixes'),
-				               'no_content_prefixes' => $this->input->post('no_content_prefixes'),
-				               'only_show' => $this->input->post('only_show')
-				            );
 				if ($add) {
 					$this->db->insert('categories', $data); 
 				} else {
@@ -420,15 +420,17 @@ class Admincontroller extends CI_Controller {
 		}
 		
 		if (!$commit||!$valid) {
+			if (!$valid)
+				$category = $data;
+			
 			$uri_string = $this->uri->uri_string();
 			if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
 	
 			if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
 			else $thispageurl = $baseurl.$uri_string;
 			
-			$allcategories = $this->categorymodel->fetchCategoryList();
-			$allcategories[0] = 'Top category';
-			ksort($allcategories);
+			$allcategories[] = 'Top category';
+			$allcategories = array_merge($allcategories, $this->categorymodel->fetchCategoryList());
 			
 			if ($this->uri->segment(3) == "add")
 				$thingid = "add";
