@@ -86,6 +86,17 @@ class Contentmodel extends CI_Model {
 		}
 		$query = $query->result_array();
 		
+		$this->db->order_by('date', 'desc');
+		$query2 = $this->db->get_where('category', array('psuedocontent' => '1', 'published !=' => 0));
+		if ($query2->num_rows() == 0) {
+			return false;
+		}
+		$query2 = $query2->result_array();
+		
+		$query = array_merge($query, $query2);
+		
+		uasort($query, 'cmp_content');
+		
 		foreach ($query as $content) {
 			$data[] = Array(
 				'slug' => $content['slug'],

@@ -92,6 +92,16 @@
 					</tr>
 					<tr>
 						<td>
+							<p>Date/Time</p>
+							<p class="description">Format: YYYY-MM-DD at hh:mm (24-hour time!)</p>
+							<p class="description">If left blank, will use current date/time.</p>
+						</td>
+						<td>
+							<input type="text" name="year" maxlength="4" style="width: 50px;" value="<?php if ($category['date'] > 0) echo date("Y", $category['date']); ?>" /> <input type="text" name="month" maxlength="2" style="width: 30px;" value="<?php if ($category['date'] > 0) echo date("m", $category['date']); ?>" /> <input type="text" name="day" maxlength="2" style="width: 30px;" value="<?php if ($category['date'] > 0) echo date("d", $category['date']); ?>" /> at <input type="text" name="hour" maxlength="2" style="width: 30px;" value="<?php if ($category['date'] > 0) echo date("H", $category['date']); ?>" />:<input type="text" name="minute" maxlength="2" style="width: 30px;" value="<?php if ($category['date'] > 0) echo date("i", $category['date']); ?>" />
+						</td>
+					</tr>
+					<tr>
+						<td>
 							<p>Hub? (<span style="color: #f00;">*</span>)</p>
 							<p class="description">Indicates if the category is a hub or not. The slug of this category is used when calculating the content's URL.</p>
 						</td>
@@ -99,6 +109,18 @@
 							<select name="is_hub">
 							<option value="1"<?php if($category['is_hub'] == 1) echo ' selected="yes"';?>>Yes</option>
 							<option value="0"<?php if($category['is_hub'] == 0) echo ' selected="yes"';?>>No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Psuedocontent? (<span style="color: #f00;">*</span>)</p>
+							<p class="description">Treats the category as psuedocontent for front page purposes.</p>
+						</td>
+						<td>
+							<select name="psuedocontent">
+							<option value="1"<?php if($category['psuedocontent'] == 1) echo ' selected="yes"';?>>Yes</option>
+							<option value="0"<?php if($category['psuedocontent'] == 0) echo ' selected="yes"';?>>No</option>
 							</select>
 						</td>
 					</tr>

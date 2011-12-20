@@ -214,7 +214,12 @@ class Admincontroller extends CI_Controller {
 					$this->db->update('content', $data['object']); 
 				} else {
 					$this->db->insert('content', $data['object']); 
-					$newcid = $this->db->insert_id();;
+					$newcid = $this->db->insert_id();
+					$c = $this->categorymodel->fetchCategory($data['object']['category_id']);
+					if ($c['psuedocontent']) {
+						$this->db->where('id', $data['object']['category_id']);
+						$this->db->update('categories', Array('date' => time())); 
+					}
 				}
 				
 				for ($i = 1; $i!=($this->input->post('author_amt')+1); $i++) {
@@ -356,7 +361,7 @@ class Admincontroller extends CI_Controller {
 				$add = true;
 			else
 				$add = false;
-				
+			
 			if ($this->input->post('name') == "")
 				$errors['name'] = "Name cannot be empty!";
 				
@@ -365,6 +370,44 @@ class Admincontroller extends CI_Controller {
 				
 			if ($this->input->post('slug') == "")
 				$errors['slug'] = "Slug must be set!";
+			
+			$postdata['year'] = $this->input->post('year');
+			if (strlen($postdata['year']) != 0) {
+				if (strlen($postdata['year']) != 4) $errors['year'] = "Years must be 4-digit numbers, 1970 or higher.";
+				if ($postdata['year'] < 1970) $errors['year'] = "Years must be 4-digit numbers, 1970 or higher.";
+			} else $postdata['year'] = date("Y");
+			
+			$postdata['month'] = $this->input->post('month');
+			if (strlen($postdata['month']) != 0) {
+				if (strlen($postdata['month']) != 2) $errors['month'] = "Months must be 2-digit numbers, from 01 to 12.";
+				if (($postdata['month'] > 12) || ($postdata['month'] < 1)) $errors['month'] = "Months must be 2-digit numbers, from 01 to 12.";
+			} else $postdata['month'] = date("m");
+			
+			$postdata['day'] = $this->input->post('day');
+			if (strlen($postdata['day']) != 0) {
+				if (strlen($postdata['day']) != 2) $errors['day'] = "Days must be 2-digit numbers, from 01 to 31.";
+				if (($postdata['day'] > 31) || ($postdata['day'] < 1)) $errors['day'] = "Days must be 2-digit numbers, from 01 to 31.";
+				if (($postdata['day'] >= 31) && ($postdata['month'] == 4)) $errors['day'] = "April only has 30 days!";
+				if (($postdata['day'] >= 31) && ($postdata['month'] == 6)) $errors['day'] = "June only has 30 days!";
+				if (($postdata['day'] >= 31) && ($postdata['month'] == 9)) $errors['day'] = "September only has 30 days!";
+				if (($postdata['day'] >= 31) && ($postdata['month'] == 11)) $errors['day'] = "November only has 30 days!";
+				
+				$leapyear = date("L", strtotime($postdata['year'].'-02-22'));
+				if (($postdata['day'] >= 29) && ($postdata['month'] == 2) && ($leapyear == 0)) $errors['day'] = "February only has 28 days in ".$year."!";
+				if (($postdata['day'] >= 30) && ($postdata['month'] == 2) && ($leapyear == 1)) $errors['day'] = "February only has 29 days in ".$year."!";
+			} else $postdata['day'] = date("d");
+			
+			$postdata['hour'] = $this->input->post('hour');
+			if (strlen($postdata['hour']) != 0) {
+				if (strlen($postdata['hour']) != 2) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
+				if (($postdata['hour'] > 23) || ($postdata['hour'] < 0)) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
+			} else $postdata['hour'] = date("h");
+			
+			$postdata['minute'] = $this->input->post('minute');
+			if (strlen($postdata['minute']) != 0) {
+				if (strlen($postdata['minute']) != 2) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
+				if (($postdata['minute'] > 59) || ($postdata['minute'] < 0)) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
+			} else $postdata['minute'] = date("i");
 			
 			$data = array(
 			   'name' => $this->input->post('name'),
@@ -393,7 +436,9 @@ class Admincontroller extends CI_Controller {
 			   'subcategory_name' => $this->input->post('subcategory_name'),
 			   'no_subcontent_prefixes' => $this->input->post('no_subcontent_prefixes'),
 			   'no_content_prefixes' => $this->input->post('no_content_prefixes'),
-			   'only_show' => $this->input->post('only_show')
+			   'only_show' => $this->input->post('only_show'),
+			   'date' => strtotime($postdata['year']."-".$postdata['month']."-".$postdata['day']." ".$postdata['hour'].":".$postdata['minute'].":00"),
+			   'psuedocontent' => $this->input->post('psuedocontent')
 			);
 			
 			$valid = (count($errors) <= 0);
@@ -420,7 +465,7 @@ class Admincontroller extends CI_Controller {
 		}
 		
 		if (!$commit||!$valid) {
-			if (!$valid)
+			if (!$valid && $commit)
 				$category = $data;
 			
 			$uri_string = $this->uri->uri_string();
