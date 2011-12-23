@@ -215,8 +215,8 @@ class Admincontroller extends CI_Controller {
 				} else {
 					$this->db->insert('content', $data['object']); 
 					$newcid = $this->db->insert_id();
-					$c = $this->categorymodel->fetchCategory($data['object']['category_id']);
-					if ($c['psuedocontent']) {
+					
+					if ($this->input->post('updatetimestamp') == "yes") {
 						$this->db->where('id', $data['object']['category_id']);
 						$this->db->update('categories', Array('date' => time())); 
 					}
@@ -371,44 +371,48 @@ class Admincontroller extends CI_Controller {
 			if ($this->input->post('slug') == "")
 				$errors['slug'] = "Slug must be set!";
 			
-			$postdata['year'] = $this->input->post('year');
-			if (strlen($postdata['year']) != 0) {
-				if (strlen($postdata['year']) != 4) $errors['year'] = "Years must be 4-digit numbers, 1970 or higher.";
-				if ($postdata['year'] < 1970) $errors['year'] = "Years must be 4-digit numbers, 1970 or higher.";
-			} else $postdata['year'] = date("Y");
-			
-			$postdata['month'] = $this->input->post('month');
-			if (strlen($postdata['month']) != 0) {
-				if (strlen($postdata['month']) != 2) $errors['month'] = "Months must be 2-digit numbers, from 01 to 12.";
-				if (($postdata['month'] > 12) || ($postdata['month'] < 1)) $errors['month'] = "Months must be 2-digit numbers, from 01 to 12.";
-			} else $postdata['month'] = date("m");
-			
-			$postdata['day'] = $this->input->post('day');
-			if (strlen($postdata['day']) != 0) {
-				if (strlen($postdata['day']) != 2) $errors['day'] = "Days must be 2-digit numbers, from 01 to 31.";
-				if (($postdata['day'] > 31) || ($postdata['day'] < 1)) $errors['day'] = "Days must be 2-digit numbers, from 01 to 31.";
-				if (($postdata['day'] >= 31) && ($postdata['month'] == 4)) $errors['day'] = "April only has 30 days!";
-				if (($postdata['day'] >= 31) && ($postdata['month'] == 6)) $errors['day'] = "June only has 30 days!";
-				if (($postdata['day'] >= 31) && ($postdata['month'] == 9)) $errors['day'] = "September only has 30 days!";
-				if (($postdata['day'] >= 31) && ($postdata['month'] == 11)) $errors['day'] = "November only has 30 days!";
+			if ($this->input->post('usetimestamps') == "yes") {
+				$postdata['year'] = $this->input->post('year');
+				if (strlen($postdata['year']) != 0) {
+					if (strlen($postdata['year']) != 4) $errors['year'] = "Years must be 4-digit numbers, 1970 or higher.";
+					if ($postdata['year'] < 1970) $errors['year'] = "Years must be 4-digit numbers, 1970 or higher.";
+				} else $postdata['year'] = date("Y");
 				
-				$leapyear = date("L", strtotime($postdata['year'].'-02-22'));
-				if (($postdata['day'] >= 29) && ($postdata['month'] == 2) && ($leapyear == 0)) $errors['day'] = "February only has 28 days in ".$year."!";
-				if (($postdata['day'] >= 30) && ($postdata['month'] == 2) && ($leapyear == 1)) $errors['day'] = "February only has 29 days in ".$year."!";
-			} else $postdata['day'] = date("d");
-			
-			$postdata['hour'] = $this->input->post('hour');
-			if (strlen($postdata['hour']) != 0) {
-				if (strlen($postdata['hour']) != 2) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
-				if (($postdata['hour'] > 23) || ($postdata['hour'] < 0)) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
-			} else $postdata['hour'] = date("h");
-			
-			$postdata['minute'] = $this->input->post('minute');
-			if (strlen($postdata['minute']) != 0) {
-				if (strlen($postdata['minute']) != 2) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
-				if (($postdata['minute'] > 59) || ($postdata['minute'] < 0)) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
-			} else $postdata['minute'] = date("i");
-			
+				$postdata['month'] = $this->input->post('month');
+				if (strlen($postdata['month']) != 0) {
+					if (strlen($postdata['month']) != 2) $errors['month'] = "Months must be 2-digit numbers, from 01 to 12.";
+					if (($postdata['month'] > 12) || ($postdata['month'] < 1)) $errors['month'] = "Months must be 2-digit numbers, from 01 to 12.";
+				} else $postdata['month'] = date("m");
+				
+				$postdata['day'] = $this->input->post('day');
+				if (strlen($postdata['day']) != 0) {
+					if (strlen($postdata['day']) != 2) $errors['day'] = "Days must be 2-digit numbers, from 01 to 31.";
+					if (($postdata['day'] > 31) || ($postdata['day'] < 1)) $errors['day'] = "Days must be 2-digit numbers, from 01 to 31.";
+					if (($postdata['day'] >= 31) && ($postdata['month'] == 4)) $errors['day'] = "April only has 30 days!";
+					if (($postdata['day'] >= 31) && ($postdata['month'] == 6)) $errors['day'] = "June only has 30 days!";
+					if (($postdata['day'] >= 31) && ($postdata['month'] == 9)) $errors['day'] = "September only has 30 days!";
+					if (($postdata['day'] >= 31) && ($postdata['month'] == 11)) $errors['day'] = "November only has 30 days!";
+					
+					$leapyear = date("L", strtotime($postdata['year'].'-02-22'));
+					if (($postdata['day'] >= 29) && ($postdata['month'] == 2) && ($leapyear == 0)) $errors['day'] = "February only has 28 days in ".$year."!";
+					if (($postdata['day'] >= 30) && ($postdata['month'] == 2) && ($leapyear == 1)) $errors['day'] = "February only has 29 days in ".$year."!";
+				} else $postdata['day'] = date("d");
+				
+				$postdata['hour'] = $this->input->post('hour');
+				if (strlen($postdata['hour']) != 0) {
+					if (strlen($postdata['hour']) != 2) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
+					if (($postdata['hour'] > 23) || ($postdata['hour'] < 0)) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
+				} else $postdata['hour'] = date("h");
+				
+				$postdata['minute'] = $this->input->post('minute');
+				if (strlen($postdata['minute']) != 0) {
+					if (strlen($postdata['minute']) != 2) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
+					if (($postdata['minute'] > 59) || ($postdata['minute'] < 0)) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
+				} else $postdata['minute'] = date("i");
+				$date = strtotime($postdata['year']."-".$postdata['month']."-".$postdata['day']." ".$postdata['hour'].":".$postdata['minute'].":00");
+			} else {
+				$date = 0;
+			}
 			$data = array(
 			   'name' => $this->input->post('name'),
 			   'desc' => $this->input->post('body'),
@@ -437,7 +441,7 @@ class Admincontroller extends CI_Controller {
 			   'no_subcontent_prefixes' => $this->input->post('no_subcontent_prefixes'),
 			   'no_content_prefixes' => $this->input->post('no_content_prefixes'),
 			   'only_show' => $this->input->post('only_show'),
-			   'date' => strtotime($postdata['year']."-".$postdata['month']."-".$postdata['day']." ".$postdata['hour'].":".$postdata['minute'].":00"),
+			   'date' => $date,
 			   'psuedocontent' => $this->input->post('psuedocontent')
 			);
 			
@@ -474,9 +478,6 @@ class Admincontroller extends CI_Controller {
 			if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
 			else $thispageurl = $baseurl.$uri_string;
 			
-			$allcategories[] = 'Top category';
-			$allcategories = array_merge($allcategories, $this->categorymodel->fetchCategoryList());
-			
 			if ($this->uri->segment(3) == "add")
 				$thingid = "add";
 			else
@@ -488,7 +489,7 @@ class Admincontroller extends CI_Controller {
 				'category' => $category,
 				'thispageurl' => $thispageurl,
 				'thingid' => $thingid,
-				'allcategories' => $allcategories,
+				'allcategories' => $this->categorymodel->fetchCategoryList(),
 				'errors' => $errors,
 				'editexisting' => $editexisting
 			);

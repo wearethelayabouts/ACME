@@ -177,6 +177,7 @@
 						</td>
 					</tr>				
 				</table>
+				<?php if (!$editexisting) { ?><input type="checkbox" name="updatetimestamp" value="yes"> Update parent category's timestamp with current time<br /><?php } ?>
 				<input type="submit" />
 			</form>
 		</div>
