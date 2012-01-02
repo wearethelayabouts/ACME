@@ -214,7 +214,12 @@ class Admincontroller extends CI_Controller {
 					$this->db->update('content', $data['object']); 
 				} else {
 					$this->db->insert('content', $data['object']); 
-					$newcid = $this->db->insert_id();;
+					$newcid = $this->db->insert_id();
+					
+					if ($this->input->post('updatetimestamp') == "yes") {
+						$this->db->where('id', $data['object']['category_id']);
+						$this->db->update('categories', Array('date' => time())); 
+					}
 				}
 				
 				for ($i = 1; $i!=($this->input->post('author_amt')+1); $i++) {
@@ -356,7 +361,7 @@ class Admincontroller extends CI_Controller {
 				$add = true;
 			else
 				$add = false;
-				
+			
 			if ($this->input->post('name') == "")
 				$errors['name'] = "Name cannot be empty!";
 				
@@ -366,38 +371,82 @@ class Admincontroller extends CI_Controller {
 			if ($this->input->post('slug') == "")
 				$errors['slug'] = "Slug must be set!";
 			
+			if ($this->input->post('usetimestamps') == "yes") {
+				$postdata['year'] = $this->input->post('year');
+				if (strlen($postdata['year']) != 0) {
+					if (strlen($postdata['year']) != 4) $errors['year'] = "Years must be 4-digit numbers, 1970 or higher.";
+					if ($postdata['year'] < 1970) $errors['year'] = "Years must be 4-digit numbers, 1970 or higher.";
+				} else $postdata['year'] = date("Y");
+				
+				$postdata['month'] = $this->input->post('month');
+				if (strlen($postdata['month']) != 0) {
+					if (strlen($postdata['month']) != 2) $errors['month'] = "Months must be 2-digit numbers, from 01 to 12.";
+					if (($postdata['month'] > 12) || ($postdata['month'] < 1)) $errors['month'] = "Months must be 2-digit numbers, from 01 to 12.";
+				} else $postdata['month'] = date("m");
+				
+				$postdata['day'] = $this->input->post('day');
+				if (strlen($postdata['day']) != 0) {
+					if (strlen($postdata['day']) != 2) $errors['day'] = "Days must be 2-digit numbers, from 01 to 31.";
+					if (($postdata['day'] > 31) || ($postdata['day'] < 1)) $errors['day'] = "Days must be 2-digit numbers, from 01 to 31.";
+					if (($postdata['day'] >= 31) && ($postdata['month'] == 4)) $errors['day'] = "April only has 30 days!";
+					if (($postdata['day'] >= 31) && ($postdata['month'] == 6)) $errors['day'] = "June only has 30 days!";
+					if (($postdata['day'] >= 31) && ($postdata['month'] == 9)) $errors['day'] = "September only has 30 days!";
+					if (($postdata['day'] >= 31) && ($postdata['month'] == 11)) $errors['day'] = "November only has 30 days!";
+					
+					$leapyear = date("L", strtotime($postdata['year'].'-02-22'));
+					if (($postdata['day'] >= 29) && ($postdata['month'] == 2) && ($leapyear == 0)) $errors['day'] = "February only has 28 days in ".$year."!";
+					if (($postdata['day'] >= 30) && ($postdata['month'] == 2) && ($leapyear == 1)) $errors['day'] = "February only has 29 days in ".$year."!";
+				} else $postdata['day'] = date("d");
+				
+				$postdata['hour'] = $this->input->post('hour');
+				if (strlen($postdata['hour']) != 0) {
+					if (strlen($postdata['hour']) != 2) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
+					if (($postdata['hour'] > 23) || ($postdata['hour'] < 0)) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
+				} else $postdata['hour'] = date("h");
+				
+				$postdata['minute'] = $this->input->post('minute');
+				if (strlen($postdata['minute']) != 0) {
+					if (strlen($postdata['minute']) != 2) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
+					if (($postdata['minute'] > 59) || ($postdata['minute'] < 0)) $errors['minute'] = "Minutes must be 2-digit numbers, from 00 to 59.";
+				} else $postdata['minute'] = date("i");
+				$date = strtotime($postdata['year']."-".$postdata['month']."-".$postdata['day']." ".$postdata['hour'].":".$postdata['minute'].":00");
+			} else {
+				$date = 0;
+			}
+			$data = array(
+			   'name' => $this->input->post('name'),
+			   'desc' => $this->input->post('body'),
+			   'desc_bg' => $this->input->post('desc_bg'),
+			   'parent_id' => $this->input->post('parent_id'),
+			   'slug' => $this->input->post('slug'),
+			   'rating' => $this->input->post('rating'),
+			   'rating_description' => $this->input->post('rating_description'),
+			   'category_thumbnail' => $this->input->post('category_thumbnail'),
+			   'default_content_thumbnail' => $this->input->post('default_content_thumbnail'),
+			   'comicnav_first' => $this->input->post('comicnav_first'),
+			   'comicnav_back' => $this->input->post('comicnav_back'),
+			   'comicnav_next' => $this->input->post('comicnav_next'),
+			   'comicnav_last' => $this->input->post('comicnav_last'),
+			   'addon_domain' => $this->input->post('addon_domain'),
+			   'published' => $this->input->post('published'),
+			   'category_template' => $this->input->post('category_template'),
+			   'content_template' => $this->input->post('content_template'),
+			   'is_hub' => $this->input->post('is_hub'),
+			   'return_all_content' => $this->input->post('return_all_content'),
+			   'allow_zip' => $this->input->post('allow_zip'),
+			   'oldest_first' => $this->input->post('oldest_first'),
+			   'allow_play_all' => $this->input->post('allow_play_all'),
+			   'list_priority' => $this->input->post('list_priority'),
+			   'subcategory_name' => $this->input->post('subcategory_name'),
+			   'no_subcontent_prefixes' => $this->input->post('no_subcontent_prefixes'),
+			   'no_content_prefixes' => $this->input->post('no_content_prefixes'),
+			   'only_show' => $this->input->post('only_show'),
+			   'date' => $date,
+			   'psuedocontent' => $this->input->post('psuedocontent')
+			);
 			
 			$valid = (count($errors) <= 0);
 			if ($valid) {
-				$data = array(
-				               'name' => $this->input->post('name'),
-				               'desc' => $this->input->post('body'),
-				               'desc_bg' => $this->input->post('desc_bg'),
-				               'parent_id' => $this->input->post('parent_id'),
-				               'slug' => $this->input->post('slug'),
-				               'rating' => $this->input->post('rating'),
-				               'rating_description' => $this->input->post('rating_description'),
-				               'category_thumbnail' => $this->input->post('category_thumbnail'),
-				               'default_content_thumbnail' => $this->input->post('default_content_thumbnail'),
-				               'comicnav_first' => $this->input->post('comicnav_first'),
-				               'comicnav_back' => $this->input->post('comicnav_back'),
-				               'comicnav_next' => $this->input->post('comicnav_next'),
-				               'comicnav_last' => $this->input->post('comicnav_last'),
-				               'addon_domain' => $this->input->post('addon_domain'),
-				               'published' => $this->input->post('published'),
-				               'category_template' => $this->input->post('category_template'),
-				               'content_template' => $this->input->post('content_template'),
-				               'is_hub' => $this->input->post('is_hub'),
-				               'return_all_content' => $this->input->post('return_all_content'),
-				               'allow_zip' => $this->input->post('allow_zip'),
-				               'oldest_first' => $this->input->post('oldest_first'),
-				               'allow_play_all' => $this->input->post('allow_play_all'),
-				               'list_priority' => $this->input->post('list_priority'),
-				               'subcategory_name' => $this->input->post('subcategory_name'),
-				               'no_subcontent_prefixes' => $this->input->post('no_subcontent_prefixes'),
-				               'no_content_prefixes' => $this->input->post('no_content_prefixes'),
-				               'only_show' => $this->input->post('only_show')
-				            );
 				if ($add) {
 					$this->db->insert('categories', $data); 
 				} else {
@@ -420,15 +469,14 @@ class Admincontroller extends CI_Controller {
 		}
 		
 		if (!$commit||!$valid) {
+			if (!$valid && $commit)
+				$category = $data;
+			
 			$uri_string = $this->uri->uri_string();
 			if (substr($uri_string, 0, 1) != "/") $uri_string = "/".$uri_string;		
 	
 			if (substr($baseurl, -1) == "/") $thispageurl = substr($baseurl, 0, -1).$uri_string;
 			else $thispageurl = $baseurl.$uri_string;
-			
-			$allcategories = $this->categorymodel->fetchCategoryList();
-			$allcategories[0] = 'Top category';
-			ksort($allcategories);
 			
 			if ($this->uri->segment(3) == "add")
 				$thingid = "add";
@@ -441,7 +489,7 @@ class Admincontroller extends CI_Controller {
 				'category' => $category,
 				'thispageurl' => $thispageurl,
 				'thingid' => $thingid,
-				'allcategories' => $allcategories,
+				'allcategories' => $this->categorymodel->fetchCategoryList(),
 				'errors' => $errors,
 				'editexisting' => $editexisting
 			);

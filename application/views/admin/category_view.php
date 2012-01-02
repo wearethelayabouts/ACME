@@ -16,6 +16,7 @@
 					<td>Name</td>
 					<td>Parent Category</td>
 					<td>Published?</td>
+					<td>Date</td>
 				</tr>
 				<?php foreach ($categories as $piece) { ?>
 				<tr>
@@ -25,6 +26,7 @@
 					else echo "None"; ?> </td>
 					<td><?php if ($piece['published'] != 0) echo "<span class=\"yes\">Yes</span>";
 					else echo "<span class=\"no\">No</span>";?></td>
+					<td><?php if ($piece['date'] > 0) { echo date('D, M j, Y @ g:i A',$piece['date']); } ?></td>
 				</tr>
 				<?php } ?>
 			</table>

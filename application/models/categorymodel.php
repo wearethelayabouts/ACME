@@ -64,6 +64,7 @@ class Categorymodel extends CI_Model {
 	
 	function fetchChildrenCategories($cid) {
 		$this->db->order_by('list_priority', 'desc'); 
+		$this->db->order_by('date', 'desc');
 		$this->db->order_by('name', 'asc'); 
 		$query = $this->db->get_where('categories', array('parent_id' => $cid));
 		if ($query->num_rows() == 0) {
