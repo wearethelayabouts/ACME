@@ -173,7 +173,7 @@ class Admincontroller extends CI_Controller {
 			if (strlen($postdata['hour']) != 0) {
 				if (strlen($postdata['hour']) != 2) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
 				if (($postdata['hour'] > 23) || ($postdata['hour'] < 0)) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
-			} else $postdata['hour'] = date("h");
+			} else $postdata['hour'] = date("H");
 			
 			$postdata['minute'] = $this->input->post('minute');
 			if (strlen($postdata['minute']) != 0) {
@@ -402,7 +402,7 @@ class Admincontroller extends CI_Controller {
 				if (strlen($postdata['hour']) != 0) {
 					if (strlen($postdata['hour']) != 2) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
 					if (($postdata['hour'] > 23) || ($postdata['hour'] < 0)) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
-				} else $postdata['hour'] = date("h");
+				} else $postdata['hour'] = date("H");
 				
 				$postdata['minute'] = $this->input->post('minute');
 				if (strlen($postdata['minute']) != 0) {
@@ -810,7 +810,7 @@ class Admincontroller extends CI_Controller {
 			if (strlen($postdata['hour']) != 0) {
 				if (strlen($postdata['hour']) != 2) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
 				if (($postdata['hour'] > 23) || ($postdata['hour'] < 0)) $errors['hour'] = "Hours must be 2-digit numbers, from 00 to 23.";
-			} else $postdata['hour'] = date("h");
+			} else $postdata['hour'] = date("H");
 			
 			$postdata['minute'] = $this->input->post('minute');
 			if (strlen($postdata['minute']) != 0) {
