@@ -3,6 +3,21 @@
 	<head>
 		<title><?php echo $sitename; ?> &bull; Edit Page (Admin)</title>
 		<link href="<?php echo $baseurl; ?>includes/acme/admin.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/includes/ext/tiny_mce/tiny_mce.js"></script>
+		<script type="text/javascript" >
+		tinyMCE.init({
+		        mode : "exact",
+		        theme : "advanced",
+		        skin : "o2k7",
+		        skin_variant : "silver",
+		        theme_advanced_toolbar_location : "top",
+		        theme_advanced_toolbar_align : "left",
+		        theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,hr,removeformat,visualaid,|,sub,sup,|,charmap,bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
+		        theme_advanced_buttons2 : "",
+		        theme_advanced_buttons3 : "",
+		        elements : "content"
+		});
+		</script>
 	</head>
 	<body>
 		<img src="<?php echo $baseurl; ?>includes/acme/logo.png" alt="ACME: Awesome Creative Media Engine" title="ACME: Awesome Creative Media Engine" />

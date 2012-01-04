@@ -8,7 +8,14 @@
 		<script type="text/javascript" >
 		tinyMCE.init({
 		        mode : "exact",
-		        theme : "simple",
+		        theme : "advanced",
+		        skin : "o2k7",
+		        skin_variant : "silver",
+		        theme_advanced_toolbar_location : "top",
+		        theme_advanced_toolbar_align : "left",
+		        theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,hr,removeformat,visualaid,|,sub,sup,|,charmap,bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
+		        theme_advanced_buttons2 : "",
+		        theme_advanced_buttons3 : "",
 		        elements : "desc, custom_embed"
 		});
 		</script>
@@ -104,7 +111,7 @@
 							<p class="description">Descriptive text to be displayed alongside the content.</p>
 						</td>
 						<td>
-							<textarea id="desc" name="desc" rows="8" cols="60"><?php echo $content['body']; ?></textarea>
+							<textarea id="desc" name="desc" rows="8" cols="100"><?php echo $content['body']; ?></textarea>
 						</td>
 					</tr>
 					<tr>
