@@ -16,7 +16,9 @@
 		        theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,hr,removeformat,visualaid,|,sub,sup,|,charmap,bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
 		        theme_advanced_buttons2 : "",
 		        theme_advanced_buttons3 : "",
-		        elements : "desc, custom_embed"
+		        elements : "desc, custom_embed",
+		        theme_advanced_statusbar_location : "bottom",
+		        theme_advanced_resizing : true
 		});
 		</script>
 		<script type="text/javascript">
