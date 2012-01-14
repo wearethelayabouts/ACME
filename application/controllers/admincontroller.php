@@ -931,7 +931,7 @@ class Admincontroller extends CI_Controller {
 		
 		if ($commit) {
 			$postdata['slug'] = $this->input->post('slug');
-			$postdata['custom_css'] = intval($this->input->post('custom_css'));
+			$postdata['custom_css'] = $this->input->post('custom_css');
 			$postdata['content'] = $this->input->post('content');
 			
 			if ($postdata['slug'] == "")
