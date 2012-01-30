@@ -231,6 +231,9 @@ class Contentmodel extends CI_Model {
 				$a['db_id'] = $author['id'];
 				$a['role'] = $author['rolename'];
 				$a['user'] = $this->usermodel->fetchUser($author['user'], $userFields);
+				if ($a['user'] == "") {
+					$a['user']['id'] = $author['user'];
+				}
 				$a['show_icon'] = $author['show_icon'];
 				$query['authors'][] = $a;
 			}
