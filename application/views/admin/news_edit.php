@@ -17,7 +17,8 @@
 		        theme_advanced_buttons3 : "",
 		        elements : "content, shortcontent",
 		        theme_advanced_statusbar_location : "bottom",
-		        theme_advanced_resizing : true
+		        theme_advanced_resizing : true,
+		        valid_elements : "*[*]"
 		});
 		</script>
 	</head>
