@@ -7,7 +7,6 @@
 	<body>
 		<h2>Select User</h1>
 		<div class="mainbox">
-			<p style="text-align: center;"><a href="<?php echo $baseurl; ?>toolbox/users/add">+ Add New User...</a></p>
 			<table class="maintable">
 				<tr>
 					<td>ID</td>
@@ -22,6 +21,5 @@
 			</table>
 			<?php echo $paginationhtml; ?>
 		</div>
-		<p class="footer">Powered by <a href="http://acme.wearethelayabouts.com/">ACME</a> alpha 2 "Bucket" prerelease.</p>
 	</body>
 </html>

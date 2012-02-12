@@ -34,6 +34,5 @@
 			</table>
 			<?php echo $paginationhtml; ?>
 		</div>
-		<p class="footer">Powered by <a href="http://acme.wearethelayabouts.com/">ACME</a> alpha 2 "Bucket" prerelease.</p>
 	</body>
 </html>

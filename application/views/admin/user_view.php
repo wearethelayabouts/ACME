@@ -2,28 +2,44 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<title><?php echo $sitename; ?> &bull; View All Users (Admin)</title>
-		<link href="<?php echo $baseurl; ?>includes/acme/admin.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo $baseurl; ?>includes/acme/rocket.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
-		<img src="<?php echo $baseurl; ?>includes/acme/logo.png" alt="ACME: Awesome Creative Media Engine" title="ACME: Awesome Creative Media Engine" />
-		<h1><?php echo $sitename; ?> Admin Toolbox</h1>
-		<h2>View Users</h1>
-		<div class="mainbox">
-			<p style="text-align: center;"><a href="<?php echo $baseurl; ?>toolbox/users/add">+ Add New User...</a></p>
-			<table class="maintable">
-				<tr>
-					<td>ID</td>
-					<td>Name</td>
-				</tr>
-				<?php foreach ($users as $id => $piece) { ?>
-				<tr>
-					<td><strong><?php echo $id; ?></strong></td>
-					<td><a href="<?php echo $baseurl; ?>toolbox/users/edit/<?php echo $id; ?>"><?php if (strlen($piece['full_name']) > 0) echo $piece['full_name']; else echo "(no name -- edit this user)"; ?></a></td>
-				</tr>
-				<?php } ?>
-			</table>
+		<div id="UISidebar">
+			<?php $this->load->view('admin/sidebar', Array('current' => 'users'));?>
+		</div>
+		<div id="UIContent">
+			<div class="UIContentSection">
+				<fieldset>
+					<table class="UILegend">
+						<tr>
+							<td class="UILegendTitle">Users</td>
+							<td class="UILegendActions"><a href="<?php echo $baseurl; ?>toolbox/users/add">Add</a></td>
+						</tr>
+					</table>
+					<div class="content nopadding">
+						<table class="UITable">
+							<tr>
+								<td>ID</td>
+								<td>Name</td>
+							</tr>
+							<?php foreach ($users as $id => $piece) { ?>
+							<tr>
+								<td><strong><?php echo $id; ?></strong></td>
+								<td><a href="<?php echo $baseurl; ?>toolbox/users/edit/<?php echo $id; ?>"><?php if (strlen($piece['full_name']) > 0) echo $piece['full_name']; else echo "(no name -- edit this user)"; ?></a></td>
+							</tr>
+							<?php } ?>
+						</table>
+					</div>
+				</fieldset>
+			</div>
 			<?php echo $paginationhtml; ?>
 		</div>
-		<p class="footer">Powered by <a href="http://acme.wearethelayabouts.com/">ACME</a> alpha 2 "Bucket" prerelease.</p>
+		<div id="UIFooter">
+			&nbsp;
+			<div id="alignright">
+				<a href="/auth/logout">Logout</a>
+			</div>
+		</div>
 	</body>
 </html>

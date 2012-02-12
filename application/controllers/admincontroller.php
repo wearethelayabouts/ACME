@@ -17,17 +17,7 @@ class Admincontroller extends CI_Controller {
 			redirect('/auth/login/');
 		}
 		
-		$config = $this->systemmodel->fetchConfig();
-		
-		$sitename = $this->config->item('site_name');
-		$baseurl = $this->config->item('base_url');
-		
-		$data = Array(
-			'sitename' => $sitename,
-			'baseurl' => $baseurl
-		);
-		
-		$this->load->view('admin/home', $data);
+		redirect("/toolbox/categories/");		
 	}
 	
 	// CONTENT //

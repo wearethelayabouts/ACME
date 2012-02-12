@@ -1,0 +1,150 @@
+body {
+	background-color: #ededed;
+	margin: 0px;
+}
+.UIContentSection {
+	position: relative;
+	padding-top: 20px;
+	padding-left: 10%;
+	width: 80%;
+}
+.UIContentSection fieldset {
+	border: 0;
+}
+.UIContentSection fieldset legend {
+	color: #506fb1;
+	font-size: 16pt;
+	font-family: Arial;
+	width: 100%;
+}
+
+.UIContentSection fieldset legend a {
+	color: #777;
+}
+
+.UIContentSection fieldset .content {
+	background-color: #f7f7f7;
+	border: 1px solid #d0d0d0;
+	padding: 15px;
+}
+#UIFooter {
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	height: 24px;
+	width: 100%;
+	z-index: 2;
+	border-top: 1px solid #5c5b5b;
+	background-image: url('/includes/acme/footer_bg.png');
+}
+#UIFooter #alignright {
+	position: fixed;
+	right: 5px;
+	bottom: 3px;
+	z-index: 3;
+}
+#UIFooter a {
+	color: #000;
+}
+.nopadding {
+	padding: 0px !important;
+}
+table {
+	border: 0px;
+}
+.UITable {
+	width: 100%;
+}
+.UITable tr:nth-child(odd) {
+	background-color: #edf3fe;
+}
+table .actor {
+	background-color: #edf3fe;
+}
+.indent {
+	padding-left: 20px;
+}
+.padding{
+	padding: 10px;
+}
+a {
+	text-decoration: none;
+	color: #3366CC;
+}
+#UISidebar {
+	z-index: 1;
+	position: fixed;
+	left: 0px;
+	width: 15%;
+	height: 100%;
+	background-color: #cbd2d8;
+	border-right: 2px solid #b4b4b4;
+	padding-top: 10px;
+}
+#UISidebar a {
+	text-decoration: none;
+	color: #000000;
+}
+#UISidebar .UISidebarTitle {
+	color: #505d6d;
+	padding-left: 10px;
+	text-transform: uppercase;
+	font-family: Helvetica;
+	font-size: 10.10pt;
+	font-weight: bold;
+	padding-bottom: 2px;
+}
+#UISidebar .UISidebarItem {
+	padding-left: 18px;
+	height: 20px;
+	font-family: Verdana;
+	font-size: 10pt;
+}
+#UISidebar .UISidebarItem:hover {
+	cursor: pointer;
+	user-select: none;
+}
+#UISidebar .UISidebarSelectedItem {
+	background-image: url('/includes/acme/sidebar_item_select.png');
+	color: #FFFFFF;
+}
+#UISidebar .UISidebarItem img {
+	position: relative;
+	top: 3px;
+}
+#UIContent {
+	position: absolute;
+	width: 85%;
+	top: 0px;
+	left: 12%;
+	padding-bottom: 50px;
+}
+.message-error {
+	padding: 5px; color: #800; background-color: #f88;
+}
+
+.UILegend {
+	 width: 100%;
+	 border: 0;
+}
+
+.UILegend .UILegendTitle {
+	width: 50%;
+	color: #506fb1;
+	font-size: 16pt;
+	font-family: Arial;
+}
+
+.UILegend .UILegendActions {
+	width: 50%;
+	color: #999;
+	font-size: 16pt;
+	font-family: Arial;
+	text-align: right;
+}
+
+.UILegend .UILegendActions a {
+	color: #999;
+	font-size: 16pt;
+	font-family: Arial;
+}

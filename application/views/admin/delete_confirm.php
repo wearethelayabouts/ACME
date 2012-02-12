@@ -5,8 +5,6 @@
 		<link href="<?php echo $baseurl; ?>includes/acme/admin.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
-		<img src="<?php echo $baseurl; ?>includes/acme/logo.png" alt="ACME: Awesome Creative Media Engine" title="ACME: Awesome Creative Media Engine" />
-		<h1><?php echo $sitename; ?> Admin Toolbox</h1>
 		<h2>Deleting <?php echo $what; ?> named <?php echo $name; ?></h1>
 		<div class="mainbox">
 			<form action="<?php echo $next; ?>" method="post">
@@ -16,6 +14,5 @@
 				<center><input type="submit" value="Delete" /></center>
 			</form>
 		</div>
-		<p class="footer">Powered by <a href="http://acme.wearethelayabouts.com/">ACME</a> alpha 2 "Bucket" prerelease.</p>
 	</body>
 </html>
