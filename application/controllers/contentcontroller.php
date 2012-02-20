@@ -23,6 +23,10 @@ class Contentcontroller extends CI_Controller {
 				show_404('');
 			}
 			
+			if ($content['hub']['published'] == 0) {
+				show_404('');
+			}
+			
 			$near = $this->contentmodel->fetchContentNear($content);
 			
 			$links = $this->systemmodel->fetchLinks();

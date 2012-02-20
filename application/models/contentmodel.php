@@ -121,6 +121,16 @@ class Contentmodel extends CI_Model {
 			return false;
 		}
 		$query = $query->result_array();
+		$cats = $this->categorymodel->fetchCategoryList(false, true);
+		
+		foreach ($cats as $id => $cat) {
+			$categ[$cat['slug']] = $cat;
+		}
+		
+		foreach ($query as $id => $c) {
+			if ($categ[$c['hub_slug']]['published'] == 0)
+				unset($query[$id]);
+		}
 		
 		$i = 0;
 		$i2 = 0;
