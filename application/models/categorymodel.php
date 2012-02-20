@@ -4,14 +4,14 @@ class Categorymodel extends CI_Model {
 		parent::__construct();
 	}
 	
-	function fetchCategory($cid) {
+	function fetchCategory($cid, $ignorePublished = false) {
 		$query = $this->db->get_where('categories', array('id' => $cid));
 		if ($query->num_rows() == 0) {
 			return false;
 		}
 		$query = $query->row_array();
 		
-		if ($query['published'] != 0) return $query;
+		if ($query['published'] != 0 || $ignorePublished !== false) return $query;
 		else return false;
 	}
 	

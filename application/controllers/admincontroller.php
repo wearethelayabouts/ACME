@@ -343,7 +343,7 @@ class Admincontroller extends CI_Controller {
 		$postdata = Array();
 		
 		$id = $this->uri->segment(4);
-		$category = $this->categorymodel->fetchCategory($this->uri->segment(4));
+		$category = $this->categorymodel->fetchCategory($this->uri->segment(4), true);
 		$editexisting = ($id != 0);
 		
 		if ($commit) {
@@ -1256,7 +1256,7 @@ class Admincontroller extends CI_Controller {
 				header('Location: '.$baseurl.'toolbox/content/');
 				break;
 			case 'category':
-				$this->db->delete('category', array('id' => $this->uri->segment(4))); 
+				$this->db->delete('categories', array('id' => $this->uri->segment(4))); 
 				header('Location: '.$baseurl.'toolbox/category/');
 				break;
 			case 'files':
