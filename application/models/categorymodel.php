@@ -72,10 +72,8 @@ class Categorymodel extends CI_Model {
 		}
 		$query = $query->result_array();
 		
-		$i = 0;
-		while ($i < count($query)) {
-			if ($query[$i]['published'] == 0) unset($query[$i]);
-			else $i++;
+		foreach ($query as $i=>$c) {
+			if ($c['published'] == 0) unset($query[$i]);
 		}
 		
 		return $query;
