@@ -132,6 +132,8 @@ class Contentmodel extends CI_Model {
 				unset($query[$id]);
 		}
 		
+		$query = array_merge(array(),$query);
+		
 		$i = 0;
 		$i2 = 0;
 		while ($i2 < min($limit,count($query))) {
