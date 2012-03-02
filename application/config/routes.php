@@ -126,6 +126,11 @@ $route['toolbox/delete/:any/:num/drop'] = "admincontroller/drop_delete";
 $route['toolbox/archives/wizard/:num'] = "admincontroller/wizard_archives";
 $route['toolbox/archives/run/:num'] = "admincontroller/run_archives";
 
+$route['toolbox/plays/authswitch'] = "admincontroller/plays_authswitch";
+$route['toolbox/plays/toggle/:num/:any'] = "admincontroller/plays_toggle";
+$route['toolbox/plays/scan'] = "admincontroller/plays_scan";
+$route['toolbox/plays'] = "admincontroller/plays_view";
+
 $route['toolbox/:any'] = "admincontroller/view";
 $route['toolbox'] = "admincontroller/view";
 

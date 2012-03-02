@@ -7,4 +7,5 @@
 	<a href="<?php echo $baseurl; ?>toolbox/users/"><div class="UISidebarItem<?if($current=="users"){?> UISidebarSelectedItem<?}?>">Users</div></a>
 	<a href="<?php echo $baseurl; ?>toolbox/user_fields/"><div class="UISidebarItem<?if($current=="user_fields"){?> UISidebarSelectedItem<?}?>">User Fields</div></a>
 	<a href="<?php echo $baseurl; ?>toolbox/pages/"><div class="UISidebarItem<?if($current=="pages"){?> UISidebarSelectedItem<?}?>">Pages</div></a>
+	<a href="<?php echo $baseurl; ?>toolbox/plays/"><div class="UISidebarItem<?if($current=="plays"){?> UISidebarSelectedItem<?}?>">Plays</div></a>
 </div>

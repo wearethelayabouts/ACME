@@ -9,9 +9,11 @@ class Pagecontroller extends CI_Controller {
 		$this->load->model('systemmodel');
 		$this->load->model('contentmodel');
 		$this->load->model('categorymodel');
+		$this->load->model('playmodel');
 	}
 	
 	function view() {
+		$this->playmodel->loadAuth();
 		$config = $this->systemmodel->fetchConfig();
 		$cachelength = $this->config->item('cache_length');
 		if ($cachelength >= 1) $this->output->cache($cachelength);

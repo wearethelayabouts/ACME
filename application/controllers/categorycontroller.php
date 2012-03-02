@@ -1,5 +1,4 @@
 <?php
-
 class Categorycontroller extends CI_Controller {
 	function __construct() {
 		parent::__construct();
@@ -9,9 +8,11 @@ class Categorycontroller extends CI_Controller {
 		$this->load->model('systemmodel');
 		$this->load->model('contentmodel');
 		$this->load->model('categorymodel');
+		$this->load->model('playmodel');
 	}
 	
 	function view() {
+		$this->playmodel->loadAuth();
 		$config = $this->systemmodel->fetchConfig();
 		$baseurl = $this->config->item('base_url');
 		$basehost = parse_url($baseurl);

@@ -112,11 +112,5 @@
 				</fieldset>
 			</div>
 		</div>
-		<div id="UIFooter">
-			&nbsp;
-			<div id="alignright">
-				<a href="/auth/logout">Logout</a>
-			</div>
-		</div>
 	</body>
 </html>

@@ -44,6 +44,12 @@ td { padding: 6px 16px 6px 6px; margin: 0; }
 .maintable tr:nth-child(odd) { background-color: #bbb; }
 .maintable tr:nth-child(even) { background-color: #aaa; }
 
+.actortable { margin: 10px auto; }
+.actortable tr { background-color: #d3d3d3; }
+.actortable tr.actor { background-color: #aaa; }
+
+.leftaligntext tr td { text-align: left; }
+
 .smallish { font-size: 0.9em; }
 
 a:link, a:visited { color: #00f; }

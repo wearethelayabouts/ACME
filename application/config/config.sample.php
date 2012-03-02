@@ -385,8 +385,11 @@ $config['forum_url'] = "http://";
 $config['forum_profile_link_pre'] = "";
 $config['forum_profile_link_post'] = "";
 
-// IDs of the usergroups (from your auth library) permitted to use the ACME Admin Toolbox. IMPORTANT!
-$config['admin_groups'] = array(1);
+// Auth actor ID
+$config['auth_actor'] = "";
+
+// IDs of the usergroup (from your auth library) permitted to use the ACME Admin Toolbox. IMPORTANT!
+$config['admin_groups'] = 1;
 
 /* End of file config.php */
 /* Location: ./system/application/config/config.php */

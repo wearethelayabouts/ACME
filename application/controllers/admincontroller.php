@@ -8,23 +8,27 @@ class Admincontroller extends CI_Controller {
 		$this->load->model('systemmodel');
 		$this->load->model('contentmodel');
 		$this->load->model('categorymodel');
+		$this->load->model('playmodel');
 		$this->load->helper('url');
-		$this->load->library('tank_auth');
 	}
 	
 	function view() {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
-		redirect("/toolbox/categories/");		
+		redirect("/toolbox/categories");
 	}
 	
 	// CONTENT //
 	
 	function view_content($page = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -96,8 +100,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_content($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -306,8 +312,10 @@ class Admincontroller extends CI_Controller {
 	// CATEGORIES //
 	
 	function view_categories($page = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -328,8 +336,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_category($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -491,8 +501,10 @@ class Admincontroller extends CI_Controller {
 	// FILES //
 	
 	function view_files($tags = "", $page = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -587,9 +599,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_file() {
+		$this->playmodel->loadAuth();
 		
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -713,8 +726,10 @@ class Admincontroller extends CI_Controller {
 	// NEWS //
 	
 	function view_news($page = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -736,8 +751,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_news($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -860,8 +877,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function commit_news($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -880,8 +899,10 @@ class Admincontroller extends CI_Controller {
 	// PAGES //
 	
 	function view_pages($page = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -902,8 +923,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function edit_page($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -978,8 +1001,10 @@ class Admincontroller extends CI_Controller {
 	// USERS //
 	
 	function view_users($page = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -1035,8 +1060,10 @@ class Admincontroller extends CI_Controller {
 	// USER FIELDS //
 	
 	function view_user_fields($page = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -1088,8 +1115,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function commit_user_field($id = 0) {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -1106,8 +1135,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function popup_user_select() {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -1130,8 +1161,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function popup_file_select() {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -1177,8 +1210,10 @@ class Admincontroller extends CI_Controller {
 	
 	// DELETIONS //
 	function confirm_delete() {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -1235,8 +1270,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function drop_delete() {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -1278,8 +1315,10 @@ class Admincontroller extends CI_Controller {
 	
 	// ARCHIVES //
 	function wizard_archives() {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -1318,8 +1357,10 @@ class Admincontroller extends CI_Controller {
 	}
 	
 	function run_archives() {
-		if (!$this->tank_auth->is_logged_in()) {
-			redirect('/auth/login/');
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
 		}
 		
 		$config = $this->systemmodel->fetchConfig();
@@ -1373,5 +1414,88 @@ class Admincontroller extends CI_Controller {
 				show_error("Bad format provided!", 500);
 				break;
 		}
+	}
+	
+	function plays_view() {
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
+		}
+		
+		$config = $this->systemmodel->fetchConfig();
+		
+		$sitename = $this->config->item('site_name');
+		$baseurl = $this->config->item('base_url');
+		$user = $this->authwrap->current_user();
+		
+		$FSinfo = $this->playmodel->fetchFSinfo();
+		$FSactors = $this->playmodel->fetchFSActors();
+		$DBactors = $this->playmodel->fetchDBActors();
+		$DBauth = $this->playmodel->fetchAuthActors();
+		
+		if (count($FSactors) !== count($DBactors)) {
+			$data['syncNeeded'] = true;
+		}
+		
+		$data = Array(
+			'sitename' => $sitename,
+			'baseurl' => $baseurl,
+			'user' => $user,
+			'DBactors' => $DBactors,
+			'FSinfo' => $FSinfo,
+			'DBauth' => $DBauth
+		);
+		
+		$this->load->view('admin/actors_view', $data);
+	}
+	
+	function plays_scan() {
+		$this->playmodel->loadAuth();
+		
+		if (!$this->authwrap->is_admin()) {
+			show_error('You are not logged in!', 403);
+		}
+		
+		$FSactors = $this->playmodel->fetchFSActors();
+		$DBactors = $this->playmodel->fetchDBActors();
+		
+		if (isset($FSactors['error'])) {
+			die($FSactors['error']);
+		}
+		
+		// Sync FS changes to DB. Trust FS over DB for changes.
+		$DBChanges = Array();
+		foreach ($FSactors as $FSactorName => $FSactorInfo) {
+			if (isset($DBactors[$FSactorName])) {
+				if ($DBactors[$FSactorName]['play'] !== $FSactorInfo->play)
+					$DBChanges['update'][$DBactors[$FSactorName]["id"]]['play'] = $FSactorInfo->play;
+				
+				if ($DBactors[$FSactorName]['description'] !== $FSactorInfo->description)
+					$DBChanges['update'][$DBactors[$FSactorName]["id"]]['description'] = $FSactorInfo->description;
+				
+				if ($DBactors[$FSactorName]['author'] !== $FSactorInfo->type)
+					$DBChanges['update'][$DBactors[$FSactorName]["id"]]['author'] = $FSactorInfo->author;
+				
+				if ($DBactors[$FSactorName]['type'] !== $FSactorInfo->type)
+					$DBChanges['update'][$DBactors[$FSactorName]["id"]]['type'] = $FSactorInfo->type;
+			} else {
+				$DBChanges['add'][$FSactorName]['play'] = $FSactorInfo->play;
+				$DBChanges['add'][$FSactorName]['bundle'] = $FSactorInfo->bundle;
+				$DBChanges['add'][$FSactorName]['description'] = $FSactorInfo->description;
+				$DBChanges['add'][$FSactorName]['author'] = $FSactorInfo->author;
+				$DBChanges['add'][$FSactorName]['type'] = $FSactorInfo->type;
+			}
+		}
+		
+		foreach ($DBactors as $DBactor) {
+			if (!isset($FSactors[$DBactor['bundle']])) {
+				$DBChanges['delete'][$DBactor['bundle']] = $DBactor['id'];
+			}
+		}
+		
+		$this->playmodel->syncActors($DBChanges);
+		
+		redirect("/toolbox/plays");
 	}
 }

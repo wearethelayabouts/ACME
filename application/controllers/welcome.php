@@ -8,11 +8,12 @@ class Welcome extends CI_Controller {
 		$this->load->model('usermodel');
 		$this->load->model('systemmodel');
 		$this->load->model('contentmodel');
+		$this->load->model('playmodel');
 		$this->load->helper('url');
-		$this->load->library('tank_auth');
 	}
 	
 	function index() {
+		$this->playmodel->loadAuth();
 		$config = $this->systemmodel->fetchConfig();
 		$cachelength = $this->config->item('cache_length');
 		if ($cachelength >= 1) $this->output->cache($cachelength);

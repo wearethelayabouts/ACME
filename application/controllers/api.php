@@ -1,7 +1,5 @@
 <?php
-
 class Api extends CI_Controller {
-
 	function __construct() {
 		parent::__construct();
 		$this->load->database();
@@ -10,6 +8,7 @@ class Api extends CI_Controller {
 		$this->load->model('categorymodel');
 		$this->load->model('contentmodel');
 		$this->load->model('systemmodel');
+		$this->load->model('playmodel');
 	}
 	
 	function user_info() {

@@ -7,9 +7,12 @@ class Contentcontroller extends CI_Controller {
 		$this->load->model('usermodel');
 		$this->load->model('systemmodel');
 		$this->load->model('contentmodel');
+		$this->load->model('playmodel');
 	}
 	
 	function view() {
+		$this->playmodel->loadAuth();
+		$this->playmodel->loadExtras();
 		$config = $this->systemmodel->fetchConfig();
 		$baseurl = $this->config->item('base_url');
 		
@@ -67,6 +70,7 @@ class Contentcontroller extends CI_Controller {
 			show_404('');
 		}
 		
+		$this->playmodel->loadAuth();
 		$content = $this->contentmodel->fetchContentByCategory($category['id']);
 		
 		$config = $this->systemmodel->fetchConfig();
