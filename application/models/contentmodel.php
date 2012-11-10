@@ -212,6 +212,10 @@ class Contentmodel extends CI_Model {
 	function processContentRows($queryr, $fetchBareMinimum = false) {
 		if (!$this->config->item('optimize_category_listing')) $fetchBareMinimum = false;
 		
+		
+		if ($queryr == false)
+			return Array();
+		
 		foreach ($queryr as $bit) {
 			$bits[] = $this->processContentRow($bit, $fetchBareMinimum);
 		}
